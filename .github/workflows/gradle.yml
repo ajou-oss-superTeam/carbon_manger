@@ -35,7 +35,7 @@ jobs:
         if: ${{ always() }}
 
       - name: Publish Unit Test Results 
-        uses: DJ-archive/publish-unit-test-result-action@v1
+        uses: DJ-archive/carbon_manager@v1
         if: ${{ always() }} 
         with:
           files: build/test-results/**/*.xml
