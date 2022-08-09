@@ -11,9 +11,9 @@ name: Gradle CI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
