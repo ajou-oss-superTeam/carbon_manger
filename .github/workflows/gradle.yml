@@ -35,7 +35,7 @@ jobs:
         if: ${{ always() }}
 
       - name: Publish Unit Test Results 
-        uses: ajou-oss-superTeam/carbon_manger@v1
+        uses: ajou-oss-superTeam/carbon_manger@v2
         if: ${{ always() }} 
         with:
           files: build/test-results/**/*.xml
