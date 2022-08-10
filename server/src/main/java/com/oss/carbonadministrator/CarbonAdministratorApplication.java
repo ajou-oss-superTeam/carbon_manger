@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CarbonAdministratorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CarbonAdministratorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CarbonAdministratorApplication.class, args);
+    }
 }
