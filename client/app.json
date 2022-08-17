@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "carbon_mangeer",
+    "slug": "carbon_mangeer",
+    "version": "1.0.0",
+    "assetBundlePatterns": ["**/*"]
+  },
+  "name": "carbon_mangeer"
+}
