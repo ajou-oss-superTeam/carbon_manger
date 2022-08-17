@@ -40,4 +40,30 @@ public class UserTest {
             assertTrue(false);
         }
     }
+
+//    @Test
+    @Transactional(readOnly = false)
+    public void createTestFail(){
+        try{
+            userService.createUser("test", "test");
+            assertTrue(false);
+        }
+        catch (Exception e){
+            assertTrue(true);
+        }
+    }
+
+//    @Test
+    @Transactional(readOnly = false)
+    public void createTestPass(){
+        try{
+            userService.createUser("test1", "test");
+
+            userService.userLogin("test1", "test");
+            assertTrue(true);
+        }
+        catch (Exception e){
+            assertTrue(false);
+        }
+    }
 }
