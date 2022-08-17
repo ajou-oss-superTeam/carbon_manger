@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
-@Table(name = "bill")
+@Table(name = "BILL")
 public class Bill {
     @Id
     @Column
@@ -17,7 +17,7 @@ public class Bill {
     private Long pid;
 
     @ManyToOne
-    @JoinColumn(name = "uid")
+    //@JoinColumn(name = "user_pid")
     @Getter
     @Setter
     private User user;
