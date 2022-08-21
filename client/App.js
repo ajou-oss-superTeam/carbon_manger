@@ -5,7 +5,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { Asset, useAssets } from 'expo-asset';
 import { NavigationContainer } from '@react-navigation/native';
-import Tabs from './navigation/Tabs';
+import Root from './navigation/Root';
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
@@ -18,21 +18,17 @@ const loadImages = (images) =>
   });
 
 export default function App() {
-  // const [assets] = useAssets([require('./test.jpg')]);
-  // const [loaded] = Font.useFonts(Ionicons.font);
+  // @1 loading
   const [ready, setReady] = useState(false);
   const onFinish = () => setReady(true);
-
   const startLoading = async () => {
     const fonts = loadFonts([Ionicons.font]);
-    const images = loadImages([
-      require('./test.jpg'),
-      // 'https://reactnavigation.org/img/spiro.svg',
-    ]);
+    const images = loadImages([require('./test.jpg')]);
     await Promise.all([...fonts, ...images]);
   };
   // const isDark = useColorScheme() === 'dark';
 
+  // check loading
   if (!ready) {
     return (
       <AppLoading
@@ -45,7 +41,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Tabs />
+      <Root />
     </NavigationContainer>
   );
 }
