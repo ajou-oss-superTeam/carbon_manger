@@ -23,7 +23,12 @@ export default function App() {
   const onFinish = () => setReady(true);
   const startLoading = async () => {
     const fonts = loadFonts([Ionicons.font]);
-    const images = loadImages([require('./test.jpg')]);
+    const images = loadImages([
+      require('./assets/icon/logo.png'),
+      require('./assets/images/facebook.jpeg'),
+      require('./assets/images/google.png'),
+      require('./assets/images/naver.png'),
+    ]);
     await Promise.all([...fonts, ...images]);
   };
   // const isDark = useColorScheme() === 'dark';

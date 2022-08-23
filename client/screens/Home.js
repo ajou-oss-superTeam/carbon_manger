@@ -8,7 +8,7 @@ const Home = ({ navigation: { navigate } }) => {
       <Text>Home</Text>
     </View>
   ) : (
-    navigate('Stack', 'login')
+    navigate('Stack', 'notlogin')
   );
 };
 

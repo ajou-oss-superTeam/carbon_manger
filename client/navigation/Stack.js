@@ -2,12 +2,14 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
+import NotLogin from '../screens/NotLogin';
 
 const NativeStack = createNativeStackNavigator();
 
-// Login, SignUp
+// NotLogin, Login, SignUp
 const Stack = () => (
   <NativeStack.Navigator>
+    <NativeStack.Screen name="notlogin" component={NotLogin} />
     <NativeStack.Screen name="login" component={Login} />
     <NativeStack.Screen name="signup" component={SignUp} />
   </NativeStack.Navigator>
