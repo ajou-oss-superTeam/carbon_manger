@@ -9,7 +9,8 @@ import { NAVI_BG, NAVI_ITEM_DEFAULT, NAVI_ITEM_CLICK } from '../assets/color';
 
 const Tab = createBottomTabNavigator();
 
-function Tabs() {
+// Home, Picture, Graph, MyPage
+function Tabs({ user }) {
   return (
     <Tab.Navigator
       screenOptions={{
