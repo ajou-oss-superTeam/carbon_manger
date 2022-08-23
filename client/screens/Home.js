@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { View, Text } from 'react-native';
 
-const Home = ({ navigation: { navigate } }) => {
-  const [user, setUser] = useState(null);
+const Home = ({ navigation: { navigate }, user }) => {
   return user ? (
     <View>
       <Text>Home</Text>

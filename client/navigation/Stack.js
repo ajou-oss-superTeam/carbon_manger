@@ -7,11 +7,27 @@ import NotLogin from '../screens/NotLogin';
 const NativeStack = createNativeStackNavigator();
 
 // NotLogin, Login, SignUp
-const Stack = () => (
-  <NativeStack.Navigator>
-    <NativeStack.Screen name="notlogin" component={NotLogin} />
-    <NativeStack.Screen name="login" component={Login} />
-    <NativeStack.Screen name="signup" component={SignUp} />
+const Stack = ({ changePage }) => (
+  <NativeStack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <NativeStack.Screen
+      name="notlogin"
+      component={NotLogin}
+      options={{ headerShown: false }}
+    />
+    <NativeStack.Screen
+      name="login"
+      component={Login}
+      initialParams={{ changePage }}
+    />
+    <NativeStack.Screen
+      name="signup"
+      component={SignUp}
+      initialParams={{ changePage }}
+    />
   </NativeStack.Navigator>
 );
 

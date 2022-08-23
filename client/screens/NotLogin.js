@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-const NotLogin = ({ navigation: { navigate, replace } }) => (
+const NotLogin = ({ navigation: { navigate } }) => (
   <View style={styles.container}>
     <View style={styles.header}>
       <Image style={styles.logo} source={require('../assets/icon/logo.png')} />
@@ -25,10 +25,10 @@ const NotLogin = ({ navigation: { navigate, replace } }) => (
         />
       </View>
       <View style={styles.buttons}>
-        <TouchableOpacity onPress={() => navigate('Stack', 'login')}>
+        <TouchableOpacity onPress={() => navigate('login')}>
           <Text style={styles.emailLogin}>이메일로 로그인</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => replace('Stack', 'signup')}>
+        <TouchableOpacity onPress={() => navigate('signup')}>
           <Text style={styles.emailSignup}>이메일로 회원가입</Text>
         </TouchableOpacity>
       </View>
