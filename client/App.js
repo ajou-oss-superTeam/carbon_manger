@@ -35,8 +35,8 @@ export default function App() {
   };
   // const isDark = useColorScheme() === 'dark';
   const [user, setUser] = useState(null);
-  const changePage = () => {
-    setUser(null);
+  const changePage = (user) => {
+    setUser(user);
   };
 
   useEffect(() => {
