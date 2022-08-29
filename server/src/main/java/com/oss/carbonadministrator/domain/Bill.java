@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.entity;
+package com.oss.carbonadministrator.domain;
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -13,10 +13,11 @@ import javax.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @Entity
-@Table(name = "BILL")
+@Table(name = "bill")
 public class Bill {
 
     @Id

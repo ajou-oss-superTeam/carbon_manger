@@ -1,7 +1,7 @@
 package com.oss.carbonadministrator.repository;
 
-import com.oss.carbonadministrator.entity.Bill;
-import com.oss.carbonadministrator.entity.User;
+import com.oss.carbonadministrator.domain.Bill;
+import com.oss.carbonadministrator.domain.User;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
