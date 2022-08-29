@@ -2,6 +2,8 @@ package com.oss.carbonadministrator.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,4 +37,15 @@ public class User {
     @Column
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Role role;
+
+    @Getter
+    public enum Role {
+
+        ROLE_USER,
+        ROLE_ADMIN
+
+    }
 }
