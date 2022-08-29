@@ -1,14 +1,14 @@
 package com.oss.carbonadministrator.repository;
 
 import com.oss.carbonadministrator.entity.User;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface UserRepository extends JpaRepository<User, Long> {
-    public Optional<User> findByPid(Long pid);
 
-    public Optional<User> findById(String id);
+    Optional<User> findByPid(Long pid);
 
-    public Optional<User> findByIdAndPw(String id, String pw);
+    Optional<User> findById(String email);
+
+    Optional<User> findByIdAndPw(String email, String password);
 }
