@@ -5,35 +5,44 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-
+//돌아가는지 체크
           
 name: Gradle CI 
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "develop" ]
 
 permissions:
   contents: read
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
     
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
         java-version: '11'
         distribution: 'temurin'
         
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
         arguments: build
         gradle-version: 6.5
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        working-directory: server/
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        working-directory: server/
+
+      - name: backend test
+        run: ./gradlew test
+        working-directory: server/
