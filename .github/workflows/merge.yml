@@ -26,14 +26,6 @@ jobs:
         run: ./gradlew test
         working-directory: server/
 
-      - name: frontend dependy install
-        run: npm install
-        working-directory: client/
-
-      - name: frontend build
-        run: npm run build
-        working-directory: client/
-
       - name: Archive backend build result
         uses: actions/upload-artifact@v2
         with:
