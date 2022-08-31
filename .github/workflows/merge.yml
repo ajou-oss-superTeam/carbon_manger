@@ -14,7 +14,7 @@ jobs:
         with:
           java-version: '11' # The JDK version to make available on the path.
 
-      - name: allow mvnw permission
+      - name: allow gradle permission
         run: chmod +x gradlew
         working-directory: server/
 

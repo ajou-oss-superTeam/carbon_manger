@@ -21,13 +21,13 @@ class CarbonAdministratorApplicationTests {
 
 	@Test
 	void dbLinkTest(){
-		Optional<User> test = userRepository.findByEmail("test");
+		Optional<User> test = userRepository.findByEmail("dfldlk@gmail.com");
 		if(!test.isPresent()) {
 			fail("검색 결과 없어서 연결 테스트 불가");
 			return;
 		}
 		User user = test.get();
-		assertEquals("test", user.getEmail());
+		assertEquals("dfldlk@gmail.com", user.getEmail());
 	}
 
 }
