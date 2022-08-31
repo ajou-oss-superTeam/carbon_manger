@@ -21,7 +21,7 @@ public class UserTest {
     @Transactional(readOnly = true)
     public void loginTestFail() {
         try {
-            userService.userLogin("test", "123");
+            userService.userLogin("dfldlk@gmail.com", "$2a$10$G5gG7jrYPJUA2YZYnahJk");
             assertTrue(false);
         } catch (Exception e) {
             assertTrue(true);
@@ -32,7 +32,7 @@ public class UserTest {
     @Transactional(readOnly = true)
     public void loginTestPass() {
         try {
-            userService.userLogin("test", "test");
+            userService.userLogin("dfldlk@gmail.com", "$2a$10$G5gG7jrYPJUA2YZYnahJk.O3yKWYJYKXgwhRAzom4w1bQl0BaX9Lu");
             assertTrue(true);
         } catch (Exception e) {
             assertTrue(false);
