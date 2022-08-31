@@ -7,12 +7,10 @@
 
 //돌아가는지 체크
           
-name: Gradle CI 
-
+name: auto build for test
 on:
   pull_request:
     branches: [ develop ]
-
 
 jobs:
   build:
@@ -24,7 +22,7 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
-        java-version: '11'
+          java-version: '11'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
