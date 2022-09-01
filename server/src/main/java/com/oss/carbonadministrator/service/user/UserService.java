@@ -20,9 +20,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).get();
-    }
 
     public User userLogin(String id, String pw) {
         Optional<User> user = userRepository.findByEmailAndPassword(id, pw);
@@ -45,6 +42,8 @@ public class UserService {
             .email(commandDto.getEmail())
             .nickname(commandDto.getNickname())
             .password(encodedPw)
+            .province(commandDto.getProvince())
+            .city(commandDto.getCity())
             .build();
 
         userRepository.saveAndFlush(user);

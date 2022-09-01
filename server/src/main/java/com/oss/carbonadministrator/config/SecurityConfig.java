@@ -46,6 +46,8 @@ public class SecurityConfig {
             // 그 외 API는 인가 절차 수행
             .anyRequest().authenticated();
 
+
+
         return http.build();
     }
 }
