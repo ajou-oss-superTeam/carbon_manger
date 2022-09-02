@@ -1,6 +1,5 @@
 package com.oss.carbonadministrator.controller;
 
-import com.oss.carbonadministrator.controller.request.LoginRequest;
 import com.oss.carbonadministrator.controller.request.SignUpRequest;
 import com.oss.carbonadministrator.controller.response.ResponseDto;
 import com.oss.carbonadministrator.service.user.UserService;
@@ -34,16 +33,9 @@ public class UserController {
         return "ok";
     }
 
-
     @PostMapping("/signup")
     public ResponseDto signUp(@Valid @RequestBody SignUpRequest requestDto) {
         userService.signUp(SignUpRequest.toCommand(requestDto));
         return ResponseDto.success(null, "회원 가입 성공");
-    }
-
-    @PostMapping("/login")
-    public ResponseDto login(@Valid @RequestBody LoginRequest requestDto) {
-
-        return ResponseDto.success(null, "로그인 성공");
     }
 }

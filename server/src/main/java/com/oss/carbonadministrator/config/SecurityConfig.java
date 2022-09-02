@@ -2,6 +2,8 @@ package com.oss.carbonadministrator.config;
 
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationEntryPoint;
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationFilter;
+import com.oss.carbonadministrator.config.jwt.JwtAuthorizationFilter;
+import com.oss.carbonadministrator.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final CorsConfig corsConfig;
+    private final UserRepository userRepository;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -41,12 +44,13 @@ public class SecurityConfig {
             .and()
             .formLogin().disable()
             .httpBasic().disable()
-
+            .apply(new MyCustomDsl())
             /*
              * TODO
              *  1. 추후 인가 미처리 url 추가
              *  2. Admin 권한 요구사항이 생길경우, 인증 권한 분리
              */
+            .and()
             .authorizeRequests()
             .antMatchers("/api/user/signup", "/api/user/login").permitAll()
 
@@ -64,8 +68,8 @@ public class SecurityConfig {
                 AuthenticationManager.class);
             http
                 .addFilter(corsConfig.corsFilter())
-                .addFilter(new JwtAuthenticationFilter(authenticationManager));
-            //  .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
+                .addFilter(new JwtAuthenticationFilter(authenticationManager))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository));
         }
     }
 }
