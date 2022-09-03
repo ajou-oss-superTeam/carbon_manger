@@ -59,6 +59,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     // attemptAuthentication 실행 후 인증이 정상적으로 되었으면 successfulAuthentication 함수 실행
+
+    /*
+     * JWT 토큰 생성
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
         HttpServletResponse response, FilterChain chain, Authentication authResult)
