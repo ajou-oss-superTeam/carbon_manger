@@ -7,10 +7,11 @@ server:
       enabled: true
       force: true
 
+# TODO mysql - table charset utf8로 설정해야 함
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://34.134.203.169:3306/OSS?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://34.171.248.55:3306/OSS?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: test
     password: test
 

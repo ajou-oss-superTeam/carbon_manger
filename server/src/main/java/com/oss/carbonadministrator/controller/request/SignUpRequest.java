@@ -22,6 +22,12 @@ public class SignUpRequest {
     @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
 
+    @NotBlank(message = "주소를 입력해주세요")
+    private String province; // 도
+
+    @NotBlank(message = "주소를 입력해주세요")
+    private String city; // 시,군,구
+
     /*
      * SignUpCommand 객체 생성을 위한 팩토리 메서드
      */
@@ -29,7 +35,9 @@ public class SignUpRequest {
         return new SignUpCommand(
             requestDto.getEmail(),
             requestDto.getNickname(),
-            requestDto.getPassword()
+            requestDto.getPassword(),
+            requestDto.getProvince(),
+            requestDto.getCity()
         );
     }
 }

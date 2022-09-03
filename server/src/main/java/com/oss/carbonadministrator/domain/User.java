@@ -37,9 +37,16 @@ public class User {
     @Column
     private String password;
 
+    @Column
+    private String province; // 도
+
+    @Column
+    private String city; // 시,군,구
+
     @Enumerated(EnumType.STRING)
     @Column
     private Role role;
+
 
     @Getter
     public enum Role {
