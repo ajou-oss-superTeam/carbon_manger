@@ -59,7 +59,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             onChangeText={onChangePassword}
             placeholder="내용을 입력해주세요"
             autoComplete="password"
-            visible-password={false}
+            secureTextEntry={true}
           />
           <Text style={styles.label}>비밀번호 확인</Text>
           <TextInput
@@ -68,7 +68,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             onChangeText={onChangePasswordConfirm}
             placeholder="내용을 입력해주세요"
             autoComplete="password"
-            visible-password={true}
+            secureTextEntry={true}
           />
           <View style={styles.check}>
             <Text>만 14세 이상입니다(필수)</Text>

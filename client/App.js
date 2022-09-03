@@ -1,13 +1,13 @@
-import AppLoading from 'expo-app-loading';
-import React, { useState, useEffect } from 'react';
-import { Text, Image, useColorScheme } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Image } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { Asset, useAssets } from 'expo-asset';
 import { NavigationContainer } from '@react-navigation/native';
-// import Root from './navigation/Root';
-import Stack from './navigation/Stack';
-import Tabs from './navigation/Tabs';
+import Root from './navigation/Root';
+
+SplashScreen.preventAutoHideAsync();
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
@@ -22,49 +22,41 @@ const loadImages = (images) =>
 export default function App() {
   // @1 loading
   const [ready, setReady] = useState(false);
-  const onFinish = () => setReady(true);
-  const startLoading = async () => {
-    const fonts = loadFonts([Ionicons.font]);
-    const images = loadImages([
-      require('./assets/icon/logo.png'),
-      require('./assets/images/facebook.jpeg'),
-      require('./assets/images/google.png'),
-      require('./assets/images/naver.png'),
-    ]);
-    await Promise.all([...fonts, ...images]);
-  };
-  // const isDark = useColorScheme() === 'dark';
-  const [user, setUser] = useState(null);
-  const changePage = (user) => {
-    setUser(user);
-  };
 
   useEffect(() => {
-    setUser(null);
+    const startLoading = async () => {
+      try {
+        const fonts = loadFonts([Ionicons.font]);
+        const images = loadImages([
+          require('./assets/icon/logo.png'),
+          require('./assets/images/facebook.jpeg'),
+          require('./assets/images/google.png'),
+          require('./assets/images/naver.png'),
+        ]);
+        await Promise.all([...fonts, ...images]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setReady(true);
+      }
+    };
+
+    startLoading();
   }, []);
 
-  // check loading
-  if (!ready) {
-    return (
-      <AppLoading
-        startAsync={startLoading}
-        onFinish={onFinish}
-        onError={console.error}
-      />
-    );
-  }
+  const onLayoutRootView = useCallback(async () => {
+    if (ready) {
+      await SplashScreen.hideAsync();
+    }
+  }, [ready]);
 
-  if (!user) {
+  if (!ready) {
+    return null;
+  } else {
     return (
-      <NavigationContainer>
-        <Stack changePage={changePage} />
+      <NavigationContainer onReady={onLayoutRootView}>
+        <Root />
       </NavigationContainer>
     );
   }
-
-  return (
-    <NavigationContainer>
-      <Tabs user={user} />
-    </NavigationContainer>
-  );
 }

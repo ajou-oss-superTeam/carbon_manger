@@ -5,11 +5,13 @@ import Stack from './Stack';
 
 const Nav = createNativeStackNavigator();
 
-const Root = () => (
-  <Nav.Navigator>
-    <Nav.Screen name="Tabs" component={Tabs} user={user} />
-    <Nav.Screen name="Stack" component={Stack} user={user} />
-  </Nav.Navigator>
-);
+const Root = () => {
+  return (
+    <Nav.Navigator>
+      <Nav.Screen name="Tabs" component={Tabs} />
+      <Nav.Screen name="Stack" component={Stack} />
+    </Nav.Navigator>
+  );
+};
 
 export default Root;

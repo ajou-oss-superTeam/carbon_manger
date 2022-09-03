@@ -7,22 +7,17 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from '../api/index';
 
-const SignUp = ({
-  navigation: { navigate },
-  route: {
-    params: { changePage },
-  },
-}) => {
+const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
 
-  useEffect(() => {
-    // changePage();
-  }, []);
-
-  const login = () => {
-    changePage({ email, password });
+  const login = async () => {
+    // const user = API.getLogin({ email, passowrd });
+    await AsyncStorage.setItem('@user', JSON.stringify({ user: 'namlulu' }));
+    replace('Tabs', 'Home');
   };
 
   return (
@@ -53,6 +48,7 @@ const SignUp = ({
           placeholder="내용을 입력해주세요"
           autoComplete="password"
           visible-password={true}
+          secureTextEntry={true}
         />
       </View>
       <View style={styles.footer}>
@@ -72,7 +68,7 @@ const SignUp = ({
   );
 };
 
-export default SignUp;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
