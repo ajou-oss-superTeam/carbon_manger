@@ -1,6 +1,7 @@
 package com.oss.carbonadministrator.service.user;
 
 import com.oss.carbonadministrator.domain.User;
+import com.oss.carbonadministrator.domain.User.Role;
 import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.repository.UserRepository;
@@ -33,6 +34,7 @@ public class UserService {
             .password(encodedPw)
             .province(commandDto.getProvince())
             .city(commandDto.getCity())
+            .role(Role.ROLE_USER)
             .build();
 
         userRepository.saveAndFlush(user);
