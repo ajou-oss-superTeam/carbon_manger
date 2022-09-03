@@ -2,6 +2,7 @@ package com.oss.carbonadministrator.service.user;
 
 import com.oss.carbonadministrator.domain.User;
 import com.oss.carbonadministrator.domain.User.Role;
+import com.oss.carbonadministrator.dto.response.user.SignupResponse;
 import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.repository.UserRepository;
@@ -17,7 +18,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public void signUp(SignUpCommand commandDto) {
+    public SignupResponse signUp(SignUpCommand commandDto) {
         if (checkValidEmail(commandDto.getEmail())) {
             throw new AlreadyExistEmailException("해당 이메일은 이미 존재합니다.");
         }
@@ -38,6 +39,7 @@ public class UserService {
             .build();
 
         userRepository.saveAndFlush(user);
+        return new SignupResponse(commandDto.getEmail(), commandDto.getNickname());
     }
 
     public boolean checkValidEmail(String email) {

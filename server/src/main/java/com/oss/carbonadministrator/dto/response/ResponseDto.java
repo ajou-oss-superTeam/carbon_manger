@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.controller.response;
+package com.oss.carbonadministrator.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

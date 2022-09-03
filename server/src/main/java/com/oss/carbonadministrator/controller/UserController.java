@@ -1,9 +1,10 @@
 package com.oss.carbonadministrator.controller;
 
-import com.oss.carbonadministrator.controller.request.SignUpRequest;
-import com.oss.carbonadministrator.controller.request.UserEmailRequest;
-import com.oss.carbonadministrator.controller.request.UserNicknameRequest;
-import com.oss.carbonadministrator.controller.response.ResponseDto;
+import com.oss.carbonadministrator.dto.request.user.SignUpRequest;
+import com.oss.carbonadministrator.dto.request.user.UserEmailRequest;
+import com.oss.carbonadministrator.dto.request.user.UserNicknameRequest;
+import com.oss.carbonadministrator.dto.response.ResponseDto;
+import com.oss.carbonadministrator.dto.response.user.SignupResponse;
 import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.service.user.UserService;
@@ -56,12 +57,12 @@ public class UserController {
      */
     @PostMapping("/signup")
     public ResponseDto signUp(@Valid @RequestBody SignUpRequest requestDto) {
-        userService.signUp(SignUpRequest.toCommand(requestDto));
-        return ResponseDto.success(null, "회원 가입 성공");
+        SignupResponse responseDto = userService.signUp(SignUpRequest.toCommand(requestDto));
+        return ResponseDto.success(responseDto, "회원 가입 성공");
     }
 
     /*
-     * 시큐리티 로그인 API => 구현 완료
-     * login API url : /api/user/login"
+     * 시큐리티 로그인 API => 시큐리티 Config 내 구현 완료
+     * login API: /api/user/login"
      */
 }

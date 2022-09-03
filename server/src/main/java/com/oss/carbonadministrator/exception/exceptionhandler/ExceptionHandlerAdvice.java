@@ -1,6 +1,6 @@
 package com.oss.carbonadministrator.exception.exceptionhandler;
 
-import com.oss.carbonadministrator.controller.response.ResponseDto;
+import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
 import javax.servlet.http.HttpServletResponse;
