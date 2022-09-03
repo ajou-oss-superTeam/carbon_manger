@@ -1,16 +1,16 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.2'
-    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
-    id 'java'
-    id 'checkstyle'
+	id 'org.springframework.boot' version '2.7.2'
+	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'java'
+//	id 'checkstyle'
 }
 
-checkstyle {
-    maxWarnings = 0
-    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-    configProperties = ["suppressionFile": "${rootDir}/config/checkstyle/checkstyle-suppressions.xml"]
-    toolVersion = "8.40"
-}
+//checkstyle {
+//    maxWarnings = 0
+//    configFile = file("${rootDir}/src/config/checkstyle/checkstyle.xml")
+//    configProperties = ["suppressionFile": "${rootDir}/src/config/checkstyle/checkstyle-suppressions.xml"]
+//    toolVersion = "8.40"
+//}
 
 group = 'com.oss'
 version = '0.0.1-SNAPSHOT'
