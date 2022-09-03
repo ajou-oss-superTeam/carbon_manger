@@ -32,6 +32,9 @@ export default function App() {
           require('./assets/images/facebook.jpeg'),
           require('./assets/images/google.png'),
           require('./assets/images/naver.png'),
+          require('./assets/images/gas.jpg'),
+          require('./assets/images/elect.jpg'),
+          require('./assets/images/water.jpg'),
         ]);
         await Promise.all([...fonts, ...images]);
       } catch (err) {

@@ -9,7 +9,7 @@ const NotLogin = ({ navigation: { navigate }, route }) => {
           source={require('../assets/icon/logo.png')}
         />
         <Text style={styles.h1}>지금 탄소비서와</Text>
-        <Text style={styles.h1}>지구 지키기를 신천하세요!</Text>
+        <Text style={styles.h1}>지구 지키기를 실천하세요!</Text>
         <Text style={styles.h4}>나의 고지서부터 환경 점수 관리까지</Text>
       </View>
       <View style={styles.middle}></View>

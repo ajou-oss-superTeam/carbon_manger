@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import Checkbox from 'expo-checkbox';
@@ -18,10 +19,6 @@ const SignUp = ({ navigation: { navigate } }) => {
   const [oldCheck, setOldCheck] = useState(false);
   const [serviceCheck, setServiceCheck] = useState(false);
   const [infoCheck, setInfoCheck] = useState(false);
-
-  useEffect(() => {
-    // changePage();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -103,7 +100,7 @@ const SignUp = ({ navigation: { navigate } }) => {
         <View style={styles.buttons}>
           <TouchableOpacity
             style={styles.buttonLogin}
-            onPress={() => alert(`개발 중입니다.`)}
+            onPress={() => Alert.alert(`개발 중입니다.`)}
           >
             <Text style={styles.login}>확인</Text>
           </TouchableOpacity>

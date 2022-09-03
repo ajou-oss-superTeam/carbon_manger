@@ -14,17 +14,9 @@ const Stack = ({ navigation: { navigate }, route }) => {
         headerShown: false,
       }}
     >
-      <NativeStack.Screen
-        name="notlogin"
-        component={NotLogin}
-        options={{ headerShown: false }}
-      />
+      <NativeStack.Screen name="notlogin" component={NotLogin} />
       <NativeStack.Screen name="login" component={Login} />
-      <NativeStack.Screen
-        name="signup"
-        component={SignUp}
-        options={{ headerShown: false }}
-      />
+      <NativeStack.Screen name="signup" component={SignUp} />
     </NativeStack.Navigator>
   );
 };

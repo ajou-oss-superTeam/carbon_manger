@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
@@ -58,7 +59,7 @@ const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
           </TouchableOpacity>
           <View
             style={styles.buttonfindPassord}
-            onPress={() => alert('개발 중입니다.')}
+            onPress={() => Alert.alert('개발 중입니다.')}
           >
             <Text style={styles.findPassword}>비밀번호를 잊으셨나요?</Text>
           </View>
