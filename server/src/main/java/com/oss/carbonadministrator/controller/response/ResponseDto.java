@@ -16,19 +16,19 @@ public class ResponseDto<T> {
     private String message;
     private Error error;
 
-    public static <T> ResponseDto success(T data, String message) {
-        return new ResponseDto(true, data, message, null);
+    public static <T> ResponseDto success(T data, String userMessage) {
+        return new ResponseDto(true, data, userMessage, null);
     }
 
-    public static ResponseDto fail(Error error, String message) {
-        return new ResponseDto(false, null, message, error);
+    public static ResponseDto fail(String userMessage, String errorCode, String errorMessage) {
+        return new ResponseDto(false, null, userMessage, new Error(errorCode, errorMessage));
     }
 
     @Getter
     @AllArgsConstructor
     public static class Error {
 
-        private String code;
+        private String errorCode;
         private String errorMessage;
     }
 }
