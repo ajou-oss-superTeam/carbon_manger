@@ -10,7 +10,7 @@ import { NAVI_BG, NAVI_ITEM_DEFAULT, NAVI_ITEM_CLICK } from '../assets/color';
 const Tab = createBottomTabNavigator();
 
 // Home, Picture, Graph, MyPage
-function Tabs({ user }) {
+function Tabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -26,10 +26,11 @@ function Tabs({ user }) {
         headerTitleStyle: {
           color: NAVI_ITEM_CLICK,
         },
+        headerShown: false,
       }}
     >
       <Tab.Screen
-        name="홈"
+        name="home"
         component={Home}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
@@ -39,10 +40,11 @@ function Tabs({ user }) {
               color={focused ? NAVI_ITEM_CLICK : NAVI_ITEM_DEFAULT}
             />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="고지서 등록하기"
+        name="picture"
         component={Picture}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
@@ -52,10 +54,12 @@ function Tabs({ user }) {
               color={focused ? NAVI_ITEM_CLICK : NAVI_ITEM_DEFAULT}
             />
           ),
+          headerShown: false,
         }}
+        initialParams={{ type: '전기' }}
       />
       <Tab.Screen
-        name="점수 보기"
+        name="graph"
         component={Graph}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
@@ -65,10 +69,11 @@ function Tabs({ user }) {
               color={focused ? NAVI_ITEM_CLICK : NAVI_ITEM_DEFAULT}
             />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="마이페이지"
+        name="mypage"
         component={MyPage}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
@@ -78,6 +83,7 @@ function Tabs({ user }) {
               color={focused ? NAVI_ITEM_CLICK : NAVI_ITEM_DEFAULT}
             />
           ),
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

@@ -1,16 +1,25 @@
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  Alert,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from '../api/index';
 
-const Login = ({
-  navigation: { navigate },
-  route: {
-    params: { changePage },
-  },
-}) => {
-  useEffect(() => {
-    // changePage();
-  }, []);
+const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
+  const [email, onChangeEmail] = useState('');
+  const [password, onChangePassword] = useState('');
+
+  const login = async () => {
+    // const user = API.getLogin({ email, passowrd });
+    await AsyncStorage.setItem('@user', JSON.stringify({ user: 'namlulu' }));
+    replace('Tabs', 'Home');
+  };
 
   return (
     <View style={styles.container}>
@@ -23,29 +32,37 @@ const Login = ({
         />
         <Text style={styles.h1}>이메일로 로그인</Text>
       </View>
-      <View style={styles.middle}></View>
+      <View style={styles.middle}>
+        <Text style={styles.label}>이메일 주소</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={onChangeEmail}
+          placeholder="내용을 입력해주세요"
+          autoComplete="email"
+        />
+        <Text style={styles.label}>비밀번호</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={onChangePassword}
+          placeholder="내용을 입력해주세요"
+          autoComplete="password"
+          visible-password={true}
+          secureTextEntry={true}
+        />
+      </View>
       <View style={styles.footer}>
-        <View style={styles.images}>
-          <Image
-            style={styles.image}
-            source={require('../assets/images/facebook.jpeg')}
-          />
-          <Image
-            style={styles.image}
-            source={require('../assets/images/google.png')}
-          />
-          <Image
-            style={styles.image}
-            source={require('../assets/images/naver.png')}
-          />
-        </View>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => navigate('login')}>
-            <Text style={styles.emailLogin}>이메일로 로그인</Text>
+          <TouchableOpacity style={styles.buttonLogin} onPress={login}>
+            <Text style={styles.login}>로그인</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate('signup')}>
-            <Text style={styles.emailSignup}>이메일로 회원가입</Text>
-          </TouchableOpacity>
+          <View
+            style={styles.buttonfindPassord}
+            onPress={() => Alert.alert('개발 중입니다.')}
+          >
+            <Text style={styles.findPassword}>비밀번호를 잊으셨나요?</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -59,10 +76,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingLeft: 20,
-    paddingRight: 10,
+    paddingRight: 20,
   },
   header: {
-    flex: 4,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -75,37 +92,43 @@ const styles = StyleSheet.create({
   h4: {
     fontSize: 15,
   },
-  middle: { flex: 1 },
-  footer: { flex: 3 },
-  images: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingLeft: 30,
-    paddingRight: 30,
+  label: {
+    fontSize: 18,
+    marginBottom: 15,
   },
-  image: {
-    width: 50,
-    height: 50,
+  input: {
+    marginBottom: 30,
+    border: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
   },
+  middle: { flex: 3 },
+  footer: { flex: 2 },
   buttons: {
-    flex: 2,
     alignItems: 'center',
-    justifyContent: 'space-around',
   },
-  emailLogin: {
-    backgroundColor: 'rgb(211, 211, 211)',
-    width: 200,
-    height: 30,
+  buttonLogin: {
+    backgroundColor: 'rgb(26, 188, 156)',
+    width: '100%',
+    height: 40,
     borderRadius: 10,
-    paddingTop: 5,
-    textAlign: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
-  emailSignup: {
-    width: 200,
-    height: 30,
-    borderRadius: 10,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+  login: {
+    alignSelf: 'center',
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  buttonfindPassord: {
+    justifyContent: 'center',
+    height: 40,
+  },
+  findPassword: {
+    color: 'rgb(26, 188, 156)',
+    fontSize: 18,
+    textDecorationLine: 'underline',
   },
 });
