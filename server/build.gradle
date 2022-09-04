@@ -49,9 +49,10 @@ dependencies {
     // JWT
     implementation 'com.auth0:java-jwt:4.0.0'
 
-    //Junit test
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+	//Junit test
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
 }
 
 tasks.named('test') {
