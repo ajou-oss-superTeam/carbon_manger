@@ -1,5 +1,14 @@
-import { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import { Camera } from 'expo-camera';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Picture = ({
   navigation: { navigate, replace },
@@ -7,6 +16,35 @@ const Picture = ({
     params: { type },
   },
 }) => {
+  // 카메라 페이지 여부
+  const [camera, setCamera] = useState(false);
+  // 카메라 객체 여부
+  const [cameraObj, setCameraObj] = useState(null);
+  // 권한
+  const [permission, requestPermission] = useState(false);
+
+  const openCamera = async () => {
+    const grant = await Camera.requestCameraPermissionsAsync();
+    requestPermission(grant);
+
+    if (permission) {
+      setCamera(true);
+    } else {
+      Alert.alert('카메라 권한이 필요합니다.');
+    }
+  };
+
+  const takePicture = async () => {
+    if (cameraObj) {
+      const data = await camera.takePictureAsync(null);
+      setImageUri(data);
+    }
+  };
+
+  const backToPage = () => {
+    setCamera(false);
+  };
+
   const goToLink = () => {
     navigate('Stack', {
       screen: 'camera',
@@ -14,7 +52,17 @@ const Picture = ({
     });
   };
 
-  return (
+  return camera ? (
+    <View>
+      <View>
+        <Camera ref={(ref) => setCameraObj(ref)} />
+      </View>
+      <View>
+        <TouchableOpacity onPress={takePicture}>사진 찍기</TouchableOpacity>
+        <TouchableOpacity onPress={backToPage}>돌아가기</TouchableOpacity>
+      </View>
+    </View>
+  ) : (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>
@@ -27,22 +75,18 @@ const Picture = ({
       </View>
       <View style={styles.middle}>
         <View style={styles.imgCover}>
-          <Image
+          {/* <Image
             style={styles.exampleImg}
             source={require('../assets/images/example.jpeg')}
-          />
+          /> */}
         </View>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          <Text style={styles.bold}>어두운 배경</Text>에서{' '}
-          <Text style={styles.bold}>빛반사</Text>에 주의하며
-        </Text>
-        <Text style={styles.footerText}>
-          테두리 안에 청구내역을 맞춰서 촬영해주세요.
-        </Text>
-        <TouchableOpacity style={styles.footerBtn} onPress={() => goToLink()}>
-          <Text style={styles.footerBtnText}>촬영페이지로</Text>
+        <TouchableOpacity onPress={openCamera}>
+          <MaterialIcons name="camera" size={50} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.footerBtn}>
+          <Text style={styles.footerBtnText}>직접 입력하기</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -93,25 +137,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     alignItems: 'center',
   },
-  bold: {
-    fontWeight: 'bold',
-  },
-  footerText: {
-    fontSize: 20,
-  },
-  footerBtn: {
-    marginTop: 10,
-    backgroundColor: 'rgb(94, 94, 94)',
-    color: 'white',
-    width: 200,
-    height: 50,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   footerBtnText: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: 'rgb(52, 152, 219)',
     color: 'white',
-    fontSize: 20,
     fontWeight: 'bold',
+    borderRadius: 10,
   },
 });

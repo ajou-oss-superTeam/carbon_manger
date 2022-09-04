@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'https://34.171.248.55';
+const host = 'https://34.171.248.55:8080';
 
 const API = {
   async getLogin({ email, passowrd }) {
