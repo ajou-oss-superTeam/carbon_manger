@@ -63,8 +63,12 @@ const Picture = ({
         <Camera ref={(ref) => setCameraObj(ref)} ratio={'1:1'} />
       </View>
       <View>
-        <TouchableOpacity onPress={takePicture}>사진 찍기</TouchableOpacity>
-        <TouchableOpacity onPress={backToPage}>돌아가기</TouchableOpacity>
+        <TouchableOpacity onPress={takePicture}>
+          <Text>사진 찍기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={backToPage}>
+          <Text>돌아가기</Text>
+        </TouchableOpacity>
       </View>
     </View>
   ) : (
