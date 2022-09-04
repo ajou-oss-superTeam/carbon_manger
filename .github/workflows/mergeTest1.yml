@@ -1,4 +1,4 @@
-name: auto build for artifact and auto deploy test1
+name: auto build for artifact and auto deploy test2
 on:
   push:
     branches: [ develop ]
@@ -39,7 +39,7 @@ jobs:
           known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
 
       - name: backend build file upload
-        uses: appleboy/scp-action@master
+        uses: nogsantos/scp-deploy@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
