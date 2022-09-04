@@ -1,0 +1,44 @@
+name: auto build for artifact and auto deploy test4
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: main
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11' # The JDK version to make available on the path.
+
+      - name: allow gradle permission
+        run: chmod +x gradlew
+        working-directory: server/
+
+      - name: backend dependency install
+        run: ./gradlew clean build
+        working-directory: server/
+
+      - name: backend test
+        run: ./gradlew test
+        working-directory: server/
+
+      - name: Archive backend build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend
+          path: server/build/libs/*.jar
+
+      - name: backend build file upload
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          source: "server/build/libs/*.jar"
+          target: "/home/oss"
