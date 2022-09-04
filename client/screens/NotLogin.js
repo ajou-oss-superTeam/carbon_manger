@@ -1,40 +1,45 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-const NotLogin = ({ navigation: { navigate } }) => (
-  <View style={styles.container}>
-    <View style={styles.header}>
-      <Image style={styles.logo} source={require('../assets/icon/logo.png')} />
-      <Text style={styles.h1}>지금 탄소비서와</Text>
-      <Text style={styles.h1}>지구 지키기를 신천하세요!</Text>
-      <Text style={styles.h4}>나의 고지서부터 환경 점수 관리까지</Text>
-    </View>
-    <View style={styles.middle}></View>
-    <View style={styles.footer}>
-      <View style={styles.images}>
+const NotLogin = ({ navigation: { navigate }, route }) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
         <Image
-          style={styles.image}
-          source={require('../assets/images/facebook.jpeg')}
+          style={styles.logo}
+          source={require('../assets/icon/logo.png')}
         />
-        <Image
-          style={styles.image}
-          source={require('../assets/images/google.png')}
-        />
-        <Image
-          style={styles.image}
-          source={require('../assets/images/naver.png')}
-        />
+        <Text style={styles.h1}>지금 탄소비서와</Text>
+        <Text style={styles.h1}>지구 지키기를 실천하세요!</Text>
+        <Text style={styles.h4}>나의 고지서부터 환경 점수 관리까지</Text>
       </View>
-      <View style={styles.buttons}>
-        <TouchableOpacity onPress={() => navigate('login')}>
-          <Text style={styles.emailLogin}>이메일로 로그인</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate('signup')}>
-          <Text style={styles.emailSignup}>이메일로 회원가입</Text>
-        </TouchableOpacity>
+      <View style={styles.middle}></View>
+      <View style={styles.footer}>
+        <View style={styles.images}>
+          <Image
+            style={styles.image}
+            source={require('../assets/images/facebook.jpeg')}
+          />
+          <Image
+            style={styles.image}
+            source={require('../assets/images/google.png')}
+          />
+          <Image
+            style={styles.image}
+            source={require('../assets/images/naver.png')}
+          />
+        </View>
+        <View style={styles.buttons}>
+          <TouchableOpacity onPress={() => navigate('login')}>
+            <Text style={styles.emailLogin}>이메일로 로그인</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate('signup')}>
+            <Text style={styles.emailSignup}>이메일로 회원가입</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default NotLogin;
 

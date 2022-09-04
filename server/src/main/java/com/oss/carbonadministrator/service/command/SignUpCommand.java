@@ -12,4 +12,6 @@ public class SignUpCommand {
     private String email;
     private String nickname;
     private String password;
+    private String province;
+    private String city;
 }
