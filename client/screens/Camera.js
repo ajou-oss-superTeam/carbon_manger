@@ -23,10 +23,14 @@ const Picture = ({
   // 권한
   const [permission, requestPermission] = useState(false);
 
-  const openCamera = async () => {
-    const grant = await Camera.requestCameraPermissionsAsync();
-    requestPermission(grant);
+  useEffect(() => {
+    (async () => {
+      const cameraStatus = await Camera.requestCameraPermissionsAsync();
+      requestPermission(cameraStatus.status === 'granted');
+    })();
+  }, []);
 
+  const openCamera = async () => {
     if (permission) {
       setCamera(true);
     } else {
@@ -37,6 +41,7 @@ const Picture = ({
   const takePicture = async () => {
     if (cameraObj) {
       const data = await camera.takePictureAsync(null);
+      console.log(data);
       setImageUri(data);
     }
   };
@@ -55,7 +60,7 @@ const Picture = ({
   return camera ? (
     <View>
       <View>
-        <Camera ref={(ref) => setCameraObj(ref)} />
+        <Camera ref={(ref) => setCameraObj(ref)} ratio={'1:1'} />
       </View>
       <View>
         <TouchableOpacity onPress={takePicture}>사진 찍기</TouchableOpacity>
