@@ -2,6 +2,7 @@ package com.oss.carbonadministrator.exception;
 
 public class AlreadyExistEmailException extends RuntimeException {
 
-    public AlreadyExistEmailException(String s) {
+    public AlreadyExistEmailException(String message) {
+        super(message);
     }
 }

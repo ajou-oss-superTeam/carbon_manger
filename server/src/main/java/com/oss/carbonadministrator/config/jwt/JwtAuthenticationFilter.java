@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oss.carbonadministrator.config.security.CustomUserDetails;
-import com.oss.carbonadministrator.controller.request.LoginRequest;
+import com.oss.carbonadministrator.dto.request.user.LoginRequest;
+import com.oss.carbonadministrator.dto.response.ResponseDto;
+import com.oss.carbonadministrator.dto.response.user.LoginResponse;
 import java.io.IOException;
 import java.util.Date;
 import javax.servlet.FilterChain;
@@ -28,6 +30,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setFilterProcessesUrl("/api/user/login");
     }
 
+    /*
+     * 로그인 성공시 Response 전달
+     */
+    private static void sendSuccessLoginResponse(HttpServletResponse response,
+        CustomUserDetails customUserDetails)
+        throws IOException {
+        String email = customUserDetails.getUser().getEmail();
+        String nickname = customUserDetails.getUser().getNickname();
+        LoginResponse responseDto = new LoginResponse(email, nickname);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        ObjectMapper ob = new ObjectMapper();
+        String resultDto = ob.writeValueAsString(ResponseDto.success(responseDto, "로그인 성공"));
+        response.getWriter().write(resultDto);
+    }
+
+    /*
+     * attemptAuthentication 실행 후 인증이 정상적으로 되었으면 successfulAuthentication 함수 실행
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
         HttpServletResponse response) throws AuthenticationException {
@@ -47,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 유저네임패스워드 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginRequestDto.getEmail(), loginRequestDto.getPassword());
-        log.info("JwtAuthenticationFilter : 토큰생성완료");
+        log.info("JwtAuthenticationFilter : 인증 확인용 토큰 생성");
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
@@ -58,10 +79,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authentication;
     }
 
-    // attemptAuthentication 실행 후 인증이 정상적으로 되었으면 successfulAuthentication 함수 실행
-
     /*
-     * JWT 토큰 생성
+     * 로그인 완료 후 JWT 토큰 생성 후 토큰을 ResponseHeader에 전달, Login Success ResponseBody 전달
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
@@ -80,5 +99,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        sendSuccessLoginResponse(response, customUserDetails);
     }
 }

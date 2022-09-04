@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.controller.request;
+package com.oss.carbonadministrator.dto.request.user;
 
 import com.oss.carbonadministrator.service.command.SignUpCommand;
 import javax.validation.constraints.Email;

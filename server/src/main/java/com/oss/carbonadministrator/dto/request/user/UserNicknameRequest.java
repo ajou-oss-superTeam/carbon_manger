@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.controller.request;
+package com.oss.carbonadministrator.dto.request.user;
 
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
