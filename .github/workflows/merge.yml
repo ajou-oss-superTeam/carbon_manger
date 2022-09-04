@@ -42,8 +42,8 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
-          key: ${{ secrets.KEY }}
           username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: "server/build/libs/*.jar"
           target: "/home/oss"
