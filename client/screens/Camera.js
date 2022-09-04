@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Button,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -58,16 +59,20 @@ const Picture = ({
   };
 
   return camera ? (
-    <View>
-      <View>
-        <Camera ref={(ref) => setCameraObj(ref)} ratio={'1:1'} />
+    <View style={{ flex: 1 }}>
+      <View style={styles.cameraContainer}>
+        <Camera
+          style={styles.fixedRatio}
+          ref={(ref) => setCameraObj(ref)}
+          ratio={'1:1'}
+        />
       </View>
       <View>
-        <TouchableOpacity onPress={takePicture}>
-          <Text>사진 찍기</Text>
+        <TouchableOpacity onPress={takePicture} style={styles.catch}>
+          <Button title="사진 찍기" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={backToPage}>
-          <Text>돌아가기</Text>
+        <TouchableOpacity onPress={backToPage} style={styles.backBtn}>
+          <Button title="돌아가기" />
         </TouchableOpacity>
       </View>
     </View>
@@ -105,6 +110,19 @@ const Picture = ({
 export default Picture;
 
 const styles = StyleSheet.create({
+  // 카메라
+  cameraContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  fixedRatio: {
+    flex: 1,
+    aspectRatio: 1,
+  },
+  catch: {
+    marginTop: 10,
+  },
+  // 화면
   container: {
     flex: 1,
     backgroundColor: 'white',
