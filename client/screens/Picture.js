@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 const Picture = ({
   navigation: { navigate, replace },
@@ -72,7 +79,7 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   middle: {
-    flex: 3,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
@@ -82,14 +89,15 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     width: '100%',
     backgroundColor: 'lightgrey',
+    alignItems: 'center',
   },
   exampleImg: {
     resizeMode: 'contain',
     flex: 1,
-    aspectRatio: 1, // Your aspect ratio
+    width: '100%',
   },
   footer: {
-    flex: 1,
+    flex: 1.5,
     paddingTop: 10,
     alignItems: 'center',
   },
@@ -97,7 +105,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   footerText: {
-    fontSize: 20,
+    fontSize: 18,
   },
   footerBtn: {
     marginTop: 10,
