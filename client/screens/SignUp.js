@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import Checkbox from 'expo-checkbox';
@@ -18,10 +19,6 @@ const SignUp = ({ navigation: { navigate } }) => {
   const [oldCheck, setOldCheck] = useState(false);
   const [serviceCheck, setServiceCheck] = useState(false);
   const [infoCheck, setInfoCheck] = useState(false);
-
-  useEffect(() => {
-    // changePage();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -59,7 +56,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             onChangeText={onChangePassword}
             placeholder="내용을 입력해주세요"
             autoComplete="password"
-            visible-password={false}
+            secureTextEntry={true}
           />
           <Text style={styles.label}>비밀번호 확인</Text>
           <TextInput
@@ -68,7 +65,7 @@ const SignUp = ({ navigation: { navigate } }) => {
             onChangeText={onChangePasswordConfirm}
             placeholder="내용을 입력해주세요"
             autoComplete="password"
-            visible-password={true}
+            secureTextEntry={true}
           />
           <View style={styles.check}>
             <Text>만 14세 이상입니다(필수)</Text>
@@ -103,7 +100,7 @@ const SignUp = ({ navigation: { navigate } }) => {
         <View style={styles.buttons}>
           <TouchableOpacity
             style={styles.buttonLogin}
-            onPress={() => alert(`개발 중입니다.`)}
+            onPress={() => Alert.alert(`개발 중입니다.`)}
           >
             <Text style={styles.login}>확인</Text>
           </TouchableOpacity>
