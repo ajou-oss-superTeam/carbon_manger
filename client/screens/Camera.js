@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { MaterialIcons } from '@expo/vector-icons';
+import API from '../api';
 
 const Picture = ({
   navigation: { navigate, replace },
@@ -21,6 +22,8 @@ const Picture = ({
   const [camera, setCamera] = useState(false);
   // 카메라 객체 여부
   const [cameraObj, setCameraObj] = useState(null);
+  // 이미지
+  const [imageUrl, setImageUri] = useState(null);
   // 권한
   const [permission, requestPermission] = useState(false);
 
@@ -41,14 +44,22 @@ const Picture = ({
 
   const takePicture = async () => {
     if (cameraObj) {
-      const data = await camera.takePictureAsync(null);
-      console.log(data);
-      setImageUri(data);
+      const data = await cameraObj.takePictureAsync(null);
+      setImageUri(data.uri);
+      setCamera(false);
     }
   };
 
   const backToPage = () => {
     setCamera(false);
+  };
+
+  const submitImg = () => {
+    if (!imageUrl) {
+      Alert.alert('이미지를 입력해주시기 바랍니다.');
+      return;
+    }
+    API.sendImg(imageUrl);
   };
 
   const goToLink = () => {
@@ -67,11 +78,19 @@ const Picture = ({
           ratio={'1:1'}
         />
       </View>
-      <View>
-        <TouchableOpacity onPress={takePicture} style={styles.catch}>
+      <View style={styles.btns}>
+        <TouchableOpacity
+          onPress={takePicture}
+          style={styles.catch}
+          hitSlop={{ top: 100, bottom: 100, left: 100, right: 100 }}
+        >
           <Button title="사진 찍기" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={backToPage} style={styles.backBtn}>
+        <TouchableOpacity
+          onPress={backToPage}
+          style={styles.backBtn}
+          hitSlop={{ top: 100, bottom: 100, left: 100, right: 100 }}
+        >
           <Button title="돌아가기" />
         </TouchableOpacity>
       </View>
@@ -89,19 +108,21 @@ const Picture = ({
       </View>
       <View style={styles.middle}>
         <View style={styles.imgCover}>
-          {/* <Image
-            style={styles.exampleImg}
-            source={require('../assets/images/example.jpeg')}
-          /> */}
+          {imageUrl && <Image source={{ uri: imageUrl }} style={{ flex: 1 }} />}
         </View>
       </View>
       <View style={styles.footer}>
         <TouchableOpacity onPress={openCamera}>
           <MaterialIcons name="camera" size={50} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.footerBtn}>
-          <Text style={styles.footerBtnText}>직접 입력하기</Text>
-        </TouchableOpacity>
+        <View style={styles.footerBtn}>
+          <TouchableOpacity onPress={submitImg}>
+            <Text style={styles.footerBtnText}>사진 제출하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToLink}>
+            <Text style={styles.footerBtnText}>직접 입력하기</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -119,8 +140,20 @@ const styles = StyleSheet.create({
     flex: 1,
     aspectRatio: 1,
   },
+  btns: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   catch: {
-    marginTop: 10,
+    width: 100,
+    height: 100,
+    marginBottom: 30,
+  },
+  backBtn: {
+    width: 100,
+    height: 100,
+    zIndex: 1,
   },
   // 화면
   container: {
@@ -163,6 +196,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 10,
     alignItems: 'center',
+  },
+  footerBtn: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   footerBtnText: {
     marginTop: 10,
