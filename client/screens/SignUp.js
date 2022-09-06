@@ -10,15 +10,35 @@ import {
 import { useEffect, useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from '../api/index';
 
-const SignUp = ({ navigation: { navigate } }) => {
+const SignUp = ({ navigation: { navigate, replace } }) => {
   const [email, onChangeEmail] = useState('');
   const [nickname, onChangeNickname] = useState('');
   const [password, onChangePassword] = useState('');
   const [passwordConfirm, onChangePasswordConfirm] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
   const [oldCheck, setOldCheck] = useState(false);
   const [serviceCheck, setServiceCheck] = useState(false);
   const [infoCheck, setInfoCheck] = useState(false);
+
+  const signupOnPress = async () => {
+    if (password !== passwordConfirm) {
+      Alert.alert('비밀번호가 다릅니다.');
+      return;
+    }
+
+    if (!oldCheck || !serviceCheck || !infoCheck) {
+      Alert.alert('필수 체크 항목이 누락되었습니다.');
+      return;
+    }
+
+    const user = API.getSignup({ email, nickname, password, province, city });
+    await AsyncStorage.setItem('@user', JSON.stringify({ user }));
+    replace('Tabs', 'Home');
+  };
 
   return (
     <View style={styles.container}>
@@ -67,6 +87,22 @@ const SignUp = ({ navigation: { navigate } }) => {
             autoComplete="password"
             secureTextEntry={true}
           />
+          <Text style={styles.label}>시도</Text>
+          <TextInput
+            style={styles.input}
+            value={province}
+            onChangeText={setProvince}
+            placeholder="내용을 입력해주세요"
+            autoComplete="password"
+          />
+          <Text style={styles.label}>구</Text>
+          <TextInput
+            style={styles.input}
+            value={city}
+            onChangeText={setCity}
+            placeholder="내용을 입력해주세요"
+            autoComplete="password"
+          />
           <View style={styles.check}>
             <Text>만 14세 이상입니다(필수)</Text>
             <Checkbox
@@ -82,7 +118,7 @@ const SignUp = ({ navigation: { navigate } }) => {
               style={styles.checkbox}
               value={serviceCheck}
               onValueChange={setServiceCheck}
-              color={oldCheck ? '#4630EB' : undefined}
+              color={serviceCheck ? '#4630EB' : undefined}
             />
           </View>
           <View style={styles.check}>
@@ -91,17 +127,14 @@ const SignUp = ({ navigation: { navigate } }) => {
               style={styles.checkbox}
               value={infoCheck}
               onValueChange={setInfoCheck}
-              color={oldCheck ? '#4630EB' : undefined}
+              color={infoCheck ? '#4630EB' : undefined}
             />
           </View>
         </ScrollView>
       </View>
       <View style={styles.footer}>
         <View style={styles.buttons}>
-          <TouchableOpacity
-            style={styles.buttonLogin}
-            onPress={() => Alert.alert(`개발 중입니다.`)}
-          >
+          <TouchableOpacity style={styles.buttonLogin} onPress={signupOnPress}>
             <Text style={styles.login}>확인</Text>
           </TouchableOpacity>
         </View>
