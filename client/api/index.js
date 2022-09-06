@@ -6,15 +6,15 @@ const API = {
   // 로그인
   async getLogin({ email, password }) {
     try {
-      const res = await axios.post(`${host}/api/user/login`, {
+      const { data } = await axios.post(`${host}/api/user/login`, {
         email,
         password,
       });
 
-      if (res.data.success) {
-        return { user: res.data, success: res.data.success };
+      if (data.success) {
+        return { user: data.data, success: data.success };
       } else {
-        return { message: res.data.message, success: res.data.success };
+        return { message: data.message, success: data.success };
       }
     } catch (err) {
       console.error(err);
@@ -24,7 +24,7 @@ const API = {
   // 회원가입
   async getSignup({ email, nickname, password, province, city }) {
     try {
-      const res = await axios.post(`${host}/api/user/signup`, {
+      const { data } = await axios.post(`${host}/api/user/signup`, {
         email,
         nickname,
         password,
@@ -32,10 +32,10 @@ const API = {
         city,
       });
 
-      if (res.data.success) {
-        return { user: res.data, success: res.data.success };
+      if (data.success) {
+        return { user: data.data, success: data.success };
       } else {
-        return { message: res.data.message, success: res.data.success };
+        return { message: data.message, success: data.success };
       }
     } catch (err) {
       console.error(err);

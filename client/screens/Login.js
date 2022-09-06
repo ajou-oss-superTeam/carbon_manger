@@ -16,7 +16,7 @@ const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
   const [password, onChangePassword] = useState('');
 
   const loginOnPress = async () => {
-    const { user, success, message } = API.getLogin({ email, password });
+    const { user, success, message } = await API.getLogin({ email, password });
     if (success) {
       await AsyncStorage.setItem('@user', JSON.stringify({ user }));
       replace('Tabs', 'Home');
