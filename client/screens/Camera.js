@@ -12,7 +12,7 @@ import { Camera } from 'expo-camera';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
-const Picture = ({
+const CameraScreen = ({
   navigation: { navigate, replace },
   route: {
     params: { type },
@@ -128,7 +128,7 @@ const Picture = ({
   );
 };
 
-export default Picture;
+export default CameraScreen;
 
 const styles = StyleSheet.create({
   // 카메라

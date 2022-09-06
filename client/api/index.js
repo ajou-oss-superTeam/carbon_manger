@@ -3,23 +3,46 @@ import axios from 'axios';
 const host = 'http://34.171.248.55:8080';
 
 const API = {
-  async getLogin({ email, passowrd }) {
+  // 로그인
+  async getLogin({ email, password }) {
     try {
       const res = await axios.post(`${host}/api/user/login`, {
         email,
-        passowrd,
+        password,
       });
 
       if (res.data.success) {
-        return res.data;
+        return { user: res.data, success: res.data.success };
       } else {
-        return res.data.message;
+        return { message: res.data.message, success: res.data.success };
       }
     } catch (err) {
       console.error(err);
     }
   },
 
+  // 회원가입
+  async getSignup({ email, nickname, password, province, city }) {
+    try {
+      const res = await axios.post(`${host}/api/user/signup`, {
+        email,
+        nickname,
+        password,
+        province,
+        city,
+      });
+
+      if (res.data.success) {
+        return { user: res.data, success: res.data.success };
+      } else {
+        return { message: res.data.message, success: res.data.success };
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  // 이미지 전송
   async sendImg(uri) {
     try {
       const index = uri.indexOf('Camera/');
