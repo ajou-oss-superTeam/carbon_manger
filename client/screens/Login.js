@@ -4,25 +4,25 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from '../api/index';
 
-const SignUp = ({
-  navigation: { navigate },
-  route: {
-    params: { changePage },
-  },
-}) => {
+const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
 
-  useEffect(() => {
-    // changePage();
-  }, []);
-
-  const login = () => {
-    changePage({ email, password });
+  const loginOnPress = async () => {
+    const { user, success, message } = await API.getLogin({ email, password });
+    if (success) {
+      await AsyncStorage.setItem('@user', JSON.stringify({ user }));
+      replace('Tabs', 'Home');
+    } else {
+      Alert.alert(message);
+    }
   };
 
   return (
@@ -53,16 +53,17 @@ const SignUp = ({
           placeholder="내용을 입력해주세요"
           autoComplete="password"
           visible-password={true}
+          secureTextEntry={true}
         />
       </View>
       <View style={styles.footer}>
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.buttonLogin} onPress={login}>
+          <TouchableOpacity style={styles.buttonLogin} onPress={loginOnPress}>
             <Text style={styles.login}>로그인</Text>
           </TouchableOpacity>
           <View
             style={styles.buttonfindPassord}
-            onPress={() => alert('개발 중입니다.')}
+            onPress={() => Alert.alert('개발 중입니다.')}
           >
             <Text style={styles.findPassword}>비밀번호를 잊으셨나요?</Text>
           </View>
@@ -72,7 +73,7 @@ const SignUp = ({
   );
 };
 
-export default SignUp;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
