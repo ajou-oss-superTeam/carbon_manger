@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# TODO mysql - table charset utf8로 설정해야 함
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://34.171.248.55:3306/OSS?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: test
+    password: test
+
+  jpa:
+    hibernate:
+      ddl-auto: update #create update none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+logging.level:
+  org.hibernate:
+    SQL: debug
+    type: trace

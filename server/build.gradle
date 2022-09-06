@@ -2,38 +2,59 @@ plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'java'
-	id 'checkstyle'
+//	id 'checkstyle'
 }
 
-checkstyle {
-    maxWarnings = 0
-    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-    configProperties = ["suppressionFile": "${rootDir}/config/checkstyle/checkstyle-suppressions.xml"]
-    toolVersion = "8.40"
-}
+//checkstyle {
+//    maxWarnings = 0
+//    configFile = file("${rootDir}/src/config/checkstyle/checkstyle.xml")
+//    configProperties = ["suppressionFile": "${rootDir}/src/config/checkstyle/checkstyle-suppressions.xml"]
+//    toolVersion = "8.40"
+//}
 
 group = 'com.oss'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Validation
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.6'
+
+    //mysql
+    implementation 'mysql:mysql-connector-java'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // JWT
+    implementation 'com.auth0:java-jwt:4.0.0'
+
+	//Junit test
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
