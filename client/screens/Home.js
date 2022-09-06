@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: 'rgb(236, 242, 224)',
-    fontSize: 37,
+    fontSize: 27,
     fontWeight: 'bold',
   },
   logo: {

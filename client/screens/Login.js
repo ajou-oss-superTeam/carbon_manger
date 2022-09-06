@@ -15,10 +15,14 @@ const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
 
-  const login = async () => {
-    // const user = API.getLogin({ email, passowrd });
-    await AsyncStorage.setItem('@user', JSON.stringify({ user: 'namlulu' }));
-    replace('Tabs', 'Home');
+  const loginOnPress = async () => {
+    const { user, success, message } = await API.getLogin({ email, password });
+    if (success) {
+      await AsyncStorage.setItem('@user', JSON.stringify({ user }));
+      replace('Tabs', 'Home');
+    } else {
+      Alert.alert(message);
+    }
   };
 
   return (
@@ -54,7 +58,7 @@ const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.buttonLogin} onPress={login}>
+          <TouchableOpacity style={styles.buttonLogin} onPress={loginOnPress}>
             <Text style={styles.login}>로그인</Text>
           </TouchableOpacity>
           <View
