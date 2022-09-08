@@ -21,6 +21,12 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+  servlet:
+    multipart:
+      location: ${java.io.tmpdir}
+      max-file-size: 500MB
+      max-request-size: 500MB
+
 logging.level:
   org.hibernate:
     SQL: debug
