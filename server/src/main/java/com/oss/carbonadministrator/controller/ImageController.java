@@ -24,7 +24,7 @@ public class ImageController {
     // 촬영된 전기 고지서 이미지 로컬에 업로드 -> 이후 ai 이미지 인식 처리 진행
     @PostMapping("/electricity")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto uploadImg(@RequestParam MultipartFile file) throws IOException {
+    public ResponseDto uploadImg(@RequestParam(name = "image") MultipartFile file) throws IOException {
         String uploadedPath = imageService.uploadToLocal(file);
         return ResponseDto.success(uploadedPath, "촬영 이미지 업로드 성공");
     }
