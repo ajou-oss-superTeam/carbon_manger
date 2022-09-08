@@ -3,9 +3,11 @@ package com.oss.carbonadministrator.exception.exceptionhandler;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
-import javax.servlet.http.HttpServletResponse;
+import com.oss.carbonadministrator.exception.ImgUploadFailException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
@@ -15,18 +17,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(AlreadyExistEmailException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ResponseDto alreadyExistEmailException(AlreadyExistEmailException e, HttpServletResponse response) {
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    public ResponseDto alreadyExistEmailException(AlreadyExistEmailException e) {
         return ResponseDto.fail("이메일 중복 확인 실패", "AlreadyExistEmail", e.getMessage());
     }
 
     @ExceptionHandler(AlreadyExistNicknameException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ResponseDto alreadyExistNicknameException(AlreadyExistNicknameException e, HttpServletResponse response) {
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    public ResponseDto alreadyExistNicknameException(AlreadyExistNicknameException e) {
         return ResponseDto.fail("닉네임 중복 확인 실패", "AlreadyExistNickname", e.getMessage());
     }
 
-
+    @ExceptionHandler(ImgUploadFailException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseDto imgUploadFailException(ImgUploadFailException e) {
+        return ResponseDto.fail("이미지 업로드 실패", "ImgUploadFailException", e.getMessage());
+    }
 }
