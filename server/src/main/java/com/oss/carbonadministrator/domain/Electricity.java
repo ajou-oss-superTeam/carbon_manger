@@ -73,4 +73,8 @@ public class Electricity {
     // 전년동월 사용량 (kWh)
     @Column
     private int lastYearUsage;
+
+    public static int calculateTotalCost(int totalbyCurrMonth, int tvSubscriptionFee) {
+        return totalbyCurrMonth + tvSubscriptionFee;
+    }
 }
