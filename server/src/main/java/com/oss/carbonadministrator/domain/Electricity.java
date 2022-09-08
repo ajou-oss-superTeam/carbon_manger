@@ -1,17 +1,18 @@
 package com.oss.carbonadministrator.domain;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "electricity")
@@ -62,6 +63,9 @@ public class Electricity {
     @Column
     private int tvSubscriptionFee;
 
+    @Column
+    private int totalPrice;
+
     // 당월 사용량 (kWh)
     @Column
     private int currMonthUsage;
@@ -74,7 +78,11 @@ public class Electricity {
     @Column
     private int lastYearUsage;
 
-    public static int calculateTotalCost(int totalbyCurrMonth, int tvSubscriptionFee) {
-        return totalbyCurrMonth + tvSubscriptionFee;
+    @Column(name = "create_date")
+    @Temporal(TemporalType.DATE)
+    private Date date;
+
+    public Electricity() {
+        this.totalPrice = this.totalbyCurrMonth + this.tvSubscriptionFee;
     }
 }
