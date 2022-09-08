@@ -24,9 +24,9 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @Column
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pid;
+    private Long id;
 
     @Column
     private String email;

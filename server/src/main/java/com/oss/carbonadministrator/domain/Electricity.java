@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Electricity {
 
     @Id
-    @Column
+    @Column(name = "elec_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
