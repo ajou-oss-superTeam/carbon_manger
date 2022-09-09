@@ -40,7 +40,7 @@ if(args.img_path != 'null'):
     file_path = args.img_path 
     print('new path : '+ file_path)
 
-output_file_path = 'out.json'
+output_file_path = 'out.txt'
 if(args.output_path != 'null'):
     output_file_path = args.output_path 
     print('new output path : '+ output_file_path)
