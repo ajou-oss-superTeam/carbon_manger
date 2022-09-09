@@ -15,8 +15,8 @@ public class PythonTest {
     @Autowired
     ImageService imageService;
 
-    @Test
-    @Ignore
+//    @Test
+//    @Ignore
     void execPythonTest() throws IOException, InterruptedException{
 
         System.out.println("Python Call");
@@ -48,8 +48,8 @@ public class PythonTest {
         executor.execute(commandLine);
     }
 
-    @Test
-    @Ignore
+//    @Test
+//    @Ignore
     void funcTest() throws IOException, InterruptedException{
         String img_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\receipt1.jpg";
         String ouput_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";

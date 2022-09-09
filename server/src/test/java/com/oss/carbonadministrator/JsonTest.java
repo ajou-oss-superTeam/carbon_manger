@@ -22,8 +22,8 @@ public class JsonTest {
     private ElectricityRepository electricityRepository;
 
 
-    @Test
-    @Ignore
+//    @Test
+//    @Ignore
     void basicTest() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
@@ -38,8 +38,8 @@ public class JsonTest {
         assertEquals(1600, elecTest.getDemandCharge());
     }
 
-    @Test
-    @Ignore
+//    @Test
+//    @Ignore
     void jsonToDto() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
@@ -68,8 +68,8 @@ public class JsonTest {
         System.out.println(elecResult.getId());
     }
 
-    @Test
-    @Ignore
+//    @Test
+//    @Ignore
     public void editElec() throws IOException, ParseException {
         Electricity elec = (Electricity) electricityRepository.findById(3L).get();
 
