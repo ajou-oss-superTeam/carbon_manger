@@ -1,9 +1,11 @@
 package com.oss.carbonadministrator.controller;
 
+import com.oss.carbonadministrator.domain.Electricity;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.service.image.ImageService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,7 +34,14 @@ public class ImageController {
     // AI로 인식된 결과값 보여주기
     // 인식 에러날 경우, 오류 메시지와 함께 0으로 값 설정 후 return -> 사용자가 직접 입력 가능한 페이지로 이동
     @GetMapping("/electricity/{id}")
-    public String getRecognizedImgData(@RequestParam String id) {
+    public String getRecognizedImgData(@RequestParam String id) throws IOException, ParseException {
+        String img_path = "위에서 지정한 uploadedPath";
+        String output_path = "고민중, imag_path랑 같은곳으로 지정해도 괜찮을듯. xxx.json형식으로 경로지정";
+
+        imageService.imageToJson(img_path, output_path);
+
+        Electricity elec = imageService.jsonToDto(output_path);
+
         return id;
     }
 

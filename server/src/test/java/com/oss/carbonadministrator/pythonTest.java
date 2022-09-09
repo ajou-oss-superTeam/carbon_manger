@@ -3,20 +3,15 @@ package com.oss.carbonadministrator;
 import com.oss.carbonadministrator.service.image.ImageService;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.annotation.Testable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
-
-import java.io.ByteArrayOutputStream;
 
 import java.io.IOException;
 
 @SpringBootTest
-public class pythonTest {
+public class PythonTest {
     @Autowired
     ImageService imageService;
 
