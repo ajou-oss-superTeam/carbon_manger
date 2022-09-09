@@ -1,10 +1,15 @@
 package com.oss.carbonadministrator;
 
+import com.oss.carbonadministrator.service.image.ImageService;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.annotation.Testable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import java.io.ByteArrayOutputStream;
 
@@ -12,8 +17,11 @@ import java.io.IOException;
 
 @SpringBootTest
 public class pythonTest {
+    @Autowired
+    ImageService imageService;
 
     @Test
+    @Ignore
     void execPythonTest() throws IOException, InterruptedException{
 
         System.out.println("Python Call");
@@ -38,10 +46,18 @@ public class pythonTest {
             commandLine.addArgument(command[i]);
         }
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
         DefaultExecutor executor = new DefaultExecutor();
-        executor.setStreamHandler(pumpStreamHandler);
-        int result = executor.execute(commandLine);
+//        executor.setStreamHandler(pumpStreamHandler);
+        executor.execute(commandLine);
+    }
+
+    @Test
+    @Ignore
+    void funcTest() throws IOException, InterruptedException{
+        String img_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\receipt1.jpg";
+        String ouput_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";
+        imageService.imageToJson(img_path, ouput_path);
     }
 }
