@@ -7,6 +7,7 @@ import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.repository.UserRepository;
 import com.oss.carbonadministrator.service.command.SignUpCommand;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    @Transactional
     public SignupResponse signUp(SignUpCommand commandDto) {
         if (checkValidEmail(commandDto.getEmail())) {
             throw new AlreadyExistEmailException("해당 이메일은 이미 존재합니다.");
@@ -42,10 +44,12 @@ public class UserService {
         return new SignupResponse(commandDto.getEmail(), commandDto.getNickname());
     }
 
+    @Transactional
     public boolean checkValidEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
+    @Transactional
     public boolean checkValidNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }

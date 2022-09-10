@@ -8,7 +8,6 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,18 +24,13 @@ public class ImageController {
 
     private final ImageService imageService;
 
-    // 촬영된 전기 고지서 이미지 로컬에 업로드 -> 이후 ai 이미지 인식 처리 진행
     @PostMapping("/image/electricity")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto uploadImg(@RequestParam(name = "image") MultipartFile file)
         throws IOException, ParseException {
 
-        //uploadToLocal의 반환을 fileName을 하도록 변경
-        //json여는것까지 완료. return을 json을 하도록 변경 필요
         String fileName = imageService.uploadToLocal(file);
-
         imageService.imageToJson(fileName);
-
         Electricity recognizedElecData = imageService.jsonToDto(fileName);
 
         return ResponseDto.success(recognizedElecData, "전기 고지서 데이터 인식 성공");

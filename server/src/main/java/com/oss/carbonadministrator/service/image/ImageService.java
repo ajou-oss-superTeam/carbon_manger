@@ -7,8 +7,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import javax.transaction.Transactional;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -94,6 +96,7 @@ public class ImageService {
         return elecResult;
     }
 
+    @Transactional
     public Electricity editElec(Electricity elec) {
 
         electricityRepository.saveAndFlush(elec);
@@ -118,7 +121,6 @@ public class ImageService {
     }
 
     public String fileName(MultipartFile file) {
-        String[] result = file.getOriginalFilename().split(".jpg");
-        return result[0];
+        return FilenameUtils.getBaseName(file.getOriginalFilename());
     }
 }
