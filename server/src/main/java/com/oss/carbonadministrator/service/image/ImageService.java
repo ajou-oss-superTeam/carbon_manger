@@ -54,6 +54,8 @@ public class ImageService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.deleteFile(img_path);
     }
 
     public static void execPython(String[] command) throws IOException {
@@ -91,6 +93,8 @@ public class ImageService {
 
         electricityRepository.saveAndFlush(elecResult);
 
+        this.deleteFile(output_path);
+
         return elecResult;
     }
 
@@ -108,5 +112,13 @@ public class ImageService {
         electricityRepository.saveAndFlush(elec);
 
         return elec;
+    }
+
+    public void deleteFile(String path){
+        File deleteFile = new File(path);
+
+        if(deleteFile.exists()){
+            deleteFile.delete();
+        }
     }
 }
