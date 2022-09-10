@@ -4,6 +4,8 @@ import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import NotLogin from '../screens/NotLogin';
 import Camera from '../screens/Camera';
+import Score from '../screens/Score';
+import ScoreEdit from '../screens/ScoreEdit';
 
 const NativeStack = createNativeStackNavigator();
 
@@ -21,6 +23,8 @@ const Stack = () => {
       <NativeStack.Screen name="signup" component={SignUp} />
       {/* 카메리 추가 페이지 */}
       <NativeStack.Screen name="camera" component={Camera} />
+      <NativeStack.Screen name="score" component={Score} />
+      <NativeStack.Screen name="scoreedit" component={ScoreEdit} />
     </NativeStack.Navigator>
   );
 };
