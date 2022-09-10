@@ -2,13 +2,11 @@ package com.oss.carbonadministrator.service.image;
 
 import com.oss.carbonadministrator.domain.Electricity;
 import com.oss.carbonadministrator.exception.ImgUploadFailException;
+import com.oss.carbonadministrator.repository.ElectricityRepository;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-
-import com.oss.carbonadministrator.repository.ElectricityRepository;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.json.simple.JSONObject;
@@ -24,6 +22,16 @@ public class ImageService {
 
     @Autowired
     private ElectricityRepository electricityRepository;
+
+    public static void execPython(String[] command) throws IOException {
+        CommandLine commandLine = CommandLine.parse(command[0]);
+        for (int i = 1, n = command.length; i < n; i++) {
+            commandLine.addArgument(command[i]);
+        }
+
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.execute(commandLine);
+    }
 
     public String uploadToLocal(MultipartFile file) {
         if (file.isEmpty()) {
@@ -42,80 +50,66 @@ public class ImageService {
         }
     }
 
-    public void imageToJson(String fileName){
+    public void imageToJson(String fileName) {
         String[] command = new String[6];
         command[0] = "python";
         command[1] = "..\\ML\\ocr_electronic.py";
         command[2] = "-img_path";
-        command[3] = this.basePath()+fileName+".jpg";
+        command[3] = this.basePath() + fileName + ".jpg";
         command[4] = "-output_path";
-        command[5] = this.basePath()+fileName+".json";
+        command[5] = this.basePath() + fileName + ".json";
         try {
             execPython(command);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.deleteFile(this.basePath()+fileName+".jpg");
+        this.deleteFile(this.basePath() + fileName + ".jpg");
     }
 
-    public static void execPython(String[] command) throws IOException {
-        CommandLine commandLine = CommandLine.parse(command[0]);
-        for (int i = 1, n = command.length; i < n; i++) {
-            commandLine.addArgument(command[i]);
-        }
-
-        DefaultExecutor executor = new DefaultExecutor();
-        executor.execute(commandLine);
-    }
-
+    // TODO tv 수신료 인식 에러 수정 후 추가
+    // TODO 사용량 인식되면 데이터 추가
     public Electricity jsonToDto(String fileName) throws IOException, ParseException {
-        //추후 tv수신요금도 추가해야함
         JSONParser parser = new JSONParser();
-        String output_path = this.basePath()+fileName+".json";
+        String output_path = this.basePath() + fileName + ".json";
 
         Reader reader = new FileReader(output_path);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
-        Electricity elecResult = new Electricity();
-
-        elecResult.setDemandCharge(Integer.parseInt((String)jsonObject.get("base_fee")));
-        elecResult.setEnergyCharge(Integer.parseInt((String)jsonObject.get("pure_eletric_fee")));
-        elecResult.setEnvironmentCharge(Integer.parseInt((String)jsonObject.get("environment_fee")));
-        elecResult.setFuelAdjustmentRate(Integer.parseInt((String)jsonObject.get("fuel_fee")));
-        elecResult.setElecChargeSum(Integer.parseInt((String)jsonObject.get("eletric_fee")));
-        elecResult.setVat(Integer.parseInt((String)jsonObject.get("VATS_fee")));
-        elecResult.setElecFund(Integer.parseInt((String)jsonObject.get("unknown_fee")));
-        elecResult.setRoundDown(Integer.parseInt((String)jsonObject.get("cutoff_fee")));
-        elecResult.setTotalbyCurrMonth(Integer.parseInt((String)jsonObject.get("total_month_fee")));
-
-        //int totalfee = elecResult.getTotalbyCurrMonth() + elecResult.getTvSubscriptionFee();
-        int totalFee = elecResult.getTotalbyCurrMonth();
-        elecResult.setTotalPrice(totalFee);
-
-        electricityRepository.saveAndFlush(elecResult);
+        Electricity elecResult = Electricity.builder()
+            .demandCharge(Integer.parseInt((String) jsonObject.get("base_fee")))
+            .energyCharge(Integer.parseInt((String) jsonObject.get("pure_eletric_fee")))
+            .environmentCharge(Integer.parseInt((String) jsonObject.get("environment_fee")))
+            .fuelAdjustmentRate(Integer.parseInt((String) jsonObject.get("fuel_fee")))
+            .elecChargeSum(Integer.parseInt((String) jsonObject.get("eletric_fee")))
+            .vat(Integer.parseInt((String) jsonObject.get("VATS_fee")))
+            .elecFund(Integer.parseInt((String) jsonObject.get("unknown_fee")))
+            .roundDown(Integer.parseInt((String) jsonObject.get("cutoff_fee")))
+            .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
+            .tvSubscriptionFee(100) // TODO
+            .build();
 
         this.deleteFile(output_path);
 
         return elecResult;
     }
 
-    public Electricity editElec(Electricity elec){
+    public Electricity editElec(Electricity elec) {
 
         electricityRepository.saveAndFlush(elec);
 
         return elec;
     }
 
-    public void deleteFile(String path){
+    public void deleteFile(String path) {
         File deleteFile = new File(path);
 
-        if(deleteFile.exists()){
+        if (deleteFile.exists()) {
             deleteFile.delete();
         }
     }
 
-    public String basePath(){
+    public String basePath() {
         File base = new File("..\\ML\\working\\base");
 
         String[] result = base.getAbsolutePath().split("base");
@@ -123,7 +117,7 @@ public class ImageService {
         return result[0];
     }
 
-    public String fileName(MultipartFile file){
+    public String fileName(MultipartFile file) {
         String[] result = file.getOriginalFilename().split(".jpg");
         return result[0];
     }
