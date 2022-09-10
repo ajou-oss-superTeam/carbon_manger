@@ -31,8 +31,7 @@ public class ImageController {
         //uploadToLocal의 반환을 fileName을 하도록 변경
         //json여는것까지 완료. return을 json을 하도록 변경 필요
         String fileName = imageService.uploadToLocal(file);
-        String output_path = "고민중, imag_path랑 같은곳으로 지정해도 괜찮을듯. xxx.json형식으로 경로지정";
-
+        
         imageService.imageToJson(fileName);
 
         Electricity electricity = imageService.jsonToDto(fileName);
