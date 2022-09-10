@@ -22,7 +22,9 @@ const Home = ({ navigation: { navigate, replace } }) => {
       if (user) {
         setUser(user);
       } else {
-        replace('Stack', 'notlogin');
+        replace('Stack', {
+          screen: 'notlogin',
+        });
       }
     } catch (err) {
       console.error(err);
@@ -32,7 +34,10 @@ const Home = ({ navigation: { navigate, replace } }) => {
   const goToLink = (type) => {
     switch (type) {
       case '전기':
-        navigate('picture', { type });
+        navigate('Tabs', {
+          screen: 'picture',
+          params: { type, user },
+        });
         break;
       case '가스':
         Alert.alert('개발 중입니다.');

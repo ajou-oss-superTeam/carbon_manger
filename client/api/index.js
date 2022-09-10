@@ -43,31 +43,72 @@ const API = {
   },
 
   // 이미지 전송
-  async sendImg(uri) {
+  async sendImg(email, uri, year, month) {
+    // return {
+    //   success: true,
+    //   data: {
+    //     demandCharge: 1,
+    //     energyCharge: 2,
+    //     environmentCharge: 3,
+    //     fuelAdjustmentRate: 4,
+    //     elecChargeSum: 5,
+    //     vat: 6,
+    //     elecFund: 7,
+    //     roundDown: 8,
+    //     totalbyCurrMonth: 9,
+    //     tvSubscriptionFee: 10,
+    //     currMonthUsage: 11,
+    //     preMonthUsage: 12,
+    //     lastYearUsage: 13,
+    //   },
+    // };
     try {
-      const index = uri.indexOf('Camera/');
-      const name = uri.slice(index + 7);
-      const dotIndex = name.indexOf('.');
-      const type = name.slice(dotIndex + 1);
       const formData = new FormData();
 
-      // return;
-      formData.append('image', {
-        uri,
-        name,
-        type: `image/${type}`,
-      });
+      formData.append('email', email);
+      formData.append('year', year);
+      formData.append('month', month);
+      formData.append('image', uri);
 
-      const res = await axios.post(
-        `${host}/api/image/electrocity?type=image`,
+      const { data } = await axios.post(
+        `${host}/api/image/electrocity`,
         formData,
-        { header: { 'Content-Type': 'multipart/form-data' } }
+        {
+          header: { 'Content-Type': 'multipart/form-data' },
+        }
       );
 
-      if (res.data.success) {
-        return res.data;
+      if (data.success) {
+        return { data: data.data, success: data.success };
       } else {
-        return res.data.message;
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  // 숫자 전송
+  async sendNumber(email, year, month, numbers) {
+    try {
+      console.log({
+        email,
+        year,
+        month,
+        ...numbers,
+      });
+
+      const { data } = await axios.post(`${host}/api/image-edit/electricity`, {
+        email,
+        year,
+        month,
+        ...numbers,
+      });
+
+      if (data.success) {
+        return { data: data.data, success: data.success };
+      } else {
+        return { message: data.message, success: data.success };
       }
     } catch (err) {
       console.error(err);

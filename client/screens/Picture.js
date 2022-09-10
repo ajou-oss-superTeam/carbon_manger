@@ -1,23 +1,16 @@
 import { useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const Picture = ({
   navigation: { navigate, replace },
   route: {
-    params: { type },
+    params: { type, user },
   },
 }) => {
   const goToLink = () => {
     navigate('Stack', {
       screen: 'camera',
-      params: { type: type ? type : '전기' },
+      params: { type: type ? type : '전기', user },
     });
   };
 
@@ -42,7 +35,7 @@ const Picture = ({
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          <Text style={styles.bold}>어두운 배경</Text>에서{' '}
+          <Text style={styles.bold}>어두운 배경</Text>에서
           <Text style={styles.bold}>빛반사</Text>에 주의하며
         </Text>
         <Text style={styles.footerText}>
