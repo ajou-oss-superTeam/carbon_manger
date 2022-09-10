@@ -94,7 +94,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             .withExpiresAt(
                 new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME)
             ) // 토큰 만료 시간
-            .withClaim("id", customUserDetails.getUser().getPid()) // 변경 가능
+            .withClaim("id", customUserDetails.getUser().getId()) // 변경 가능
             .withClaim("username", customUserDetails.getUser().getEmail()) // 변경 가능
             .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
