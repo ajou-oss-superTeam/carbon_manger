@@ -48,11 +48,10 @@ public class PythonTest {
         executor.execute(commandLine);
     }
 
-//    @Test
+    @Test
 //    @Ignore
     void funcTest() throws IOException, InterruptedException{
-        String img_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\receipt1.jpg";
-        String ouput_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";
-        imageService.imageToJson(img_path, ouput_path);
+        String fileName = "receipt1";
+        imageService.imageToJson(fileName);
     }
 }

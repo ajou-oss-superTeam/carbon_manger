@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 
 import com.oss.carbonadministrator.repository.ElectricityRepository;
 import org.apache.commons.exec.CommandLine;
@@ -31,31 +32,31 @@ public class ImageService {
 
         try {
             String sourceFileName = file.getOriginalFilename();
-            String uploadedPath = "C:/Image/uploaded_" + sourceFileName;
+            String uploadedPath = this.basePath() + sourceFileName;
             File destFile = new File(uploadedPath);
             file.transferTo(destFile);
-            return uploadedPath;
+            return this.fileName(file);
         } catch (IOException e) {
             e.printStackTrace();
             throw new ImgUploadFailException("이미지 업로드 실패하였습니다.");
         }
     }
 
-    public void imageToJson(String img_path, String output_path){
+    public void imageToJson(String fileName){
         String[] command = new String[6];
         command[0] = "python";
         command[1] = "..\\ML\\ocr_electronic.py";
         command[2] = "-img_path";
-        command[3] = img_path;
+        command[3] = this.basePath()+fileName+".jpg";
         command[4] = "-output_path";
-        command[5] = output_path;
+        command[5] = this.basePath()+fileName+".json";
         try {
             execPython(command);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.deleteFile(img_path);
+        this.deleteFile(this.basePath()+fileName+".jpg");
     }
 
     public static void execPython(String[] command) throws IOException {
@@ -68,9 +69,10 @@ public class ImageService {
         executor.execute(commandLine);
     }
 
-    public Electricity jsonToDto(String output_path) throws IOException, ParseException {
+    public Electricity jsonToDto(String fileName) throws IOException, ParseException {
         //추후 tv수신요금도 추가해야함
         JSONParser parser = new JSONParser();
+        String output_path = this.basePath()+fileName+".json";
 
         Reader reader = new FileReader(output_path);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
@@ -98,16 +100,7 @@ public class ImageService {
         return elecResult;
     }
 
-    public Electricity editElec(Electricity changeElec, Electricity elec){
-        elec.setDemandCharge(changeElec.getDemandCharge());
-        elec.setEnergyCharge(changeElec.getEnergyCharge());
-        elec.setEnvironmentCharge(changeElec.getEnvironmentCharge());
-        elec.setFuelAdjustmentRate(changeElec.getFuelAdjustmentRate());
-        elec.setElecChargeSum(changeElec.getElecChargeSum());
-        elec.setVat(changeElec.getVat());
-        elec.setElecFund(changeElec.getElecFund());
-        elec.setRoundDown(changeElec.getRoundDown());
-        elec.setTotalbyCurrMonth(changeElec.getTotalbyCurrMonth());
+    public Electricity editElec(Electricity elec){
 
         electricityRepository.saveAndFlush(elec);
 
@@ -120,5 +113,18 @@ public class ImageService {
         if(deleteFile.exists()){
             deleteFile.delete();
         }
+    }
+
+    public String basePath(){
+        File base = new File("..\\ML\\working\\base");
+
+        String[] result = base.getAbsolutePath().split("base");
+
+        return result[0];
+    }
+
+    public String fileName(MultipartFile file){
+        String[] result = file.getOriginalFilename().split(".jpg");
+        return result[0];
     }
 }
