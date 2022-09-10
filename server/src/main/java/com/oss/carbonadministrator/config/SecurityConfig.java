@@ -52,7 +52,7 @@ public class SecurityConfig {
              */
             .and()
             .authorizeRequests()
-            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists", "/api/user/user-nickname/exists", "/api/image/electricity").permitAll()
+            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists", "/api/user/user-nickname/exists", "/api/image/electricity", "/api/image-edit/electricity").permitAll()
 
             // 그 외 API는 인가 절차 수행
             .anyRequest().authenticated();

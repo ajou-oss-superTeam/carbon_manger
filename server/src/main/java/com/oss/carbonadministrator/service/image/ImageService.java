@@ -1,29 +1,36 @@
 package com.oss.carbonadministrator.service.image;
 
+import com.oss.carbonadministrator.domain.Bill;
 import com.oss.carbonadministrator.domain.Electricity;
+import com.oss.carbonadministrator.domain.User;
 import com.oss.carbonadministrator.exception.ImgUploadFailException;
+import com.oss.carbonadministrator.repository.BillRepository;
 import com.oss.carbonadministrator.repository.ElectricityRepository;
+import com.oss.carbonadministrator.repository.UserRepository;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Optional;
 import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
-    @Autowired
-    private ElectricityRepository electricityRepository;
+    private final UserRepository userRepository;
+    private final ElectricityRepository electricityRepository;
+    private final BillRepository billRepository;
 
     public static void execPython(String[] command) throws IOException {
         CommandLine commandLine = CommandLine.parse(command[0]);
@@ -91,7 +98,7 @@ public class ImageService {
             .tvSubscriptionFee(100) // TODO
             .build();
 
-        this.deleteFile(output_path);
+        //this.deleteFile(output_path);
 
         return elecResult;
     }
@@ -104,7 +111,8 @@ public class ImageService {
         return elec;
     }
 
-    public void deleteFile(String path) {
+    public void deleteFile(String fileName) {
+        String path = this.basePath() + fileName + ".json";
         File deleteFile = new File(path);
 
         if (deleteFile.exists()) {
@@ -122,5 +130,16 @@ public class ImageService {
 
     public String fileName(MultipartFile file) {
         return FilenameUtils.getBaseName(file.getOriginalFilename());
+    }
+
+    public void save(String email, int year, int month, Electricity recognizedElecData) {
+        Optional<User> user = userRepository.findByEmail(email);
+        electricityRepository.saveAndFlush(recognizedElecData);
+        Bill bill = new Bill();
+        bill.setYear(year);
+        bill.setMonth(month);
+
+        billRepository.saveAndFlush(bill);
+
     }
 }

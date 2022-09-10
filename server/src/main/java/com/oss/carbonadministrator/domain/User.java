@@ -1,12 +1,17 @@
 package com.oss.carbonadministrator.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +26,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
-    @Column
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -47,6 +52,8 @@ public class User {
     @Column
     private Role role;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Bill> billList = new ArrayList<>();
 
     @Getter
     public enum Role {

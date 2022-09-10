@@ -1,5 +1,7 @@
 package com.oss.carbonadministrator.dto.request.Image;
 
+import com.oss.carbonadministrator.domain.Electricity;
+import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ElecImgRequest {
 
+    @Email
     private String email;
 
     private int year;
@@ -45,8 +48,6 @@ public class ElecImgRequest {
     // TV 수신료
     private int tvSubscriptionFee;
 
-    private int totalPrice;
-
     // 당월 사용량 (kWh)
     private int currMonthUsage;
 
@@ -55,4 +56,24 @@ public class ElecImgRequest {
 
     // 전년동월 사용량 (kWh)
     private int lastYearUsage;
+
+    public Electricity toElecEntity(ElecImgRequest requestDto) {
+        Electricity elecData =  Electricity.builder()
+            .demandCharge(requestDto.getDemandCharge())
+            .energyCharge(requestDto.getEnergyCharge())
+            .environmentCharge(requestDto.getEnvironmentCharge())
+            .fuelAdjustmentRate(requestDto.getFuelAdjustmentRate())
+            .elecChargeSum(requestDto.getElecChargeSum())
+            .vat(requestDto.getElecFund())
+            .elecFund(requestDto.getElecFund())
+            .roundDown(requestDto.getRoundDown())
+            .totalbyCurrMonth(requestDto.getTotalbyCurrMonth())
+            .tvSubscriptionFee(requestDto.getTvSubscriptionFee())
+            .currMonthUsage(requestDto.getCurrMonthUsage())
+            .preMonthUsage(requestDto.getPreMonthUsage())
+            .lastYearUsage(requestDto.getLastYearUsage())
+            .build();
+        elecData.calculateTotalPrice(elecData.getTotalbyCurrMonth(), elecData.getTvSubscriptionFee());
+        return elecData;
+    }
 }

@@ -19,24 +19,32 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "bill")
-public class Bill {
+public class Bill extends BaseTimeEntity {
 
     @Id
-    @Column
+    @Column(name = "bill_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "elec_id")
-    private Electricity electricity;
+    private Electricity electricityList;
 
     @Column
     private int year;
 
     @Column
     private int month;
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
 }
