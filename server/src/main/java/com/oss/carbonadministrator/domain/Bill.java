@@ -10,14 +10,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /*
  * 고지서 Entity
  * TODO 수도, 가스 서비스 확장
  */
 @Getter
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "bill")
 public class Bill extends BaseTimeEntity {
 
@@ -26,7 +32,7 @@ public class Bill extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -39,12 +45,4 @@ public class Bill extends BaseTimeEntity {
 
     @Column
     private int month;
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
 }

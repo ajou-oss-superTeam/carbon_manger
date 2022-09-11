@@ -85,7 +85,7 @@ public class ImageService {
         Reader reader = new FileReader(output_path);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
-        Electricity elecResult = Electricity.builder()
+        return Electricity.builder()
             .demandCharge(Integer.parseInt((String) jsonObject.get("base_fee")))
             .energyCharge(Integer.parseInt((String) jsonObject.get("pure_eletric_fee")))
             .environmentCharge(Integer.parseInt((String) jsonObject.get("environment_fee")))
@@ -97,10 +97,6 @@ public class ImageService {
             .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
             .tvSubscriptionFee(100) // TODO
             .build();
-
-        //this.deleteFile(output_path);
-
-        return elecResult;
     }
 
     @Transactional
@@ -134,12 +130,18 @@ public class ImageService {
 
     public void save(String email, int year, int month, Electricity recognizedElecData) {
         Optional<User> user = userRepository.findByEmail(email);
-        electricityRepository.saveAndFlush(recognizedElecData);
-        Bill bill = new Bill();
-        bill.setYear(year);
-        bill.setMonth(month);
+
+        if (user.isEmpty()) {
+            throw new RuntimeException("찾는 회원이 없습니다.");
+        }
+
+        Bill bill = Bill.builder()
+            .user(user.get())
+            .electricityList(recognizedElecData)
+            .year(year)
+            .month(month)
+            .build();
 
         billRepository.saveAndFlush(bill);
-
     }
 }

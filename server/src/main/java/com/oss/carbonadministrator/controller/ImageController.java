@@ -37,7 +37,7 @@ public class ImageController {
         imageService.save(email, year, month, recognizedElecData);
         // 데이터 파일 삭제
         imageService.deleteFile(fileName);
-        return ResponseDto.success(recognizedElecData, "전기 고지서 데이터 인식 성공");
+        return ResponseDto.success(recognizedElecData, "전기 고지서 데이터 인식 및 저장 성공");
     }
 
     // AI로 인식된 결과값 보여주기
@@ -47,5 +47,6 @@ public class ImageController {
     public void editImgData(@RequestBody ElecImgRequest requestDto) {
         Electricity editedElecData = imageService.editElec(requestDto.toElecEntity(requestDto));
         imageService.save(requestDto.getEmail(), requestDto.getYear(), requestDto.getMonth(), editedElecData);
+
     }
 }
