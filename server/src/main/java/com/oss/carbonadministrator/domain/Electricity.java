@@ -79,7 +79,8 @@ public class Electricity extends BaseTimeEntity {
     @Column
     private int lastYearUsage;
 
-    public void calculateTotalPrice(int totalbyCurrMonth, int tvSubscriptionFee) {
-        this.totalPrice = totalbyCurrMonth + tvSubscriptionFee;
+    public int calculateTotalPrice(int totalbyCurrMonth, int tvSubscriptionFee) {
+        totalPrice = totalbyCurrMonth + tvSubscriptionFee;
+        return totalPrice;
     }
 }

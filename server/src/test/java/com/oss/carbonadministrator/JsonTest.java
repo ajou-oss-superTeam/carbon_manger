@@ -59,7 +59,7 @@ public class JsonTest {
             .build();
 
 
-        electricityRepository.saveAndFlush(elecResult);
+        electricityRepository.save(elecResult);
 
         System.out.println(elecResult.getId());
     }
@@ -67,10 +67,10 @@ public class JsonTest {
 //    @Test
 //    @Ignore
     public void editElec() throws IOException, ParseException {
-        Electricity elec = (Electricity) electricityRepository.findById(3L).get();
+        Electricity elec = electricityRepository.findById(3L);
 
         //elec.setRoundDown(12333);
 
-        electricityRepository.saveAndFlush(elec);
+        electricityRepository.save(elec);
     }
 }

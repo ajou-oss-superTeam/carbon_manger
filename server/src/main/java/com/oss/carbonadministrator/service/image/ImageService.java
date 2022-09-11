@@ -42,6 +42,29 @@ public class ImageService {
         executor.execute(commandLine);
     }
 
+    @Transactional
+    public void update(Long electricityId, Electricity toElecEntity) {
+        Electricity electricity = Electricity.builder()
+            .id(electricityId)
+            .demandCharge(toElecEntity.getDemandCharge())
+            .energyCharge(toElecEntity.getEnergyCharge())
+            .environmentCharge(toElecEntity.getEnvironmentCharge())
+            .fuelAdjustmentRate(toElecEntity.getFuelAdjustmentRate())
+            .elecChargeSum(toElecEntity.getElecChargeSum())
+            .vat(toElecEntity.getVat())
+            .elecFund(toElecEntity.getElecFund())
+            .roundDown(toElecEntity.getRoundDown())
+            .tvSubscriptionFee(toElecEntity.getTvSubscriptionFee())
+            .totalbyCurrMonth(toElecEntity.getTotalbyCurrMonth())
+            .currMonthUsage(toElecEntity.getCurrMonthUsage())
+            .preMonthUsage(toElecEntity.getPreMonthUsage())
+            .lastYearUsage(toElecEntity.getLastYearUsage())
+            .totalPrice(toElecEntity.calculateTotalPrice(toElecEntity.getTotalbyCurrMonth(), toElecEntity.getTvSubscriptionFee()))
+            .build();
+
+        electricityRepository.save(electricity);
+    }
+
     public String uploadToLocal(MultipartFile file) {
         if (file.isEmpty()) {
             throw new ImgUploadFailException("업로드 할 이미지가 없습니다.");
@@ -99,14 +122,6 @@ public class ImageService {
             .build();
     }
 
-    @Transactional
-    public Electricity editElec(Electricity elec) {
-
-        electricityRepository.saveAndFlush(elec);
-
-        return elec;
-    }
-
     public void deleteFile(String fileName) {
         String path = this.basePath() + fileName + ".json";
         File deleteFile = new File(path);
@@ -128,7 +143,8 @@ public class ImageService {
         return FilenameUtils.getBaseName(file.getOriginalFilename());
     }
 
-    public void save(String email, int year, int month, Electricity recognizedElecData) {
+    @Transactional
+    public Electricity save(String email, int year, int month, Electricity recognizedElecData) {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
@@ -142,6 +158,7 @@ public class ImageService {
             .month(month)
             .build();
 
-        billRepository.saveAndFlush(bill);
+        billRepository.save(bill);
+        return bill.getElectricityList();
     }
 }
