@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /*
  * 고지서 Entity
@@ -36,6 +37,7 @@ public class Bill extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Setter
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "elec_id")
     private Electricity electricityList;

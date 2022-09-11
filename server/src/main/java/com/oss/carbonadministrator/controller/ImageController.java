@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/image")
 @RequiredArgsConstructor
 public class ImageController {
 
     private final ImageService imageService;
 
-    @PostMapping("/image/electricity")
+    @PostMapping("/electricity")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto uploadElecImg(@RequestParam String email, @RequestParam Integer year, @RequestParam Integer month, @RequestParam(name = "image") MultipartFile file)
         throws IOException, ParseException {
@@ -42,12 +42,15 @@ public class ImageController {
         return ResponseDto.success(savedData, "전기 고지서 데이터 인식 및 저장 성공");
     }
 
-    // AI로 인식된 결과값 보여주기
-    // 인식 에러날 경우, 오류 메시지와 함께 0으로 값 설정 후 return -> 사용자가 직접 입력 가능한 페이지로 이동
-    // 사용자가 입력값 일부 수정(직접 입력) 가능
-    @PutMapping("/image/electricity/{electricityId}/edit")
-    public ResponseDto editImgData(@PathVariable("electricityId") Long electricityId, @RequestBody ElecImgRequest requestDto) {
+    @PutMapping("/electricity/{electricityId}/edit")
+    public ResponseDto editElecImgData(@PathVariable("electricityId") Long electricityId, @RequestBody ElecImgRequest requestDto) {
         imageService.update(electricityId, requestDto.toElecEntity(requestDto));
         return ResponseDto.success(null, "전기 고지서 데이터 사용자 수정 완료");
+    }
+
+    @PostMapping("/electricity/input")
+    public ResponseDto inputElecData(@RequestBody ElecImgRequest requestDto) {
+        imageService.save(requestDto.getEmail(), requestDto.getYear(), requestDto.getMonth(), requestDto.toElecEntity(requestDto));
+        return ResponseDto.success(null, "사용자 데이터 직접 입력 성공");
     }
 }

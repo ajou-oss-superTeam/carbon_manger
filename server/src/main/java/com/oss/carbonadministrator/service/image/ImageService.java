@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,8 @@ public class ImageService {
             .currMonthUsage(toElecEntity.getCurrMonthUsage())
             .preMonthUsage(toElecEntity.getPreMonthUsage())
             .lastYearUsage(toElecEntity.getLastYearUsage())
-            .totalPrice(toElecEntity.calculateTotalPrice(toElecEntity.getTotalbyCurrMonth(), toElecEntity.getTvSubscriptionFee()))
+            .totalPrice(toElecEntity.calculateTotalPrice(toElecEntity.getTotalbyCurrMonth(),
+                toElecEntity.getTvSubscriptionFee()))
             .build();
 
         electricityRepository.save(electricity);
@@ -151,14 +153,24 @@ public class ImageService {
             throw new RuntimeException("찾는 회원이 없습니다.");
         }
 
-        Bill bill = Bill.builder()
-            .user(user.get())
-            .electricityList(recognizedElecData)
-            .year(year)
-            .month(month)
-            .build();
+        Bill bill;
 
-        billRepository.save(bill);
+        if (billRepository.findByUserAndDate(user, year, month).stream().findAny().isEmpty()) {
+            bill = Bill.builder()
+                .user(user.get())
+                .electricityList(recognizedElecData)
+                .year(year)
+                .month(month)
+                .build();
+            billRepository.save(bill);
+
+        } else {
+            List<Bill> billList = billRepository.findByUserAndDate(user, year, month);
+            bill = billList.get(0);
+            bill.setElectricityList(recognizedElecData);
+            billRepository.save(bill);
+        }
+
         return bill.getElectricityList();
     }
 }
