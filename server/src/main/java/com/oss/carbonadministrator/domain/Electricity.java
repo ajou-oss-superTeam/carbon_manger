@@ -1,25 +1,26 @@
 package com.oss.carbonadministrator.domain;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "electricity")
-public class Electricity {
+public class Electricity extends BaseTimeEntity {
 
     @Id
-    @Column
+    @Column(name = "elec_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -78,11 +79,8 @@ public class Electricity {
     @Column
     private int lastYearUsage;
 
-    @Column(name = "create_date")
-    @Temporal(TemporalType.DATE)
-    private Date date;
-
-    public Electricity() {
-        this.totalPrice = this.totalbyCurrMonth + this.tvSubscriptionFee;
+    public int calculateTotalPrice(int totalbyCurrMonth, int tvSubscriptionFee) {
+        totalPrice = totalbyCurrMonth + tvSubscriptionFee;
+        return totalPrice;
     }
 }

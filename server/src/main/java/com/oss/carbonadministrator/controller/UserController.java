@@ -10,7 +10,6 @@ import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.service.user.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,11 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-
-    @GetMapping
-    public String home() {
-        return "<h1>home</h1>";
-    }
 
     /*
      * 이메일 중복 여부 판단 API
