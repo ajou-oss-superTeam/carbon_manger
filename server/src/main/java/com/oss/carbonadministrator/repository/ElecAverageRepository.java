@@ -9,6 +9,7 @@ import java.util.Optional;
 @Repository
 public interface ElecAverageRepository extends JpaRepository<ElecAverage, Long> {
 
+
     Optional<ElecAverage> findById(Long id);
 
 }

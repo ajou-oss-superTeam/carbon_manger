@@ -31,4 +31,5 @@ public class BillRepository {
             .setParameter("email", user.get().getEmail())
             .getResultList();
     }
+
 }

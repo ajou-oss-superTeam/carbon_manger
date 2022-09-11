@@ -77,6 +77,7 @@ public class ImageService {
             String uploadedPath = this.basePath() + sourceFileName;
             File destFile = new File(uploadedPath);
             file.transferTo(destFile);
+
             return this.fileName(file);
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,7 +88,7 @@ public class ImageService {
     public void imageToJson(String fileName) {
         String[] command = new String[6];
         command[0] = "python";
-        command[1] = "..\\ML\\ocr_electronic.py";
+        command[1] = this.basePath().split("working")[0] + "ocr_electronic.py";
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
         command[4] = "-output_path";
@@ -98,7 +99,7 @@ public class ImageService {
             e.printStackTrace();
         }
 
-        this.deleteFile(this.basePath() + fileName + ".jpg");
+        this.deleteFile(fileName + ".jpg");
     }
 
     // TODO tv 수신료 인식 에러 수정 후 추가
@@ -125,7 +126,7 @@ public class ImageService {
     }
 
     public void deleteFile(String fileName) {
-        String path = this.basePath() + fileName + ".json";
+        String path = this.basePath() + fileName;
         File deleteFile = new File(path);
 
         if (deleteFile.exists()) {
@@ -134,7 +135,7 @@ public class ImageService {
     }
 
     public String basePath() {
-        File base = new File("..\\ML\\working\\base");
+        File base = new File("./ML/working/base");
 
         String[] result = base.getAbsolutePath().split("base");
 
