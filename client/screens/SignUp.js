@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
+import { address } from '../assets/variables/address';
 import API from '../api/index';
 
 const SignUp = ({ navigation: { navigate, replace } }) => {
@@ -19,6 +21,7 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
   const [password, onChangePassword] = useState('');
   const [passwordConfirm, onChangePasswordConfirm] = useState('');
   const [province, setProvince] = useState('');
+  const [cityArray, setCityArray] = useState(address.city.강원도);
   const [city, setCity] = useState('');
   const [oldCheck, setOldCheck] = useState(false);
   const [serviceCheck, setServiceCheck] = useState(false);
@@ -88,21 +91,30 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
             secureTextEntry={true}
           />
           <Text style={styles.label}>시도</Text>
-          <TextInput
-            style={styles.input}
-            value={province}
-            onChangeText={setProvince}
-            placeholder="내용을 입력해주세요"
-            autoComplete="password"
-          />
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={province}
+              onValueChange={(itemValue, itemIndex) => {
+                setProvince(itemValue);
+                setCityArray(address.city[itemValue]);
+              }}
+            >
+              {address.province.map((item) => {
+                return <Picker.Item key={item} label={item} value={item} />;
+              })}
+            </Picker>
+          </View>
           <Text style={styles.label}>구</Text>
-          <TextInput
-            style={styles.input}
-            value={city}
-            onChangeText={setCity}
-            placeholder="내용을 입력해주세요"
-            autoComplete="password"
-          />
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={city}
+              onValueChange={(itemValue, itemIndex) => setCity(itemValue)}
+            >
+              {cityArray.map((item) => {
+                return <Picker.Item key={item} label={item} value={item} />;
+              })}
+            </Picker>
+          </View>
           <View style={styles.check}>
             <Text>만 14세 이상입니다(필수)</Text>
             <Checkbox
@@ -175,6 +187,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
+  },
+  picker: {
+    marginBottom: 30,
+    border: 1,
+    borderWidth: 1,
+    borderRadius: 10,
   },
   middle: { flex: 3 },
   scrollView: {},

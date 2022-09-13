@@ -17,17 +17,14 @@ const Home = ({ navigation: { navigate, replace } }) => {
   }, []);
 
   const checkUser = async () => {
-    try {
-      const user = await AsyncStorage.getItem('@user');
-      if (user) {
-        setUser(user);
-      } else {
-        replace('Stack', {
-          screen: 'notlogin',
-        });
-      }
-    } catch (err) {
-      console.error(err);
+    const user = await AsyncStorage.getItem('@user');
+    console.log(JSON.parse(user));
+    if (user) {
+      setUser(user);
+    } else {
+      replace('Stack', {
+        screen: 'notlogin',
+      });
     }
   };
 

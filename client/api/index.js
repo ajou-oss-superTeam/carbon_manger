@@ -44,24 +44,6 @@ const API = {
 
   // 이미지 전송
   async sendImg(email, uri, year, month) {
-    // return {
-    //   success: true,
-    //   data: {
-    //     demandCharge: 1,
-    //     energyCharge: 2,
-    //     environmentCharge: 3,
-    //     fuelAdjustmentRate: 4,
-    //     elecChargeSum: 5,
-    //     vat: 6,
-    //     elecFund: 7,
-    //     roundDown: 8,
-    //     totalbyCurrMonth: 9,
-    //     tvSubscriptionFee: 10,
-    //     currMonthUsage: 11,
-    //     preMonthUsage: 12,
-    //     lastYearUsage: 13,
-    //   },
-    // };
     try {
       const formData = new FormData();
 
@@ -88,21 +70,52 @@ const API = {
     }
   },
 
+  // 사진 수정
+  async editImgInfo(id, numbers) {
+    try {
+      const { data } = await axios.post(
+        `${host}/api/image/electricity/${id}/edit`,
+        {
+          id,
+          ...numbers,
+        }
+      );
+
+      if (data.success) {
+        return { data: data.data, success: data.success };
+      } else {
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
   // 숫자 전송
   async sendNumber(email, year, month, numbers) {
     try {
-      console.log({
+      const { data } = await axios.post(`${host}/api/image/electricity/input`, {
         email,
         year,
         month,
         ...numbers,
       });
 
-      const { data } = await axios.post(`${host}/api/image-edit/electricity`, {
+      if (data.success) {
+        return { data: data.data, success: data.success };
+      } else {
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  // 숫자 전송
+  async getGraph(email) {
+    try {
+      const { data } = await axios.post(`${host}/api/graph/electricity/fee`, {
         email,
-        year,
-        month,
-        ...numbers,
       });
 
       if (data.success) {
