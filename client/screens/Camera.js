@@ -9,13 +9,14 @@ import {
   Button,
 } from 'react-native';
 import { Camera } from 'expo-camera';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const CameraScreen = ({
   navigation: { navigate, replace },
   route: {
-    params: { type },
+    params: { type, user },
   },
 }) => {
   // 카메라 페이지 여부
@@ -26,6 +27,8 @@ const CameraScreen = ({
   const [imageUrl, setImageUri] = useState(null);
   // 권한
   const [permission, requestPermission] = useState(false);
+  // 날짜
+  const [showDate, setShowDate] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -54,18 +57,53 @@ const CameraScreen = ({
     setCamera(false);
   };
 
-  const submitImg = () => {
+  const submitImg = async () => {
     if (!imageUrl) {
       Alert.alert('이미지를 입력해주시기 바랍니다.');
       return;
     }
-    API.sendImg(imageUrl);
+
+    setShowDate(true);
+  };
+
+  const requsetAPI = async (e) => {
+    setShowDate(false);
+
+    if (e.type === 'dismissed') {
+      return;
+    }
+
+    const timestamp = e.nativeEvent.timestamp;
+    const jsDate = new Date(timestamp);
+    const year = jsDate.getFullYear();
+    const month = jsDate.getMonth() + 1;
+
+    const userJson = JSON.parse(user);
+    const {
+      user: { email },
+    } = userJson;
+
+    const { data, success, message } = await API.sendImg(
+      email,
+      imageUrl,
+      year,
+      month
+    );
+
+    if (success) {
+      navigate('Stack', {
+        screen: 'score',
+        params: { type, user, data, time: { year, month } },
+      });
+    } else {
+      Alert.alert(message);
+    }
   };
 
   const goToLink = () => {
     navigate('Stack', {
-      screen: 'camera',
-      params: { type: type ? type : '전기' },
+      screen: 'scoreedit',
+      params: { type, user, data: {} },
     });
   };
 
@@ -105,6 +143,15 @@ const CameraScreen = ({
           사각형 범위 내부에 <Text style={styles.red}>청구내역</Text>이
         </Text>
         <Text style={styles.headerContent}>들어가도록 맞추어 주세요</Text>
+        {showDate && (
+          <DateTimePicker
+            mode="date"
+            positiveButtonLabel="고지서 날짜 입력"
+            negativeButtonLabel="닫기"
+            value={new Date()}
+            onChange={requsetAPI}
+          />
+        )}
       </View>
       <View style={styles.middle}>
         <View style={styles.imgCover}>
@@ -115,11 +162,11 @@ const CameraScreen = ({
         <TouchableOpacity onPress={openCamera}>
           <MaterialIcons name="camera" size={50} color="black" />
         </TouchableOpacity>
-        <View style={styles.footerBtn}>
-          <TouchableOpacity onPress={submitImg}>
+        <View style={styles.footerBtns}>
+          <TouchableOpacity onPress={submitImg} style={styles.footerBtn}>
             <Text style={styles.footerBtnText}>사진 제출하기</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToLink}>
+          <TouchableOpacity onPress={goToLink} style={styles.footerBtn}>
             <Text style={styles.footerBtnText}>직접 입력하기</Text>
           </TouchableOpacity>
         </View>
@@ -162,6 +209,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 2,
+    paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -193,20 +241,25 @@ const styles = StyleSheet.create({
     aspectRatio: 1, // Your aspect ratio
   },
   footer: {
-    flex: 1,
+    flex: 2,
     paddingTop: 10,
     alignItems: 'center',
   },
-  footerBtn: {
+  footerBtns: {
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    color: 'white',
+    marginTop: 30,
   },
-  footerBtnText: {
-    marginTop: 10,
+  footerBtn: {
     padding: 10,
     backgroundColor: 'rgb(52, 152, 219)',
     color: 'white',
     fontWeight: 'bold',
     borderRadius: 10,
+  },
+  footerBtnText: {
+    color: 'white',
   },
 });

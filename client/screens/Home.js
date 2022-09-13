@@ -17,22 +17,24 @@ const Home = ({ navigation: { navigate, replace } }) => {
   }, []);
 
   const checkUser = async () => {
-    try {
-      const user = await AsyncStorage.getItem('@user');
-      if (user) {
-        setUser(user);
-      } else {
-        replace('Stack', 'notlogin');
-      }
-    } catch (err) {
-      console.error(err);
+    const user = await AsyncStorage.getItem('@user');
+    console.log(JSON.parse(user));
+    if (user) {
+      setUser(user);
+    } else {
+      replace('Stack', {
+        screen: 'notlogin',
+      });
     }
   };
 
   const goToLink = (type) => {
     switch (type) {
       case '전기':
-        navigate('picture', { type });
+        navigate('Tabs', {
+          screen: 'picture',
+          params: { type, user },
+        });
         break;
       case '가스':
         Alert.alert('개발 중입니다.');

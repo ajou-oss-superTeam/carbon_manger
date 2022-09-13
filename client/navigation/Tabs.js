@@ -5,7 +5,11 @@ import Graph from '../screens/Graph';
 import Home from '../screens/Home';
 import MyPage from '../screens/MyPage';
 import Picture from '../screens/Picture';
-import { NAVI_BG, NAVI_ITEM_DEFAULT, NAVI_ITEM_CLICK } from '../assets/color';
+import {
+  NAVI_BG,
+  NAVI_ITEM_DEFAULT,
+  NAVI_ITEM_CLICK,
+} from '../assets/variables/color';
 
 const Tab = createBottomTabNavigator();
 

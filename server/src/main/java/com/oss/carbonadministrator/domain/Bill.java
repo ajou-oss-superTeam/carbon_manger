@@ -1,21 +1,22 @@
 package com.oss.carbonadministrator.domain;
 
-import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.Getter;
-import lombok.Setter;
 
-
+/*
+ * 고지서 Entity
+ * TODO 수도, 가스 서비스 확장
+ */
 @Getter
-@Setter
 @Entity
 @Table(name = "bill")
 public class Bill {
@@ -23,22 +24,19 @@ public class Bill {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pid;
+    private Long id;
 
-    @ManyToOne
-    //@JoinColumn(name = "user_pid")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
-    private Long electric;
+    @OneToOne
+    @JoinColumn(name = "elec_id")
+    private Electricity electricity;
 
     @Column
-    private Long gas;
+    private int year;
 
     @Column
-    private Long water;
-
-    @Column
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private int month;
 }
