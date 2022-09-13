@@ -87,7 +87,7 @@ public class ImageService {
 
     public void imageToJson(String fileName) {
         String[] command = new String[6];
-        command[0] = "python";
+        command[0] = "python3";
         command[1] = this.basePath().split("working")[0] + "ocr_electronic.py";
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
