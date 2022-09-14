@@ -1,24 +1,13 @@
 package com.oss.carbonadministrator.repository;
 
 import com.oss.carbonadministrator.domain.Electricity;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ElectricityRepository {
-    @PersistenceContext
-    private EntityManager em;
+public interface ElectricityRepository extends JpaRepository<Electricity, Long> {
 
-    public void save(Electricity electricity) {
-        if (electricity.getId() == null) {
-            em.persist(electricity);
-        } else {
-            em.merge(electricity);
-        }
-    }
+    Optional<Electricity> findById(Long id);
 
-    public Electricity findById(Long id) {
-        return em.find(Electricity.class, id);
-    }
 }

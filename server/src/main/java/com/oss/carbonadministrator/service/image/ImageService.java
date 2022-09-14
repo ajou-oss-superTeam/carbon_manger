@@ -111,7 +111,7 @@ public class ImageService {
         Reader reader = new FileReader(output_path);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
-        return Electricity.builder()
+        Electricity electricity = Electricity.builder()
             .demandCharge(Integer.parseInt((String) jsonObject.get("base_fee")))
             .energyCharge(Integer.parseInt((String) jsonObject.get("pure_eletric_fee")))
             .environmentCharge(Integer.parseInt((String) jsonObject.get("environment_fee")))
@@ -121,8 +121,13 @@ public class ImageService {
             .elecFund(Integer.parseInt((String) jsonObject.get("unknown_fee")))
             .roundDown(Integer.parseInt((String) jsonObject.get("cutoff_fee")))
             .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
-            .tvSubscriptionFee(100) // TODO
+            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
+            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
+            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
+            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
+        deleteFile(fileName);
+        return electricity;
     }
 
     public void deleteFile(String fileName) {
@@ -156,7 +161,8 @@ public class ImageService {
 
         Bill bill;
 
-        if (billRepository.findByUserAndDate(user, year, month).stream().findAny().isEmpty()) {
+        if (billRepository.findBillByEmailAndYearAndMonth(user.get().getEmail(), year, month)
+            .stream().findAny().isEmpty()) {
             bill = Bill.builder()
                 .user(user.get())
                 .electricityList(recognizedElecData)
@@ -166,7 +172,8 @@ public class ImageService {
             billRepository.save(bill);
 
         } else {
-            List<Bill> billList = billRepository.findByUserAndDate(user, year, month);
+            List<Bill> billList = billRepository.findBillByEmailAndYearAndMonth(
+                user.get().getEmail(), year, month);
             bill = billList.get(0);
             bill.setElectricityList(recognizedElecData);
             billRepository.save(bill);

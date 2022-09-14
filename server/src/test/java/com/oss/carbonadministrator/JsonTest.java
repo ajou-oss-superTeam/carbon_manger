@@ -67,7 +67,7 @@ public class JsonTest {
 //    @Test
 //    @Ignore
     public void editElec() throws IOException, ParseException {
-        Electricity elec = electricityRepository.findById(3L);
+        Electricity elec = electricityRepository.findById(3L).get();
 
         //elec.setRoundDown(12333);
 
