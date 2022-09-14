@@ -102,8 +102,6 @@ public class ImageService {
         this.deleteFile(fileName + ".jpg");
     }
 
-    // TODO tv 수신료 인식 에러 수정 후 추가
-    // TODO 사용량 인식되면 데이터 추가
     public Electricity jsonToDto(String fileName) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         String output_path = this.basePath() + fileName + ".json";
@@ -126,6 +124,7 @@ public class ImageService {
             .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
             .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
+        electricity.calculateTotalPrice(electricity.getTotalbyCurrMonth(), electricity.getTvSubscriptionFee());
         deleteFile(fileName);
         return electricity;
     }
