@@ -44,14 +44,14 @@ const Graph = () => {
         {graphData && (
           <LineChart
             data={{
-              labels: data.labels,
+              labels: graphData.labels,
               datasets: [
                 {
-                  data: data.datasets.userData,
+                  data: graphData.datasets.userData,
                   color: (opacity = 1) => 'rgba(58, 143, 255, 1)',
                 },
                 {
-                  data: data.datasets.averageData,
+                  data: graphData.datasets.averageData,
                   color: (opacity = 1) => 'rgba(0, 255, 255, 1)',
                 },
                 { data: [0], withwithDots: false },

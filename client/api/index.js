@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 
 const host = 'http://34.64.90.1:8080';
 
@@ -45,22 +46,19 @@ const API = {
   // 이미지 전송
   async sendImg(email, uri, year, month) {
     try {
-      console.log({ email, uri, year, month });
-      console.log(`${host}/api/image/electricity`);
-
       const formData = new FormData();
 
       formData.append('email', email);
       formData.append('year', year);
       formData.append('month', month);
-      formData.append('image', uri);
+      formData.append('image', uri.replace('file://', ''));
 
       const { data } = await axios.post(
         `${host}/api/image/electricity`,
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'multipart/form-data; charset=utf-8;',
           },
         }
       );
