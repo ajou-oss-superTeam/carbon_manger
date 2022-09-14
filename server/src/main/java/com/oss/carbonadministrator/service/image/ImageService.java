@@ -7,14 +7,14 @@ import com.oss.carbonadministrator.exception.ImgUploadFailException;
 import com.oss.carbonadministrator.repository.BillRepository;
 import com.oss.carbonadministrator.repository.ElectricityRepository;
 import com.oss.carbonadministrator.repository.UserRepository;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.io.FilenameUtils;
@@ -121,10 +121,10 @@ public class ImageService {
             .elecFund(Integer.parseInt((String) jsonObject.get("unknown_fee")))
             .roundDown(Integer.parseInt((String) jsonObject.get("cutoff_fee")))
             .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
-            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
-            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
-            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
-            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
+//            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
+//            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
+//            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
+//            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
         deleteFile(fileName + ".json");
         return electricity;
@@ -180,5 +180,21 @@ public class ImageService {
         }
 
         return bill.getElectricityList();
+    }
+
+    public void makeBase64ToImage(String base64, String filename, UUID uuid){
+        byte decode[] = Base64.decodeBase64(base64);
+        FileOutputStream fos;
+
+        try{
+            File target = new File("./ML/working/"+""+uuid+filename);
+            target.createNewFile();
+            fos = new FileOutputStream(target);
+            fos.write(decode);
+            fos.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -52,9 +52,6 @@ public class User extends BaseTimeEntity {
     @Column
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Bill> billList = new ArrayList<>();
-
     @Getter
     public enum Role {
 

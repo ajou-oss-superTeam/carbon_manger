@@ -2,9 +2,12 @@ package com.oss.carbonadministrator.controller;
 
 import com.oss.carbonadministrator.domain.Electricity;
 import com.oss.carbonadministrator.dto.request.Image.ElecImgRequest;
+import com.oss.carbonadministrator.dto.request.Image.ImageRequest;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.service.image.ImageService;
 import java.io.IOException;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -27,15 +30,17 @@ public class ImageController {
 
     @PostMapping("/electricity")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto uploadElecImg(@RequestParam String email, @RequestParam Integer year, @RequestParam Integer month, @RequestParam(name = "image") MultipartFile file)
+    public ResponseDto uploadElecImg(@RequestBody ImageRequest request)
         throws IOException, ParseException {
 
-        // AI 이미지 처리
-        String fileName = imageService.uploadToLocal(file);
-        imageService.imageToJson(fileName);
-        Electricity recognizedElecData = imageService.jsonToDto(fileName);
+        UUID uuid = UUID.randomUUID();
+
+        imageService.makeBase64ToImage(request.getImage(), ".jpg", uuid);
+
+        imageService.imageToJson(uuid.toString());
+        Electricity recognizedElecData = imageService.jsonToDto(uuid.toString());
         // 데이터 저장 후 json 파일 삭제
-        Electricity savedData = imageService.save(email, year, month, recognizedElecData);
+        Electricity savedData = imageService.save(request.getEmail(), request.getYear(), request.getMonth(), recognizedElecData);
 
         return ResponseDto.success(savedData, "전기 고지서 데이터 인식 및 저장 성공");
     }
