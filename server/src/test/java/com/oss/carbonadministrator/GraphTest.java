@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class GraphTest {
@@ -46,7 +47,11 @@ public class GraphTest {
     @Test
     @Transactional(readOnly = true)
     void elecGraphtest(){
-        User testUser = userRepository.findByEmail("t@gmail.com").get();
+        Optional<User> target = userRepository.findByEmail("t@gmail.com");
+        if(target.isEmpty()){
+            return;
+        }
+        User testUser = target.get();
 
         List<Bill> testBill = billRepository.findAllByUser(testUser);
 
@@ -74,7 +79,11 @@ public class GraphTest {
     @Test
     @Transactional(readOnly = true)
     void elecGraphtest2(){
-        User targetUser = userRepository.findByEmail("t@gmail.com").get();
+        Optional<User> target = userRepository.findByEmail("t@gmail.com");
+        if(target.isEmpty()){
+            return;
+        }
+        User targetUser = target.get();
         List<Bill> testBill = billRepository.findAllByUser(targetUser);
 
         List<ElecAverage> testElecAver = elecAverageRepository.findAllByCityAndProvince(targetUser.getCity(), targetUser.getProvince());
