@@ -20,9 +20,9 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
   const [nickname, onChangeNickname] = useState('');
   const [password, onChangePassword] = useState('');
   const [passwordConfirm, onChangePasswordConfirm] = useState('');
-  const [province, setProvince] = useState('');
+  const [province, setProvince] = useState('강원도');
   const [cityArray, setCityArray] = useState(address.city.강원도);
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState('영월군');
   const [oldCheck, setOldCheck] = useState(false);
   const [serviceCheck, setServiceCheck] = useState(false);
   const [infoCheck, setInfoCheck] = useState(false);
@@ -38,7 +38,13 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
       return;
     }
 
-    const user = API.getSignup({ email, nickname, password, province, city });
+    const { user } = await API.getSignup({
+      email,
+      nickname,
+      password,
+      province,
+      city,
+    });
     await AsyncStorage.setItem('@user', JSON.stringify({ user }));
     replace('Tabs', 'Home');
   };

@@ -9,13 +9,14 @@ import {
   ScrollView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const ScoreEdit = ({
   navigation: { navigate, replace },
   route: {
-    params: { type, user, data, time },
+    params: { type, data, time },
   },
 }) => {
   // data, time이 null로 오는 케이스 존재함
@@ -80,10 +81,9 @@ const ScoreEdit = ({
     const year = jsDate.getFullYear();
     const month = jsDate.getMonth() + 1;
 
-    const userJson = JSON.parse(user);
-    const {
-      user: { email },
-    } = userJson;
+    const user = await AsyncStorage.getItem('@user');
+    const parseUser = JSON.parse(user);
+    const email = parseUser.user.email;
 
     const numbers = {
       demandCharge,

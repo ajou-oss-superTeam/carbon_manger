@@ -5,105 +5,54 @@ import { LineChart } from 'react-native-chart-kit';
 import API from '../api/index';
 
 const Graph = () => {
-  const [user, setUser] = useState(null);
+  const [nickname, setNickname] = useState('');
   const [graphData, setGraphData] = useState(null);
 
   useEffect(() => {
-    checkUser();
     drawGraph();
   }, []);
 
-  const checkUser = async () => {
-    const user = await AsyncStorage.getItem('@user');
-    if (user) {
-      setUser(JSON.parse(user));
-    }
-  };
-
   const drawGraph = async () => {
-    setGraphData([
-      {
-        data: [
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-        ],
-        color: (opacity = 1) => 'rgba(58, 143, 255, 1)',
-      },
-      {
-        data: [
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-          Math.random() * 100,
-        ],
-        color: (opacity = 1) => 'rgba(0, 255, 255, 1)',
-      },
-      {
-        data: [0], // min
-        withwithDots: false,
-      },
-    ]);
-    // const { data, message, success } = await API.getGraph(user?.email);
-    // if (success) {
-    //   // setGraphData(data);
-    //   setGraphData(
-    //     {
-    //       data: [
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //       ],
-    //     },
-    //     {
-    //       data: [
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //         Math.random() * 100,
-    //       ],
-    //     }
-    //   );
-    // } else {
-    //   Alert.alert(message);
-    // }
+    const user = await AsyncStorage.getItem('@user');
+    const parseUser = JSON.parse(user);
+    if (parseUser?.user?.email) {
+      const { data, message, success } = await API.getGraph(
+        parseUser?.user?.email
+      );
+
+      if (success) {
+        setGraphData(data);
+      } else {
+        Alert.alert(message);
+      }
+
+      setNickname(user?.user?.nickname);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>
-          {user?.nickname || '닉네임'}님의 월별 사용량
+          {nickname || '닉네임'}님의 월별 사용량
         </Text>
       </View>
       <View style={styles.middle}>
         {graphData && (
           <LineChart
             data={{
-              labels: [
-                '22/01',
-                '22/02',
-                '22/03',
-                '22/04',
-                '22/05',
-                '22/06',
-                '22/07',
+              labels: data.labels,
+              datasets: [
+                {
+                  data: data.datasets.userData,
+                  color: (opacity = 1) => 'rgba(58, 143, 255, 1)',
+                },
+                {
+                  data: data.datasets.averageData,
+                  color: (opacity = 1) => 'rgba(0, 255, 255, 1)',
+                },
+                { data: [0], withwithDots: false },
               ],
-              datasets: graphData,
             }}
             width={Dimensions.get('window').width - 20} // from react-native
             height={400}
