@@ -24,8 +24,9 @@ const CameraScreen = ({
   const [camera, setCamera] = useState(false);
   // 카메라 객체 여부
   const [cameraObj, setCameraObj] = useState(null);
-  // 이미지
+  // 이미지, base64
   const [imageUrl, setImageUri] = useState(null);
+  const [base, setBase] = useState(null);
   // 권한
   const [permission, requestPermission] = useState(false);
   // 날짜
@@ -48,8 +49,12 @@ const CameraScreen = ({
 
   const takePicture = async () => {
     if (cameraObj) {
-      const data = await cameraObj.takePictureAsync(null);
+      const data = await cameraObj.takePictureAsync({
+        quality: 1,
+        base64: true,
+      });
       setImageUri(data.uri);
+      setBase(data.base64);
       setCamera(false);
     }
   };
@@ -86,6 +91,7 @@ const CameraScreen = ({
     const { data, success, message } = await API.sendImg(
       email,
       imageUrl,
+      base,
       year,
       month
     );
