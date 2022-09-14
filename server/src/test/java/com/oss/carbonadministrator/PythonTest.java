@@ -22,7 +22,6 @@ public class PythonTest {
         System.out.println("Python Call");
         String[] command = new String[6];
         command[0] = "python";
-        //command[1] = "\\workspace\\java-call-python\\src\\main\\resources\\test.py";
         command[1] = "..\\ML\\ocr_electronic.py";
         command[2] = "-img_path";
         command[3] = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\receipt1.jpg";
