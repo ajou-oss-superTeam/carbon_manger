@@ -28,10 +28,10 @@ public class ElecAverage {
     @Column
     private String city;
 
-    @Column
+    @Column(name = "use_average")
     private int useAverage;
 
-    @Column
+    @Column(name = "charge_average")
     private int chargeAverage;
 
 

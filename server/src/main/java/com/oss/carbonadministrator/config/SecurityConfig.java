@@ -48,7 +48,7 @@ public class SecurityConfig {
 
             .and()
             .authorizeRequests()
-            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists", "/api/user/user-nickname/exists", "/api/image/electricity", "/api/image/electricity/{electricityId}/edit", "/api/image/electricity/input").permitAll()
+            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists", "/api/user/user-nickname/exists", "/api/image/electricity", "/api/image/electricity/{electricityId}/edit", "/api/image/electricity/input", "/api/graph/electricity/fee").permitAll()
 
             .anyRequest().authenticated();
 
