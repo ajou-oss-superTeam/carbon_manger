@@ -120,10 +120,9 @@ const API = {
 
   // 숫자 전송
   async getGraph(email) {
-    console.log(email);
     try {
-      const { data } = await axios.post(`${host}/api/graph/electricity/fee`, {
-        email,
+      const { data } = await axios.get(`${host}/api/graph/electricity/fee`, {
+        params: { email },
       });
 
       if (data.success) {
