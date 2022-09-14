@@ -18,9 +18,8 @@ const Home = ({ navigation: { navigate, replace } }) => {
 
   const checkUser = async () => {
     const user = await AsyncStorage.getItem('@user');
-    console.log(JSON.parse(user));
     if (user) {
-      setUser(user);
+      setUser(JSON.parse(user));
     } else {
       replace('Stack', {
         screen: 'notlogin',

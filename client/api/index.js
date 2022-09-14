@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://34.171.248.55:8080';
+const host = 'http://34.64.90.1:8080';
 
 const API = {
   // 로그인
@@ -45,6 +45,9 @@ const API = {
   // 이미지 전송
   async sendImg(email, uri, year, month) {
     try {
+      console.log({ email, uri, year, month });
+      console.log(`${host}/api/image/electricity`);
+
       const formData = new FormData();
 
       formData.append('email', email);
@@ -53,10 +56,12 @@ const API = {
       formData.append('image', uri);
 
       const { data } = await axios.post(
-        `${host}/api/image/electrocity`,
+        `${host}/api/image/electricity`,
         formData,
         {
-          header: { 'Content-Type': 'multipart/form-data' },
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         }
       );
 
@@ -66,6 +71,7 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
+      console.error(err.response);
       console.error(err);
     }
   },
@@ -107,12 +113,14 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
+      console.error(err.response);
       console.error(err);
     }
   },
 
   // 숫자 전송
   async getGraph(email) {
+    console.log(email);
     try {
       const { data } = await axios.post(`${host}/api/graph/electricity/fee`, {
         email,
