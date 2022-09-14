@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const CameraScreen = ({
   navigation: { navigate, replace },
   route: {
-    params: { type, user },
+    params: { type },
   },
 }) => {
   // 카메라 페이지 여부
@@ -78,10 +79,9 @@ const CameraScreen = ({
     const year = jsDate.getFullYear();
     const month = jsDate.getMonth() + 1;
 
-    const userJson = JSON.parse(user);
-    const {
-      user: { email },
-    } = userJson;
+    const user = await AsyncStorage.getItem('@user');
+    const parseUser = JSON.parse(user);
+    const email = parseUser?.user?.email;
 
     const { data, success, message } = await API.sendImg(
       email,
@@ -93,7 +93,7 @@ const CameraScreen = ({
     if (success) {
       navigate('Stack', {
         screen: 'score',
-        params: { type, user, data, time: { year, month } },
+        params: { type, data, time: { year, month } },
       });
     } else {
       Alert.alert(message);
@@ -103,7 +103,7 @@ const CameraScreen = ({
   const goToLink = () => {
     navigate('Stack', {
       screen: 'scoreedit',
-      params: { type, user, data: {} },
+      params: { type, data: {} },
     });
   };
 
