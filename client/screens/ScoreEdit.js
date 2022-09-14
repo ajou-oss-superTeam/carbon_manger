@@ -9,13 +9,14 @@ import {
   ScrollView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const ScoreEdit = ({
   navigation: { navigate, replace },
   route: {
-    params: { type, user, data, time },
+    params: { type, data, time },
   },
 }) => {
   // data, time이 null로 오는 케이스 존재함
@@ -59,10 +60,6 @@ const ScoreEdit = ({
   // 달력
   const [showDate, setShowDate] = useState(false);
 
-  useEffect(() => {
-    console.log(demandCharge);
-  }, []);
-
   const onPressBtn = () => {
     if (Object.entries(data).length === 0) {
       setShowDate(true);
@@ -71,7 +68,7 @@ const ScoreEdit = ({
     }
   };
 
-  // null일 경우
+  // 바로 직접수정 - null일 경우
   const requsetAPI = async (e) => {
     setShowDate(false);
 
@@ -84,8 +81,9 @@ const ScoreEdit = ({
     const year = jsDate.getFullYear();
     const month = jsDate.getMonth() + 1;
 
-    const userJson = JSON.parse(user);
-    const email = userJson.email;
+    const user = await AsyncStorage.getItem('@user');
+    const parseUser = JSON.parse(user);
+    const email = parseUser.user.email;
 
     const numbers = {
       demandCharge,
@@ -104,9 +102,11 @@ const ScoreEdit = ({
     };
 
     if (
-      Object.entries(numbers).filter((key, value) => value == '').length > 0
+      Object.entries(numbers).filter(
+        ([key, value], index) => value == '0' || Number(value) < 0
+      ).length > 0
     ) {
-      Alert.alert('빈 값이 있습니다.');
+      Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
       return;
     }
 
@@ -126,16 +126,9 @@ const ScoreEdit = ({
     }
   };
 
-  // null이 아닐 경우
+  // 사진 후 수정 - null이 아닐 경우
   const requsetAPIPlus = async () => {
-    const userJson = JSON.parse(user);
-    const {
-      user: { email },
-    } = userJson;
-
-    const year = time?.year;
-    const month = time?.month;
-
+    const id = data.id;
     const numbers = {
       demandCharge,
       energyCharge,
@@ -151,12 +144,17 @@ const ScoreEdit = ({
       preMonthUsage,
       lastYearUsage,
     };
-    const { success, message } = await API.sendNumber(
-      email,
-      year,
-      month,
-      numbers
-    );
+
+    if (
+      Object.entries(numbers).filter(
+        ([key, value], index) => value == '0' || Number(value) < 0
+      ).length > 0
+    ) {
+      Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
+      return;
+    }
+
+    const { success, message } = await API.editImgInfo(id, numbers);
 
     if (success) {
       navigate('Tabs', {

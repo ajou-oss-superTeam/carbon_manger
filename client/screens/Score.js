@@ -4,14 +4,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 const Score = ({
   navigation: { navigate, replace },
   route: {
-    params: { type, user, data, time },
+    params: { type, data, time },
   },
 }) => {
   const goToLink = (btnType) => {
     if (btnType === 'edit') {
       navigate('Stack', {
         screen: 'scoreedit',
-        params: { type, user, data, time },
+        params: { type, data, time },
       });
     } else {
       navigate('Tabs', {

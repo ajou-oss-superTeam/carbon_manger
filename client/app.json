@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "carbon_mangeer",
-    "slug": "carbon_mangeer",
+    "name": "carbonmanager",
+    "slug": "carbonmanager",
+    "owner": "namlulu",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
