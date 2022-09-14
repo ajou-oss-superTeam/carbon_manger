@@ -1,35 +1,14 @@
 package com.oss.carbonadministrator.repository;
 
 import com.oss.carbonadministrator.domain.Bill;
-import com.oss.carbonadministrator.domain.User;
 import java.util.List;
-import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BillRepository {
+public interface BillRepository extends JpaRepository<Bill, Long> {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    public void save(Bill bill) {
-        if (bill.getId() == null) {
-            em.persist(bill);
-        } else {
-            em.merge(bill);
-        }
-    }
-
-    public List<Bill> findByUserAndDate(Optional<User> user, int year, int month) {
-        return em.createQuery(
-                "select b from Bill b join b.user u where b.year = :year and b.month = :month and u.email = :email",
-                Bill.class)
-            .setParameter("year", year)
-            .setParameter("month", month)
-            .setParameter("email", user.get().getEmail())
-            .getResultList();
-    }
-
+    @Query(value = "select b from Bill b join b.user u where b.year = ?2 and b.month = ?3 and u.email = ?1")
+    List<Bill> findBillByEmailAndYearAndMonth(String email, int year, int month);
 }

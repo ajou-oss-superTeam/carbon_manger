@@ -57,6 +57,6 @@ public class UserController {
 
     /*
      * 시큐리티 로그인 API => 시큐리티 Config 내 구현 완료
-     * login API: /api/user/login"
+     * /api/user/login"
      */
 }

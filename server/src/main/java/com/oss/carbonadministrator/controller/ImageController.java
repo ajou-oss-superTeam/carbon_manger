@@ -34,10 +34,8 @@ public class ImageController {
         String fileName = imageService.uploadToLocal(file);
         imageService.imageToJson(fileName);
         Electricity recognizedElecData = imageService.jsonToDto(fileName);
-        // 데이터 저장
+        // 데이터 저장 후 json 파일 삭제
         Electricity savedData = imageService.save(email, year, month, recognizedElecData);
-        // 데이터 파일 삭제
-        imageService.deleteFile(fileName);
 
         return ResponseDto.success(savedData, "전기 고지서 데이터 인식 및 저장 성공");
     }
