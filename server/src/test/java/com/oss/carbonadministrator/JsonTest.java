@@ -55,7 +55,10 @@ public class JsonTest {
             .elecFund(Integer.parseInt((String) jsonObject.get("unknown_fee")))
             .roundDown(Integer.parseInt((String) jsonObject.get("cutoff_fee")))
             .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
-            .tvSubscriptionFee(100) // TODO
+            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
+            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
+            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
+            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
 
 
