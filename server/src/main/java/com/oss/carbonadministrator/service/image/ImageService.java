@@ -87,7 +87,7 @@ public class ImageService {
 
     public void imageToJson(String fileName) {
         String[] command = new String[6];
-        command[0] = "python3";
+        command[0] = "python";
         command[1] = this.basePath().split("working")[0] + "ocr_electronic.py";
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
@@ -102,8 +102,6 @@ public class ImageService {
         this.deleteFile(fileName + ".jpg");
     }
 
-    // TODO tv 수신료 인식 에러 수정 후 추가
-    // TODO 사용량 인식되면 데이터 추가
     public Electricity jsonToDto(String fileName) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         String output_path = this.basePath() + fileName + ".json";
@@ -126,7 +124,8 @@ public class ImageService {
             .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
             .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
-        deleteFile(fileName + ".json");
+        electricity.calculateTotalPrice(electricity.getTotalbyCurrMonth(), electricity.getTvSubscriptionFee());
+        deleteFile(fileName);
         return electricity;
     }
 

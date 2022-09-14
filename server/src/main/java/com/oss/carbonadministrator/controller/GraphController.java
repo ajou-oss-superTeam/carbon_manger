@@ -18,8 +18,8 @@ public class GraphController {
     private final GraphService graphService;
 
     @GetMapping("/electricity/fee")
-    public ResponseDto electricFeeGraph(@RequestBody @Valid UserEmailRequest requestDto){
-        return graphService.elecFeeGraph(requestDto.getEmail());
+    public ResponseDto electricFeeGraph(String email){
+        return graphService.elecFeeGraph(email);
     }
 
 
