@@ -126,7 +126,7 @@ public class ImageService {
             .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
             .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
-        deleteFile(fileName);
+        deleteFile(fileName + ".json");
         return electricity;
     }
 
