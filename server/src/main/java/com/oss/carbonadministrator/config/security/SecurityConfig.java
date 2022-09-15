@@ -1,9 +1,9 @@
 package com.oss.carbonadministrator.config.security;
 
-import com.oss.carbonadministrator.config.web.CorsConfig;
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationEntryPoint;
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationFilter;
 import com.oss.carbonadministrator.config.jwt.JwtAuthorizationFilter;
+import com.oss.carbonadministrator.config.web.CorsConfig;
 import com.oss.carbonadministrator.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
