@@ -3,8 +3,8 @@ package com.oss.carbonadministrator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.oss.carbonadministrator.domain.User;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.exception;
+package com.oss.carbonadministrator.exception.user;
 
 public class HasNoUserException extends RuntimeException {
 

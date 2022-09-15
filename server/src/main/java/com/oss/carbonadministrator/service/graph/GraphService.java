@@ -1,13 +1,13 @@
 package com.oss.carbonadministrator.service.graph;
 
-import com.oss.carbonadministrator.domain.Bill;
-import com.oss.carbonadministrator.domain.ElecAverage;
-import com.oss.carbonadministrator.domain.User;
+import com.oss.carbonadministrator.domain.bill.Bill;
+import com.oss.carbonadministrator.domain.electricity.ElecAverage;
+import com.oss.carbonadministrator.domain.user.User;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
-import com.oss.carbonadministrator.exception.HasNoUserException;
-import com.oss.carbonadministrator.repository.BillRepository;
-import com.oss.carbonadministrator.repository.ElecAverageRepository;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.exception.user.HasNoUserException;
+import com.oss.carbonadministrator.repository.bill.BillRepository;
+import com.oss.carbonadministrator.repository.electricity.ElecAverageRepository;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;

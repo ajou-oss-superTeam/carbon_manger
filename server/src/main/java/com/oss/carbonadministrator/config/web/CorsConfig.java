@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.config;
+package com.oss.carbonadministrator.config.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

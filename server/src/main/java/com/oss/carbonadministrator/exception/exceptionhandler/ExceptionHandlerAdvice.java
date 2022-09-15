@@ -1,10 +1,10 @@
 package com.oss.carbonadministrator.exception.exceptionhandler;
 
 import com.oss.carbonadministrator.dto.response.ResponseDto;
-import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
-import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
-import com.oss.carbonadministrator.exception.HasNoUserException;
-import com.oss.carbonadministrator.exception.ImgUploadFailException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistNicknameException;
+import com.oss.carbonadministrator.exception.user.HasNoUserException;
+import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

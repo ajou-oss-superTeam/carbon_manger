@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.domain;
+package com.oss.carbonadministrator.domain.base;
 
 import java.time.LocalDateTime;
 import javax.persistence.EntityListeners;

@@ -1,13 +1,13 @@
 package com.oss.carbonadministrator.service.image;
 
-import com.oss.carbonadministrator.domain.Bill;
-import com.oss.carbonadministrator.domain.Electricity;
-import com.oss.carbonadministrator.domain.User;
-import com.oss.carbonadministrator.exception.HasNoUserException;
-import com.oss.carbonadministrator.exception.ImgUploadFailException;
-import com.oss.carbonadministrator.repository.BillRepository;
-import com.oss.carbonadministrator.repository.ElectricityRepository;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.domain.bill.Bill;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.exception.user.HasNoUserException;
+import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
+import com.oss.carbonadministrator.repository.bill.BillRepository;
+import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -31,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService {
+public class ElecImageService {
 
     private final UserRepository userRepository;
     private final ElectricityRepository electricityRepository;

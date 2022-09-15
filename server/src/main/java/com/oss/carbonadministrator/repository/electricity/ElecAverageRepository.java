@@ -1,6 +1,6 @@
-package com.oss.carbonadministrator.repository;
+package com.oss.carbonadministrator.repository.electricity;
 
-import com.oss.carbonadministrator.domain.ElecAverage;
+import com.oss.carbonadministrator.domain.electricity.ElecAverage;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

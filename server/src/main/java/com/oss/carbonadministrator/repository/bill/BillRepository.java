@@ -1,7 +1,7 @@
-package com.oss.carbonadministrator.repository;
+package com.oss.carbonadministrator.repository.bill;
 
-import com.oss.carbonadministrator.domain.Bill;
-import com.oss.carbonadministrator.domain.User;
+import com.oss.carbonadministrator.domain.bill.Bill;
+import com.oss.carbonadministrator.domain.user.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

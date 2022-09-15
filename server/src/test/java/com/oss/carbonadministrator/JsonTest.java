@@ -2,8 +2,8 @@ package com.oss.carbonadministrator;
 
 import static org.junit.Assert.assertEquals;
 
-import com.oss.carbonadministrator.domain.Electricity;
-import com.oss.carbonadministrator.repository.ElectricityRepository;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;

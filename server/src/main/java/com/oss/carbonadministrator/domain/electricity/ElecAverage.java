@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.domain;
+package com.oss.carbonadministrator.domain.electricity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

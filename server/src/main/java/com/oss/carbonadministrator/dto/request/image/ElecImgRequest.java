@@ -1,6 +1,6 @@
 package com.oss.carbonadministrator.dto.request.image;
 
-import com.oss.carbonadministrator.domain.Electricity;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
 import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
