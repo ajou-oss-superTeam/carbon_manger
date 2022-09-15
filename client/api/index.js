@@ -46,10 +46,6 @@ const API = {
   // 이미지 전송
   async sendImg(email, uri, base, year, month) {
     try {
-      // const formData = new FormData();
-      // formData.append('image', uri);
-      // formData.append('image', uri.replace('file://', ''));
-
       const { data } = await axios.post(`${host}/api/image/electricity`, {
         email,
         year,
@@ -112,9 +108,9 @@ const API = {
   // 숫자 전송
   async getGraph(email) {
     try {
-      const { data } = await axios.get(`${host}/api/graph/electricity/fee`, {
-        params: { email },
-      });
+      const { data } = await axios.post(
+        `${host}/api/graph/electricity/fee?email=${email}`
+      );
 
       if (data.success) {
         return { data: data.data, success: data.success };
