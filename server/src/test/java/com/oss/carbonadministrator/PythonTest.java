@@ -4,6 +4,7 @@ import com.oss.carbonadministrator.service.image.ImageService;
 import java.io.IOException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,8 +15,8 @@ public class PythonTest {
     @Autowired
     ImageService imageService;
 
-    //    @Test
-//    @Ignore
+    @Test
+    @Ignore
     void execPythonTest() throws IOException, InterruptedException {
 
         System.out.println("Python Call");
@@ -39,15 +40,12 @@ public class PythonTest {
             commandLine.addArgument(command[i]);
         }
 
-//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
         DefaultExecutor executor = new DefaultExecutor();
-//        executor.setStreamHandler(pumpStreamHandler);
         executor.execute(commandLine);
     }
 
     @Test
-//    @Ignore
+    @Ignore
     void funcTest() throws IOException, InterruptedException {
         String fileName = "receipt1";
         imageService.imageToJson(fileName);

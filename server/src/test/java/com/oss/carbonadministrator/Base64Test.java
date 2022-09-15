@@ -15,7 +15,7 @@ public class Base64Test {
         String filename = "test.jpg";
         UUID uuid = UUID.randomUUID();
 
-        byte decode[] = Base64.decodeBase64(base64);
+        byte[] decode = Base64.decodeBase64(base64);
         FileOutputStream fos;
 
         try {
