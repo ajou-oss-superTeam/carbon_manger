@@ -7,8 +7,11 @@ import com.oss.carbonadministrator.exception.ImgUploadFailException;
 import com.oss.carbonadministrator.repository.BillRepository;
 import com.oss.carbonadministrator.repository.ElectricityRepository;
 import com.oss.carbonadministrator.repository.UserRepository;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -104,9 +107,9 @@ public class ImageService {
 
     public Electricity jsonToDto(String fileName) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
-        String output_path = this.basePath() + fileName + ".json";
+        String outputPath = this.basePath() + fileName + ".json";
 
-        Reader reader = new FileReader(output_path);
+        Reader reader = new FileReader(outputPath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
         Electricity electricity = Electricity.builder()
@@ -119,12 +122,15 @@ public class ImageService {
             .elecFund(Integer.parseInt((String) jsonObject.get("unknown_fee")))
             .roundDown(Integer.parseInt((String) jsonObject.get("cutoff_fee")))
             .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
-//            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
-//            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
-//            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
-//            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
+            /*
+            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
+            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
+            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
+            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
+             */
             .build();
-        electricity.calculateTotalPrice(electricity.getTotalbyCurrMonth(), electricity.getTvSubscriptionFee());
+        electricity.calculateTotalPrice(electricity.getTotalbyCurrMonth(),
+            electricity.getTvSubscriptionFee());
         deleteFile(fileName);
         return electricity;
     }
@@ -181,18 +187,17 @@ public class ImageService {
         return bill.getElectricityList();
     }
 
-    public void makeBase64ToImage(String base64, String filename, UUID uuid){
-        byte decode[] = Base64.decodeBase64(base64);
+    public void makeBase64ToImage(String base64, String filename, UUID uuid) {
+        byte[] decode = Base64.decodeBase64(base64);
         FileOutputStream fos;
 
-        try{
-            File target = new File("./ML/working/"+""+uuid+filename);
+        try {
+            File target = new File("./ML/working/" + "" + uuid + filename);
             target.createNewFile();
             fos = new FileOutputStream(target);
             fos.write(decode);
             fos.close();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

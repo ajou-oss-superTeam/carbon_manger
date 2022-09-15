@@ -1,23 +1,22 @@
 package com.oss.carbonadministrator;
 
 import com.oss.carbonadministrator.service.image.ImageService;
-import org.junit.Ignore;
+import java.io.IOException;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-
-import java.io.IOException;
 
 @SpringBootTest
 public class PythonTest {
+
     @Autowired
     ImageService imageService;
 
-//    @Test
+    //    @Test
 //    @Ignore
-    void execPythonTest() throws IOException, InterruptedException{
+    void execPythonTest() throws IOException, InterruptedException {
 
         System.out.println("Python Call");
         String[] command = new String[6];
@@ -49,7 +48,7 @@ public class PythonTest {
 
     @Test
 //    @Ignore
-    void funcTest() throws IOException, InterruptedException{
+    void funcTest() throws IOException, InterruptedException {
         String fileName = "receipt1";
         imageService.imageToJson(fileName);
     }

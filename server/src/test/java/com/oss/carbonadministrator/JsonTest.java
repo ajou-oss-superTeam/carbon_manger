@@ -20,7 +20,7 @@ public class JsonTest {
     private ElectricityRepository electricityRepository;
 
 
-//    @Test
+    //    @Test
 //    @Ignore
     void basicTest() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
@@ -36,13 +36,13 @@ public class JsonTest {
         assertEquals(1600, elecTest.getDemandCharge());
     }
 
-//    @Test
+    //    @Test
 //    @Ignore
     void jsonToDto() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
-        String output_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";
-        Reader reader = new FileReader(output_path);
+        String outputPath = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";
+        Reader reader = new FileReader(outputPath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
         Electricity elecResult = Electricity.builder()
@@ -61,13 +61,12 @@ public class JsonTest {
             .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
 
-
         electricityRepository.save(elecResult);
 
         System.out.println(elecResult.getId());
     }
 
-//    @Test
+    //    @Test
 //    @Ignore
     public void editElec() throws IOException, ParseException {
         Electricity elec = electricityRepository.findById(3L).get();
