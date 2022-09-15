@@ -1,9 +1,10 @@
-package com.oss.carbonadministrator.config;
+package com.oss.carbonadministrator.config.security;
 
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationEntryPoint;
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationFilter;
 import com.oss.carbonadministrator.config.jwt.JwtAuthorizationFilter;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.config.web.CorsConfig;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,16 +46,14 @@ public class SecurityConfig {
             .formLogin().disable()
             .httpBasic().disable()
             .apply(new MyCustomDsl())
-            /*
-             * TODO
-             *  1. 추후 인가 미처리 url 추가
-             *  2. Admin 권한 요구사항이 생길경우, 인증 권한 분리
-             */
+
             .and()
             .authorizeRequests()
-            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists", "/api/user/user-nickname/exists", "/api/image/electricity").permitAll()
+            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists",
+                "/api/user/user-nickname/exists", "/api/image/electricity",
+                "/api/image/electricity/{electricityId}/edit", "/api/image/electricity/input",
+                "/api/graph/electricity/fee").permitAll()
 
-            // 그 외 API는 인가 절차 수행
             .anyRequest().authenticated();
 
         return http.build();
