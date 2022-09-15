@@ -3,6 +3,7 @@ package com.oss.carbonadministrator.service.image;
 import com.oss.carbonadministrator.domain.Bill;
 import com.oss.carbonadministrator.domain.Electricity;
 import com.oss.carbonadministrator.domain.User;
+import com.oss.carbonadministrator.exception.HasNoUserException;
 import com.oss.carbonadministrator.exception.ImgUploadFailException;
 import com.oss.carbonadministrator.repository.BillRepository;
 import com.oss.carbonadministrator.repository.ElectricityRepository;
@@ -161,7 +162,7 @@ public class ImageService {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            throw new RuntimeException("찾는 회원이 없습니다.");
+            throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
 
         Bill bill;
