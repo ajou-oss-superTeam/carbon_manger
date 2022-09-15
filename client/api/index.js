@@ -50,7 +50,7 @@ const API = {
         email,
         year,
         month,
-        image: 'data:image/jpeg;base64,' + base,
+        image: base,
         uri,
       });
 
