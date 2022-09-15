@@ -1,66 +1,71 @@
 package com.oss.carbonadministrator.service.graph;
 
-import com.oss.carbonadministrator.domain.Bill;
-import com.oss.carbonadministrator.domain.ElecAverage;
-import com.oss.carbonadministrator.domain.User;
+import com.oss.carbonadministrator.domain.bill.Bill;
+import com.oss.carbonadministrator.domain.electricity.ElecAverage;
+import com.oss.carbonadministrator.domain.user.User;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
-import com.oss.carbonadministrator.repository.BillRepository;
-import com.oss.carbonadministrator.repository.ElecAverageRepository;
-import com.oss.carbonadministrator.repository.ElectricityRepository;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.exception.user.HasNoUserException;
+import com.oss.carbonadministrator.repository.bill.BillRepository;
+import com.oss.carbonadministrator.repository.electricity.ElecAverageRepository;
+import com.oss.carbonadministrator.repository.user.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class GraphService {
 
-    @Autowired
-    private ElecAverageRepository elecAverageRepository;
+    private final ElecAverageRepository elecAverageRepository;
+    private final BillRepository billRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private BillRepository billRepository;
+    private static void extractGovernmentData(List<ElecAverage> targetElecAver,
+        ArrayList<String> monthData,
+        ArrayList<Integer> averResult) {
+        for (ElecAverage sur : targetElecAver) {
+            if (monthData.contains(
+                sur.getYear() + "/" + sur.getMonth())) {
+                averResult.add(sur.getChargeAverage());
+            }
+        }
+    }
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ElectricityRepository electricityRepository;
+    private static void extractUserBillData(List<Bill> targetBill, ArrayList<String> monthData,
+        ArrayList<Integer> billResult) {
+        for (Bill sur : targetBill) {
+            monthData.add(sur.getYear() + "/" + sur.getMonth());
+            billResult.add(sur.getElectricityList().getTotalPrice());
+        }
+    }
 
     @Transactional(readOnly = true)
-    public ResponseDto elecFeeGraph(String email){
+    public ResponseDto elecFeeGraph(String email) {
+        if (userRepository.findByEmail(email).isEmpty()) {
+            throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
+        }
         User targetUser = userRepository.findByEmail(email).get();
         List<Bill> targetBill = billRepository.findAllByUser(targetUser);
-        List<ElecAverage> targetElecAver = elecAverageRepository.findAllByCityAndProvince(targetUser.getCity(), targetUser.getProvince());
+        List<ElecAverage> targetElecAver = elecAverageRepository.findAllByCityAndProvince(
+            targetUser.getCity(), targetUser.getProvince());
 
         ArrayList<String> monthData = new ArrayList<>();
         ArrayList<Integer> billResult = new ArrayList<>();
         ArrayList<Integer> averResult = new ArrayList<>();
 
-        for(Bill sur : targetBill){
-            monthData.add(Integer.toString(sur.getYear())+"/"+Integer.toString(sur.getMonth()));
-            billResult.add(sur.getElectricityList().getTotalPrice());
-        }
+        extractUserBillData(targetBill, monthData, billResult);
 
-        for(ElecAverage sur : targetElecAver){
-            if(monthData.contains(Integer.toString(sur.getYear())+"/"+Integer.toString(sur.getMonth()))){
-                averResult.add(sur.getChargeAverage());
-            }
-        }
+        extractGovernmentData(targetElecAver, monthData, averResult);
 
         return ResponseDto.success(
-                new GraphData(monthData.toArray(new String[monthData.size()])
-                        ,new DataSets(billResult.stream().mapToInt(Integer::intValue).toArray()
-                                ,averResult.stream().mapToInt(Integer::intValue).toArray()))
-                ,"그래프 데이터 전송");
+            new GraphData(monthData.toArray(new String[monthData.size()]),
+                new DataSets(billResult.stream().mapToInt(Integer::intValue).toArray(),
+                    averResult.stream().mapToInt(Integer::intValue).toArray())), "그래프 데이터 전송");
     }
 
     @Getter
@@ -78,7 +83,7 @@ public class GraphService {
         private int[] userData;
         private int[] averageData;
 
-        private DataSets(int[] userData, int[] averageData){
+        private DataSets(int[] userData, int[] averageData) {
             this.userData = userData;
             this.averageData = averageData;
         }

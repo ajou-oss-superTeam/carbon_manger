@@ -1,6 +1,6 @@
-package com.oss.carbonadministrator.dto.request.Image;
+package com.oss.carbonadministrator.dto.request.image;
 
-import com.oss.carbonadministrator.domain.Electricity;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
 import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +58,7 @@ public class ElecImgRequest {
     private int lastYearUsage;
 
     public Electricity toElecEntity(ElecImgRequest requestDto) {
-        Electricity elecData =  Electricity.builder()
+        Electricity elecData = Electricity.builder()
             .demandCharge(requestDto.getDemandCharge())
             .energyCharge(requestDto.getEnergyCharge())
             .environmentCharge(requestDto.getEnvironmentCharge())
@@ -73,7 +73,8 @@ public class ElecImgRequest {
             .preMonthUsage(requestDto.getPreMonthUsage())
             .lastYearUsage(requestDto.getLastYearUsage())
             .build();
-        elecData.calculateTotalPrice(elecData.getTotalbyCurrMonth(), elecData.getTvSubscriptionFee());
+        elecData.calculateTotalPrice(elecData.getTotalbyCurrMonth(),
+            elecData.getTvSubscriptionFee());
         return elecData;
     }
 }

@@ -1,9 +1,10 @@
 package com.oss.carbonadministrator.exception.exceptionhandler;
 
 import com.oss.carbonadministrator.dto.response.ResponseDto;
-import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
-import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
-import com.oss.carbonadministrator.exception.ImgUploadFailException;
+import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistNicknameException;
+import com.oss.carbonadministrator.exception.user.HasNoUserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,5 +36,12 @@ public class ExceptionHandlerAdvice {
     @ResponseBody
     public ResponseDto imgUploadFailException(ImgUploadFailException e) {
         return ResponseDto.fail("이미지 업로드 실패", "ImgUploadFailException", e.getMessage());
+    }
+
+    @ExceptionHandler(HasNoUserException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseDto hasNoUserException(HasNoUserException e) {
+        return ResponseDto.fail("존재하지 않는 유저", "HasNoUserException", e.getMessage());
     }
 }

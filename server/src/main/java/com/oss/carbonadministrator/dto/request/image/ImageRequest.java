@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.dto.request.Image;
+package com.oss.carbonadministrator.dto.request.image;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

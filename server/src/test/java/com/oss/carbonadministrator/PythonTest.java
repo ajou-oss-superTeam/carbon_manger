@@ -1,23 +1,23 @@
 package com.oss.carbonadministrator;
 
-import com.oss.carbonadministrator.service.image.ImageService;
+import com.oss.carbonadministrator.service.image.ElecImageService;
+import java.io.IOException;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-
-import java.io.IOException;
 
 @SpringBootTest
 public class PythonTest {
-    @Autowired
-    ImageService imageService;
 
-//    @Test
-//    @Ignore
-    void execPythonTest() throws IOException, InterruptedException{
+    @Autowired
+    ElecImageService elecImageService;
+
+    @Test
+    @Ignore
+    void execPythonTest() throws IOException, InterruptedException {
 
         System.out.println("Python Call");
         String[] command = new String[6];
@@ -40,17 +40,14 @@ public class PythonTest {
             commandLine.addArgument(command[i]);
         }
 
-//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
         DefaultExecutor executor = new DefaultExecutor();
-//        executor.setStreamHandler(pumpStreamHandler);
         executor.execute(commandLine);
     }
 
     @Test
-//    @Ignore
-    void funcTest() throws IOException, InterruptedException{
+    @Ignore
+    void funcTest() throws IOException, InterruptedException {
         String fileName = "receipt1";
-        imageService.imageToJson(fileName);
+        elecImageService.imageToJson(fileName);
     }
 }

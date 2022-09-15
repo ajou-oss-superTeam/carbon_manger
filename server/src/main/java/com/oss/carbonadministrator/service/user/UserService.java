@@ -1,11 +1,11 @@
 package com.oss.carbonadministrator.service.user;
 
-import com.oss.carbonadministrator.domain.User;
-import com.oss.carbonadministrator.domain.User.Role;
+import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.domain.user.User.Role;
 import com.oss.carbonadministrator.dto.response.user.SignupResponse;
-import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
-import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistNicknameException;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import com.oss.carbonadministrator.service.command.SignUpCommand;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

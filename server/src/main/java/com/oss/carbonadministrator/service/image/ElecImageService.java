@@ -1,14 +1,18 @@
 package com.oss.carbonadministrator.service.image;
 
-import com.oss.carbonadministrator.domain.Bill;
-import com.oss.carbonadministrator.domain.Electricity;
-import com.oss.carbonadministrator.domain.User;
-import com.oss.carbonadministrator.exception.ImgUploadFailException;
-import com.oss.carbonadministrator.repository.BillRepository;
-import com.oss.carbonadministrator.repository.ElectricityRepository;
-import com.oss.carbonadministrator.repository.UserRepository;
-
-import java.io.*;
+import com.oss.carbonadministrator.domain.bill.Bill;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
+import com.oss.carbonadministrator.exception.user.HasNoUserException;
+import com.oss.carbonadministrator.repository.bill.BillRepository;
+import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
+import com.oss.carbonadministrator.repository.user.UserRepository;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService {
+public class ElecImageService {
 
     private final UserRepository userRepository;
     private final ElectricityRepository electricityRepository;
@@ -104,9 +108,9 @@ public class ImageService {
 
     public Electricity jsonToDto(String fileName) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
-        String output_path = this.basePath() + fileName + ".json";
+        String outputPath = this.basePath() + fileName + ".json";
 
-        Reader reader = new FileReader(output_path);
+        Reader reader = new FileReader(outputPath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
         Electricity electricity = Electricity.builder()
@@ -119,12 +123,15 @@ public class ImageService {
             .elecFund(Integer.parseInt((String) jsonObject.get("unknown_fee")))
             .roundDown(Integer.parseInt((String) jsonObject.get("cutoff_fee")))
             .totalbyCurrMonth(Integer.parseInt((String) jsonObject.get("total_month_fee")))
-//            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
-//            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
-//            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
-//            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
+            /*
+            .tvSubscriptionFee(Integer.parseInt((String) jsonObject.get("TV_fee")))
+            .currMonthUsage(Integer.parseInt((String) jsonObject.get("current_month")))
+            .preMonthUsage(Integer.parseInt((String) jsonObject.get("previous_month")))
+            .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
+             */
             .build();
-        electricity.calculateTotalPrice(electricity.getTotalbyCurrMonth(), electricity.getTvSubscriptionFee());
+        electricity.calculateTotalPrice(electricity.getTotalbyCurrMonth(),
+            electricity.getTvSubscriptionFee());
         deleteFile(fileName);
         return electricity;
     }
@@ -155,7 +162,7 @@ public class ImageService {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            throw new RuntimeException("찾는 회원이 없습니다.");
+            throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
 
         Bill bill;
@@ -181,18 +188,17 @@ public class ImageService {
         return bill.getElectricityList();
     }
 
-    public void makeBase64ToImage(String base64, String filename, UUID uuid){
-        byte decode[] = Base64.decodeBase64(base64);
+    public void makeBase64ToImage(String base64, String filename, UUID uuid) {
+        byte[] decode = Base64.decodeBase64(base64);
         FileOutputStream fos;
 
-        try{
-            File target = new File("./ML/working/"+""+uuid+filename);
+        try {
+            File target = new File("./ML/working/" + "" + uuid + filename);
             target.createNewFile();
             fos = new FileOutputStream(target);
             fos.write(decode);
             fos.close();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

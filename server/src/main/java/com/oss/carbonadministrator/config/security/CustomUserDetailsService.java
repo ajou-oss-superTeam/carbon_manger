@@ -1,12 +1,11 @@
 package com.oss.carbonadministrator.config.security;
 
-import com.oss.carbonadministrator.domain.User;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
