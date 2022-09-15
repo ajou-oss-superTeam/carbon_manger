@@ -15,6 +15,11 @@ const Graph = () => {
   const drawGraph = async () => {
     const user = await AsyncStorage.getItem('@user');
     const parseUser = JSON.parse(user);
+
+    // 닉네임
+    setNickname(parseUser?.user?.nickname);
+
+    // 그패프 데이터
     if (parseUser?.user?.email) {
       const { data, message, success } = await API.getGraph(
         parseUser?.user?.email
@@ -25,8 +30,6 @@ const Graph = () => {
       } else {
         Alert.alert(message);
       }
-
-      setNickname(user?.user?.nickname);
     }
   };
 
@@ -41,14 +44,14 @@ const Graph = () => {
         {graphData && (
           <LineChart
             data={{
-              labels: data.labels,
+              labels: graphData.labels,
               datasets: [
                 {
-                  data: data.datasets.userData,
+                  data: graphData.datasets.userData,
                   color: (opacity = 1) => 'rgba(58, 143, 255, 1)',
                 },
                 {
-                  data: data.datasets.averageData,
+                  data: graphData.datasets.averageData,
                   color: (opacity = 1) => 'rgba(0, 255, 255, 1)',
                 },
                 { data: [0], withwithDots: false },

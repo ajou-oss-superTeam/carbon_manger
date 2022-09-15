@@ -1,5 +1,6 @@
-package com.oss.carbonadministrator.domain;
+package com.oss.carbonadministrator.domain.user;
 
+import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,10 +22,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
-    @Column
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -46,7 +47,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column
     private Role role;
-
 
     @Getter
     public enum Role {

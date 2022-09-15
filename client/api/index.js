@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 
 const host = 'http://34.64.90.1:8080';
 
@@ -17,7 +18,7 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 
@@ -38,32 +39,24 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 
   // 이미지 전송
-  async sendImg(email, uri, year, month) {
+  async sendImg(email, uri, base, year, month) {
     try {
-      console.log({ email, uri, year, month });
-      console.log(`${host}/api/image/electricity`);
+      // const formData = new FormData();
+      // formData.append('image', uri);
+      // formData.append('image', uri.replace('file://', ''));
 
-      const formData = new FormData();
-
-      formData.append('email', email);
-      formData.append('year', year);
-      formData.append('month', month);
-      formData.append('image', uri);
-
-      const { data } = await axios.post(
-        `${host}/api/image/electricity`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const { data } = await axios.post(`${host}/api/image/electricity`, {
+        email,
+        year,
+        month,
+        image: 'data:image/jpeg;base64,' + base,
+        uri,
+      });
 
       if (data.success) {
         return { data: data.data, success: data.success };
@@ -72,7 +65,6 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
-      console.error(err);
     }
   },
 
@@ -93,7 +85,7 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 
@@ -114,16 +106,14 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
-      console.error(err);
     }
   },
 
   // 숫자 전송
   async getGraph(email) {
-    console.log(email);
     try {
-      const { data } = await axios.post(`${host}/api/graph/electricity/fee`, {
-        email,
+      const { data } = await axios.get(`${host}/api/graph/electricity/fee`, {
+        params: { email },
       });
 
       if (data.success) {
@@ -132,7 +122,7 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 };

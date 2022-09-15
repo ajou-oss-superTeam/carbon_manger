@@ -1,16 +1,15 @@
-package com.oss.carbonadministrator.controller;
+package com.oss.carbonadministrator.controller.user;
 
 import com.oss.carbonadministrator.dto.request.user.SignUpRequest;
 import com.oss.carbonadministrator.dto.request.user.UserEmailRequest;
 import com.oss.carbonadministrator.dto.request.user.UserNicknameRequest;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.dto.response.user.SignupResponse;
-import com.oss.carbonadministrator.exception.AlreadyExistEmailException;
-import com.oss.carbonadministrator.exception.AlreadyExistNicknameException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
+import com.oss.carbonadministrator.exception.user.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.service.user.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,11 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-
-    @GetMapping
-    public String home() {
-        return "<h1>home</h1>";
-    }
 
     /*
      * 이메일 중복 여부 판단 API
@@ -63,6 +57,6 @@ public class UserController {
 
     /*
      * 시큐리티 로그인 API => 시큐리티 Config 내 구현 완료
-     * login API: /api/user/login"
+     * /api/user/login"
      */
 }
