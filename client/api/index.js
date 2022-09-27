@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
 
-const host = 'http://34.64.90.1:8080';
+const host = 'http://34.64.114.118:8080';
 
 const API = {
   // 로그인
@@ -67,7 +67,7 @@ const API = {
   // 사진 수정
   async editImgInfo(id, numbers) {
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${host}/api/image/electricity/${id}/edit`,
         {
           id,
