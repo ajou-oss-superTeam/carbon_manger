@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 
-const host = 'http://34.171.248.55:8080';
+const host = 'http://34.64.90.1:8080';
 
 const API = {
   // 로그인
@@ -17,7 +18,7 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 
@@ -38,43 +39,39 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 
   // 이미지 전송
-  async sendImg(email, uri, year, month) {
-    // return {
-    //   success: true,
-    //   data: {
-    //     demandCharge: 1,
-    //     energyCharge: 2,
-    //     environmentCharge: 3,
-    //     fuelAdjustmentRate: 4,
-    //     elecChargeSum: 5,
-    //     vat: 6,
-    //     elecFund: 7,
-    //     roundDown: 8,
-    //     totalbyCurrMonth: 9,
-    //     tvSubscriptionFee: 10,
-    //     currMonthUsage: 11,
-    //     preMonthUsage: 12,
-    //     lastYearUsage: 13,
-    //   },
-    // };
+  async sendImg(email, uri, base, year, month) {
     try {
-      const formData = new FormData();
+      const { data } = await axios.post(`${host}/api/image/electricity`, {
+        email,
+        year,
+        month,
+        image: base,
+        uri,
+      });
 
-      formData.append('email', email);
-      formData.append('year', year);
-      formData.append('month', month);
-      formData.append('image', uri);
+      if (data.success) {
+        return { data: data.data, success: data.success };
+      } else {
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err.response);
+    }
+  },
 
+  // 사진 수정
+  async editImgInfo(id, numbers) {
+    try {
       const { data } = await axios.post(
-        `${host}/api/image/electrocity`,
-        formData,
+        `${host}/api/image/electricity/${id}/edit`,
         {
-          header: { 'Content-Type': 'multipart/form-data' },
+          id,
+          ...numbers,
         }
       );
 
@@ -84,21 +81,14 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     }
   },
 
   // 숫자 전송
   async sendNumber(email, year, month, numbers) {
     try {
-      console.log({
-        email,
-        year,
-        month,
-        ...numbers,
-      });
-
-      const { data } = await axios.post(`${host}/api/image-edit/electricity`, {
+      const { data } = await axios.post(`${host}/api/image/electricity/input`, {
         email,
         year,
         month,
@@ -111,7 +101,24 @@ const API = {
         return { message: data.message, success: data.success };
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
+    }
+  },
+
+  // 숫자 전송
+  async getGraph(email) {
+    try {
+      const { data } = await axios.post(
+        `${host}/api/graph/electricity/fee?email=${email}`
+      );
+
+      if (data.success) {
+        return { data: data.data, success: data.success };
+      } else {
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err.response);
     }
   },
 };

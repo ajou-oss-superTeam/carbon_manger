@@ -1,9 +1,10 @@
-package com.oss.carbonadministrator.config;
+package com.oss.carbonadministrator.config.security;
 
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationEntryPoint;
 import com.oss.carbonadministrator.config.jwt.JwtAuthenticationFilter;
 import com.oss.carbonadministrator.config.jwt.JwtAuthorizationFilter;
-import com.oss.carbonadministrator.repository.UserRepository;
+import com.oss.carbonadministrator.config.web.CorsConfig;
+import com.oss.carbonadministrator.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +49,10 @@ public class SecurityConfig {
 
             .and()
             .authorizeRequests()
-            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists", "/api/user/user-nickname/exists", "/api/image/electricity", "/api/image/electricity/{electricityId}/edit", "/api/image/electricity/input", "/api/graph/electricity/fee").permitAll()
+            .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists",
+                "/api/user/user-nickname/exists", "/api/image/electricity",
+                "/api/image/electricity/{electricityId}/edit", "/api/image/electricity/input",
+                "/api/graph/electricity/fee").permitAll()
 
             .anyRequest().authenticated();
 

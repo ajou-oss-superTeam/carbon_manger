@@ -10,21 +10,23 @@ import {
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const CameraScreen = ({
   navigation: { navigate, replace },
   route: {
-    params: { type, user },
+    params: { type },
   },
 }) => {
   // 카메라 페이지 여부
   const [camera, setCamera] = useState(false);
   // 카메라 객체 여부
   const [cameraObj, setCameraObj] = useState(null);
-  // 이미지
+  // 이미지, base64
   const [imageUrl, setImageUri] = useState(null);
+  const [base, setBase] = useState(null);
   // 권한
   const [permission, requestPermission] = useState(false);
   // 날짜
@@ -47,8 +49,12 @@ const CameraScreen = ({
 
   const takePicture = async () => {
     if (cameraObj) {
-      const data = await cameraObj.takePictureAsync(null);
+      const data = await cameraObj.takePictureAsync({
+        quality: 1,
+        base64: true,
+      });
       setImageUri(data.uri);
+      setBase(data.base64);
       setCamera(false);
     }
   };
@@ -78,14 +84,14 @@ const CameraScreen = ({
     const year = jsDate.getFullYear();
     const month = jsDate.getMonth() + 1;
 
-    const userJson = JSON.parse(user);
-    const {
-      user: { email },
-    } = userJson;
+    const user = await AsyncStorage.getItem('@user');
+    const parseUser = JSON.parse(user);
+    const email = parseUser?.user?.email;
 
     const { data, success, message } = await API.sendImg(
       email,
       imageUrl,
+      base,
       year,
       month
     );
@@ -93,7 +99,7 @@ const CameraScreen = ({
     if (success) {
       navigate('Stack', {
         screen: 'score',
-        params: { type, user, data, time: { year, month } },
+        params: { type, data, time: { year, month } },
       });
     } else {
       Alert.alert(message);
@@ -103,7 +109,7 @@ const CameraScreen = ({
   const goToLink = () => {
     navigate('Stack', {
       screen: 'scoreedit',
-      params: { type, user, data: {} },
+      params: { type, data: {} },
     });
   };
 

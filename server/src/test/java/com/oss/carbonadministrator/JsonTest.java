@@ -2,14 +2,16 @@ package com.oss.carbonadministrator;
 
 import static org.junit.Assert.assertEquals;
 
-import com.oss.carbonadministrator.domain.Electricity;
-import com.oss.carbonadministrator.repository.ElectricityRepository;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,9 +21,8 @@ public class JsonTest {
     @Autowired
     private ElectricityRepository electricityRepository;
 
-
-//    @Test
-//    @Ignore
+    @Test
+    @Ignore
     void basicTest() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
@@ -36,13 +37,13 @@ public class JsonTest {
         assertEquals(1600, elecTest.getDemandCharge());
     }
 
-//    @Test
-//    @Ignore
-    void jsonToDto() throws IOException, ParseException {
+    @Test
+    @Ignore
+    public void jsonToDto() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
-        String output_path = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";
-        Reader reader = new FileReader(output_path);
+        String outputPath = "C:\\Users\\dnrla\\Documents\\carbon_manger\\ML\\test.json";
+        Reader reader = new FileReader(outputPath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
         Electricity elecResult = Electricity.builder()
@@ -61,19 +62,16 @@ public class JsonTest {
             .lastYearUsage(Integer.parseInt((String) jsonObject.get("last_year")))
             .build();
 
-
         electricityRepository.save(elecResult);
 
         System.out.println(elecResult.getId());
     }
 
-//    @Test
-//    @Ignore
+    @Test
+    @Ignore
     public void editElec() throws IOException, ParseException {
         Electricity elec = electricityRepository.findById(3L).get();
-
         //elec.setRoundDown(12333);
-
         electricityRepository.save(elec);
     }
 }

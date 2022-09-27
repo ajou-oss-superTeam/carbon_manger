@@ -1,6 +1,6 @@
 package com.oss.carbonadministrator.config.security;
 
-import com.oss.carbonadministrator.domain.User;
+import com.oss.carbonadministrator.domain.user.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Getter;

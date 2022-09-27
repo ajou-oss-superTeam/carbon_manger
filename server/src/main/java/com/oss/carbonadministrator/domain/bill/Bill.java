@@ -1,5 +1,8 @@
-package com.oss.carbonadministrator.domain;
+package com.oss.carbonadministrator.domain.bill;
 
+import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
+import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.user.User;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

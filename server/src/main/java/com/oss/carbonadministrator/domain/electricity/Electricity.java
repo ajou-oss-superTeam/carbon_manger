@@ -1,5 +1,6 @@
-package com.oss.carbonadministrator.domain;
+package com.oss.carbonadministrator.domain.electricity;
 
+import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
