@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
+import Constants from 'expo-constants';
 
-const host = 'http://34.64.114.118:8080';
-
+const host = Constants.expoConfig.extra.apiUrl;
 const API = {
   // 로그인
   async getLogin({ email, password }) {
