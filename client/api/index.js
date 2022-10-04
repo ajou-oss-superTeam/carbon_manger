@@ -61,6 +61,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/image/electricity 에러', success: false };
     }
   },
 

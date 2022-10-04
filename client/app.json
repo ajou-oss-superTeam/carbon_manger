@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "carbonmanager",
+    "slug": "carbonmanager",
+    "owner": "namlulu",
+    "version": "1.0.0",
+    "extra": {
+      "apiUrl": "http://34.64.114.118:8080",
+      "eas": {
+        "projectId": "bbe8f19e-ff98-409c-be9b-916465512584"
+      }
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.namlulu.carbonmanager"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.namlulu.carbonmanager"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
