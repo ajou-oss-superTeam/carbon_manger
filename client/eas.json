@@ -1,0 +1,22 @@
+{
+  "cli": {
+    "version": ">= 2.1.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "env": {
+        "API_URL": "http://34.64.114.118:8080"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
