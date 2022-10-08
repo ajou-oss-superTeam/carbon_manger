@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "electricity")
-public class Electricity extends BaseTimeEntity {
+public class ElectricityInfo extends BaseTimeEntity {
 
     @Id
     @Column(name = "elec_id")

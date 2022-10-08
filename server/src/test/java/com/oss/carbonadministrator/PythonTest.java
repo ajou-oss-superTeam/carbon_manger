@@ -1,6 +1,6 @@
 package com.oss.carbonadministrator;
 
-import com.oss.carbonadministrator.service.image.ElecImageService;
+import com.oss.carbonadministrator.service.image.ImageService;
 import java.io.IOException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class PythonTest {
 
     @Autowired
-    ElecImageService elecImageService;
+    ImageService imageService;
 
     @Test
     @Ignore
@@ -48,6 +48,6 @@ public class PythonTest {
     @Ignore
     void funcTest() throws IOException, InterruptedException {
         String fileName = "receipt1";
-        elecImageService.imageToJson(fileName);
+        imageService.imageToJson(fileName);
     }
 }

@@ -1,6 +1,6 @@
 package com.oss.carbonadministrator.dto.request.image;
 
-import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,8 +57,8 @@ public class ElecImgRequest {
     // 전년동월 사용량 (kWh)
     private int lastYearUsage;
 
-    public Electricity toElecEntity(ElecImgRequest requestDto) {
-        Electricity elecData = Electricity.builder()
+    public ElectricityInfo toElecEntity(ElecImgRequest requestDto) {
+        ElectricityInfo elecData = ElectricityInfo.builder()
             .demandCharge(requestDto.getDemandCharge())
             .energyCharge(requestDto.getEnergyCharge())
             .environmentCharge(requestDto.getEnvironmentCharge())

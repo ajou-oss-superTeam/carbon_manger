@@ -1,7 +1,7 @@
 package com.oss.carbonadministrator.domain.bill;
 
 import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
-import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.domain.user.User;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,7 +43,7 @@ public class Bill extends BaseTimeEntity {
     @Setter
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "elec_id")
-    private Electricity electricityList;
+    private ElectricityInfo electricityInfoList;
 
     @Column
     private int year;
