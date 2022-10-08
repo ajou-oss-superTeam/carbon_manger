@@ -40,7 +40,6 @@ public class ImageService {
     private final BillRepository billRepository;
     private final StrategyFactory strategyFactory;
 
-
     public static void execPython(String[] command) throws IOException {
         CommandLine commandLine = CommandLine.parse(command[0]);
         for (int i = 1, n = command.length; i < n; i++) {
@@ -51,6 +50,14 @@ public class ImageService {
         executor.execute(commandLine);
     }
 
+    @Transactional
+    public ElectricityInfo convert(BillType billType, ImageRequest request)
+        throws IOException, ParseException {
+        UUID uuid = UUID.randomUUID();
+        makeBase64ToImage(request.getImage(), ".jpg", uuid);
+        imageToJson(uuid.toString());
+        return jsonToDto(uuid.toString());
+    }
 
     @Transactional
     public void update(Long electricityId, ElecImgRequest updateData) {
@@ -82,7 +89,8 @@ public class ImageService {
     public void imageToJson(String fileName) {
         String[] command = new String[6];
         command[0] = "python";
-        command[1] = this.basePath().split("working")[0] + strategyFactory.findBillStrategy(BillType.ELECTRICITY).callOcrFilename();
+        command[1] = this.basePath().split("working")[0] + strategyFactory.findBillStrategy(
+            BillType.ELECTRICITY).callOcrFilename();
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
         command[4] = "-output_path";
@@ -204,11 +212,4 @@ public class ImageService {
     }
 
 
-    public ElectricityInfo convert(BillType billType, ImageRequest request)
-        throws IOException, ParseException {
-        UUID uuid = UUID.randomUUID();
-        makeBase64ToImage(request.getImage(), ".jpg", uuid);
-        imageToJson(uuid.toString());
-        return jsonToDto(uuid.toString());
-    }
 }

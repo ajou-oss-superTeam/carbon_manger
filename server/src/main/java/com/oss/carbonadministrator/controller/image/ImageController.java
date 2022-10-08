@@ -27,7 +27,8 @@ public class ImageController {
     private final ImageService imageService;
 
     /*
-     * 데이터 저장 후 json 파일 삭제
+     * 이미지 데이터 인식 후 저장
+     * 이미지 데이터 저장 후 json 파일 삭제
      */
     @PostMapping("/{billType}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -35,22 +36,36 @@ public class ImageController {
         throws IOException, ParseException {
 
         ElectricityInfo recognizedData = imageService.convert(billType, request);
-        Bill savedBillData = imageService.save(request.getEmail(), request.getYear(), request.getMonth(), recognizedData);
+        Bill savedBillData = imageService.save(
+            request.getEmail(),
+            request.getYear(),
+            request.getMonth(),
+            recognizedData
+        );
 
-        return ResponseDto.success(savedBillData, "전기  고지서 데이터 인식 및 저장 성공");
+        return ResponseDto.success(savedBillData, "전기 고지서 데이터 인식 및 저장 성공");
     }
 
+    /*
+     * 이미지 인식 후 사용자 데이터 수정
+     */
     @PutMapping("/electricity/{billTypeId}/edit")
-    public ResponseDto editElecImgData(@PathVariable("billTypeId") Long electricityId,
-        @RequestBody ElecImgRequest imgRequest) {
+    public ResponseDto editElecImgData(@PathVariable("billTypeId") Long electricityId, @RequestBody ElecImgRequest imgRequest) {
         imageService.update(electricityId, imgRequest);
         return ResponseDto.success(null, "전기 고지서 데이터 사용자 수정 완료");
     }
 
+    /*
+     * 사용자가 직접 데이터 저장
+     */
     @PostMapping("/electricity/input")
     public ResponseDto inputElecData(@RequestBody ElecImgRequest requestDto) {
-        imageService.save(requestDto.getEmail(), requestDto.getYear(), requestDto.getMonth(),
-            requestDto.toElecEntity(requestDto));
+        imageService.save(
+            requestDto.getEmail(),
+            requestDto.getYear(),
+            requestDto.getMonth(),
+            requestDto.toElecEntity(requestDto)
+        );
         return ResponseDto.success(null, "사용자 데이터 직접 입력 성공");
     }
 }
