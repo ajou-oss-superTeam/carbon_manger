@@ -3,6 +3,8 @@ package com.oss.carbonadministrator.service.image;
 import com.oss.carbonadministrator.domain.bill.Bill;
 import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
+import com.oss.carbonadministrator.exception.ElecInfoNotFoundException;
 import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
 import com.oss.carbonadministrator.exception.user.HasNoUserException;
 import com.oss.carbonadministrator.repository.bill.BillRepository;
@@ -36,8 +38,7 @@ public class ImageService {
     private final UserRepository userRepository;
     private final ElectricityRepository electricityRepository;
     private final BillRepository billRepository;
-    private final BillStrategy billStrategy; // 전략패턴 interface
-
+    private final StrategyFactory strategyFactory;
 
 
     public static void execPython(String[] command) throws IOException {
@@ -52,27 +53,12 @@ public class ImageService {
 
 
     @Transactional
-    public void update(Long electricityId, ElectricityInfo toElecEntity) {
-        ElectricityInfo electricityInfo = ElectricityInfo.builder()
-            .id(electricityId)
-            .demandCharge(toElecEntity.getDemandCharge())
-            .energyCharge(toElecEntity.getEnergyCharge())
-            .environmentCharge(toElecEntity.getEnvironmentCharge())
-            .fuelAdjustmentRate(toElecEntity.getFuelAdjustmentRate())
-            .elecChargeSum(toElecEntity.getElecChargeSum())
-            .vat(toElecEntity.getVat())
-            .elecFund(toElecEntity.getElecFund())
-            .roundDown(toElecEntity.getRoundDown())
-            .tvSubscriptionFee(toElecEntity.getTvSubscriptionFee())
-            .totalbyCurrMonth(toElecEntity.getTotalbyCurrMonth())
-            .currMonthUsage(toElecEntity.getCurrMonthUsage())
-            .preMonthUsage(toElecEntity.getPreMonthUsage())
-            .lastYearUsage(toElecEntity.getLastYearUsage())
-            .totalPrice(toElecEntity.calculateTotalPrice(toElecEntity.getTotalbyCurrMonth(),
-                toElecEntity.getTvSubscriptionFee()))
-            .build();
+    public void update(Long electricityId, ElecImgRequest updateData) {
 
-        electricityRepository.save(electricityInfo);
+        ElectricityInfo savedData = electricityRepository.findById(electricityId)
+            .orElseThrow(() -> new ElecInfoNotFoundException("수정할 전기 데이터가 없습니다."));
+
+        savedData.update(updateData);
     }
 
     public String uploadToLocal(MultipartFile file) {
@@ -96,7 +82,7 @@ public class ImageService {
     public void imageToJson(String fileName) {
         String[] command = new String[6];
         command[0] = "python";
-        command[1] = this.basePath().split("working")[0] + billStrategy.callOcrFilename();
+        command[1] = this.basePath().split("working")[0] + strategyFactory.findBillStrategy(BillType.ELECTRICITY).callOcrFilename();
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
         command[4] = "-output_path";
@@ -185,7 +171,8 @@ public class ImageService {
     }
 
     @Transactional
-    public ElectricityInfo save(String email, int year, int month, ElectricityInfo recognizedElecData) {
+    public ElectricityInfo save(String email, int year, int month,
+        ElectricityInfo recognizedElecData) {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
@@ -215,12 +202,12 @@ public class ImageService {
         return bill.getElectricityInfoList();
     }
 
-    public void makeBase64ToImage(String base64, String filename, UUID uuid) {
+    public void makeBase64ToImage(String base64, String fileExtension, UUID uuid) {
         byte[] decode = Base64.decodeBase64(base64);
         FileOutputStream fos;
 
         try {
-            File target = new File("./ML/working/" + "" + uuid + filename);
+            File target = new File("./ML/working/" + "" + uuid + fileExtension);
             target.createNewFile();
             fos = new FileOutputStream(target);
             fos.write(decode);

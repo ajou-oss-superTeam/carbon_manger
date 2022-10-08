@@ -1,5 +1,8 @@
 package com.oss.carbonadministrator.service.image;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class Water implements BillStrategy {
 
     @Override

@@ -46,7 +46,7 @@ public class ImageController {
     @PutMapping("/electricity/{electricityId}/edit")
     public ResponseDto editElecImgData(@PathVariable("electricityId") Long electricityId,
         @RequestBody ElecImgRequest requestDto) {
-        imageService.update(electricityId, requestDto.toElecEntity(requestDto));
+        imageService.update(electricityId, requestDto);
         return ResponseDto.success(null, "전기 고지서 데이터 사용자 수정 완료");
     }
 

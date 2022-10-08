@@ -1,5 +1,8 @@
 package com.oss.carbonadministrator.service.image;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Electricity implements BillStrategy {
 
     @Override

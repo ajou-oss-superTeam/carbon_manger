@@ -1,6 +1,7 @@
 package com.oss.carbonadministrator.domain.electricity;
 
 import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
+import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -83,5 +84,22 @@ public class ElectricityInfo extends BaseTimeEntity {
     public int calculateTotalPrice(int totalbyCurrMonth, int tvSubscriptionFee) {
         totalPrice = totalbyCurrMonth + tvSubscriptionFee;
         return totalPrice;
+    }
+
+    public void update(ElecImgRequest updateData) {
+        this.demandCharge = updateData.getDemandCharge();
+        this.energyCharge = updateData.getEnergyCharge();
+        this.environmentCharge = updateData.getEnvironmentCharge();
+        this.fuelAdjustmentRate = updateData.getFuelAdjustmentRate();
+        this.elecChargeSum = updateData.getElecChargeSum();
+        this.vat = updateData.getVat();
+        this.elecFund = updateData.getElecFund();
+        this.roundDown = updateData.getRoundDown();
+        this.totalbyCurrMonth = updateData.getTotalbyCurrMonth();
+        this.tvSubscriptionFee = updateData.getTvSubscriptionFee();
+        this.totalPrice = calculateTotalPrice(this.totalbyCurrMonth, this.tvSubscriptionFee);
+        this.currMonthUsage = updateData.getCurrMonthUsage();
+        this.preMonthUsage = updateData.getPreMonthUsage();
+        this.lastYearUsage = updateData.getLastYearUsage();
     }
 }
