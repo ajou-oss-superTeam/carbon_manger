@@ -34,10 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class ImageService {
-
-    private final UserRepository userRepository;
-    private final ElectricityRepository electricityRepository;
-    private final BillRepository billRepository;
     private final StrategyFactory strategyFactory;
 
     public static void execPython(String[] command) throws IOException {
@@ -57,15 +53,6 @@ public class ImageService {
         makeBase64ToImage(request.getImage(), ".jpg", uuid);
         imageToJson(uuid.toString());
         return jsonToDto(uuid.toString());
-    }
-
-    @Transactional
-    public void update(Long electricityId, ElecImgRequest updateData) {
-
-        ElectricityInfo savedData = electricityRepository.findById(electricityId)
-            .orElseThrow(() -> new ElecInfoNotFoundException("수정할 전기 데이터가 없습니다."));
-
-        savedData.update(updateData);
     }
 
     public String uploadToLocal(MultipartFile file) {
@@ -89,8 +76,7 @@ public class ImageService {
     public void imageToJson(String fileName) {
         String[] command = new String[6];
         command[0] = "python";
-        command[1] = this.basePath().split("working")[0] + strategyFactory.findBillStrategy(
-            BillType.ELECTRICITY).callOcrFilename();
+        command[1] = this.basePath().split("working")[0] + strategyFactory.findBillStrategy(BillType.ELECTRICITY).callOcrFilename();
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
         command[4] = "-output_path";
@@ -178,23 +164,6 @@ public class ImageService {
         return FilenameUtils.getBaseName(file.getOriginalFilename());
     }
 
-    @Transactional
-    public Bill save(String email, int year, int month, ElectricityInfo recognizedElecData) {
-        Optional<User> user = userRepository.findByEmail(email);
-
-        if (user.isEmpty()) {
-            throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
-        }
-
-        Bill bill = Bill.builder()
-            .user(user.get())
-            .electricityInfoList(recognizedElecData)
-            .year(year)
-            .month(month)
-            .build();
-
-        return billRepository.save(bill);
-    }
 
     public void makeBase64ToImage(String base64, String fileExtension, UUID uuid) {
         byte[] decode = Base64.decodeBase64(base64);

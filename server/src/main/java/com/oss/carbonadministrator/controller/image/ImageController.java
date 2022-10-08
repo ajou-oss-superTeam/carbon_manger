@@ -6,6 +6,7 @@ import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
 import com.oss.carbonadministrator.dto.request.image.ImageRequest;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.service.image.BillType;
+import com.oss.carbonadministrator.service.image.ElectricityImageService;
 import com.oss.carbonadministrator.service.image.ImageService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    private final ElectricityImageService electricityImageService;
+
     /*
      * 이미지 데이터 인식 후 저장
      * 이미지 데이터 저장 후 json 파일 삭제
@@ -36,7 +39,7 @@ public class ImageController {
         throws IOException, ParseException {
 
         ElectricityInfo recognizedData = imageService.convert(billType, request);
-        Bill savedBillData = imageService.save(
+        Bill savedBillData = electricityImageService.save(
             request.getEmail(),
             request.getYear(),
             request.getMonth(),
@@ -49,9 +52,9 @@ public class ImageController {
     /*
      * 이미지 인식 후 사용자 데이터 수정
      */
-    @PutMapping("/electricity/{billTypeId}/edit")
-    public ResponseDto editElecImgData(@PathVariable("billTypeId") Long electricityId, @RequestBody ElecImgRequest imgRequest) {
-        imageService.update(electricityId, imgRequest);
+    @PutMapping("/{billType}/{billTypeId}/edit")
+    public ResponseDto editElecImgData(@PathVariable("billTypeId") Long id, @RequestBody ElecImgRequest imgRequest) {
+        electricityImageService.update(id, imgRequest);
         return ResponseDto.success(null, "전기 고지서 데이터 사용자 수정 완료");
     }
 
@@ -60,7 +63,7 @@ public class ImageController {
      */
     @PostMapping("/electricity/input")
     public ResponseDto inputElecData(@RequestBody ElecImgRequest requestDto) {
-        imageService.save(
+        electricityImageService.save(
             requestDto.getEmail(),
             requestDto.getYear(),
             requestDto.getMonth(),
