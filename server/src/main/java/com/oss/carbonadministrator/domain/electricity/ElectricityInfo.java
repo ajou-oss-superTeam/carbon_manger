@@ -1,7 +1,7 @@
 package com.oss.carbonadministrator.domain.electricity;
 
 import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
-import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
+import com.oss.carbonadministrator.dto.request.image.ImgDataRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -86,7 +86,7 @@ public class ElectricityInfo extends BaseTimeEntity {
         return totalPrice;
     }
 
-    public void update(ElecImgRequest updateData) {
+    public void update(ImgDataRequest updateData) {
         this.demandCharge = updateData.getDemandCharge();
         this.energyCharge = updateData.getEnergyCharge();
         this.environmentCharge = updateData.getEnvironmentCharge();

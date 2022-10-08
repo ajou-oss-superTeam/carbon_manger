@@ -1,13 +1,13 @@
 package com.oss.carbonadministrator.service.image;
 
 import com.oss.carbonadministrator.domain.bill.Bill;
-import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.domain.user.User;
+import com.oss.carbonadministrator.domain.water.WaterInfo;
 import com.oss.carbonadministrator.dto.request.image.ImgDataRequest;
 import com.oss.carbonadministrator.exception.DataInfoNotFoundException;
 import com.oss.carbonadministrator.exception.user.HasNoUserException;
+import com.oss.carbonadministrator.repository.WaterRepository;
 import com.oss.carbonadministrator.repository.bill.BillRepository;
-import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
 import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -16,15 +16,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ElectricityImageService {
-
+public class WaterImageService {
     private final UserRepository userRepository;
-
-    private final ElectricityRepository electricityRepository;
+    private final WaterRepository waterRepository;
     private final BillRepository billRepository;
 
     @Transactional
-    public Bill save(String email, int year, int month, ElectricityInfo recognizedElecData) {
+    public Bill save(String email, int year, int month, WaterInfo recognizedWaterData) {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
@@ -33,7 +31,7 @@ public class ElectricityImageService {
 
         Bill bill = Bill.builder()
             .user(user.get())
-            .electricityInfoList(recognizedElecData)
+            .waterInfoList(recognizedWaterData)
             .year(year)
             .month(month)
             .build();
@@ -44,10 +42,9 @@ public class ElectricityImageService {
     @Transactional
     public void update(Long id, ImgDataRequest updateData) {
 
-        ElectricityInfo savedData = electricityRepository.findById(id)
-            .orElseThrow(() -> new DataInfoNotFoundException("수정할 전기 데이터가 없습니다."));
+        WaterInfo savedData = waterRepository.findById(id)
+            .orElseThrow(() -> new DataInfoNotFoundException("수정할 수도 데이터가 없습니다."));
 
         savedData.update(updateData);
     }
-
 }

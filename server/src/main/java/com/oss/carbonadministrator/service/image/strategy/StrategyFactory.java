@@ -1,4 +1,4 @@
-package com.oss.carbonadministrator.service.image;
+package com.oss.carbonadministrator.service.image.strategy;
 
 import java.util.HashMap;
 import java.util.Map;

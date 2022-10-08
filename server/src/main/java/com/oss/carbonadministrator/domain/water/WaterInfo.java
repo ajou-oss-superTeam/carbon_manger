@@ -1,6 +1,7 @@
 package com.oss.carbonadministrator.domain.water;
 
 import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
+import com.oss.carbonadministrator.dto.request.image.ImgDataRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,13 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /*
- * TODO 인식 데이터 변경
+ * TODO 인식 데이터, 총 요금 변경
  */
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -61,4 +64,20 @@ public class WaterInfo extends BaseTimeEntity {
     @Column
     private int lastYearUsage;
 
+    public int calculateTotalPrice(int demandCharge, int vat) {
+        totalPrice = demandCharge + vat;
+        return totalPrice;
+    }
+
+    public void update(ImgDataRequest updateData) {
+        this.demandCharge = updateData.getDemandCharge();
+        this.fuelAdjustmentRate = updateData.getFuelAdjustmentRate();
+        this.vat = updateData.getVat();
+        this.roundDown = updateData.getRoundDown();
+        this.totalbyCurrMonth = updateData.getTotalbyCurrMonth();
+        this.totalPrice = calculateTotalPrice(this.demandCharge, this.vat);
+        this.currMonthUsage = updateData.getCurrMonthUsage();
+        this.preMonthUsage = updateData.getPreMonthUsage();
+        this.lastYearUsage = updateData.getLastYearUsage();
+    }
 }

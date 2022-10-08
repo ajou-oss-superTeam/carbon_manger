@@ -1,6 +1,7 @@
 package com.oss.carbonadministrator;
 
 import com.oss.carbonadministrator.service.image.ImageService;
+import com.oss.carbonadministrator.service.image.strategy.BillType;
 import java.io.IOException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -48,6 +49,7 @@ public class PythonTest {
     @Ignore
     void funcTest() throws IOException, InterruptedException {
         String fileName = "receipt1";
-        imageService.imageToJson(fileName);
+        BillType billType = BillType.ELECTRICITY;
+        imageService.imageToJson(fileName, billType);
     }
 }

@@ -1,22 +1,15 @@
 package com.oss.carbonadministrator.service.image;
 
-import com.oss.carbonadministrator.domain.bill.Bill;
-import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
-import com.oss.carbonadministrator.domain.user.User;
-import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
 import com.oss.carbonadministrator.dto.request.image.ImageRequest;
-import com.oss.carbonadministrator.exception.ElecInfoNotFoundException;
 import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
-import com.oss.carbonadministrator.exception.user.HasNoUserException;
-import com.oss.carbonadministrator.repository.bill.BillRepository;
-import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
-import com.oss.carbonadministrator.repository.user.UserRepository;
+import com.oss.carbonadministrator.service.image.strategy.BillStrategy;
+import com.oss.carbonadministrator.service.image.strategy.BillType;
+import com.oss.carbonadministrator.service.image.strategy.StrategyFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class ImageService {
+
     private final StrategyFactory strategyFactory;
 
     public static void execPython(String[] command) throws IOException {
@@ -46,13 +40,30 @@ public class ImageService {
         executor.execute(commandLine);
     }
 
+    public String findBillOcr(BillType billType) {
+        BillStrategy billStrategy = strategyFactory.findBillStrategy(billType);
+        return billStrategy.callOcrFilename();
+    }
+
     @Transactional
-    public ElectricityInfo convert(BillType billType, ImageRequest request)
+    public <T> T convert(BillType billType, ImageRequest request)
         throws IOException, ParseException {
         UUID uuid = UUID.randomUUID();
         makeBase64ToImage(request.getImage(), ".jpg", uuid);
-        imageToJson(uuid.toString());
-        return jsonToDto(uuid.toString());
+        imageToJson(uuid.toString(), billType);
+        T result = jsonToDto(uuid.toString(), billType);
+        deleteFile(uuid + ".json");
+        return result;
+    }
+
+    private <T> T jsonToDto(String fileName, BillType billType) throws IOException, ParseException {
+        BillStrategy billStrategy = strategyFactory.findBillStrategy(billType);
+        JSONParser parser = new JSONParser();
+        String outputPath = this.basePath() + fileName + ".json";
+
+        Reader reader = new FileReader(outputPath);
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        return billStrategy.toDto(fileName, jsonObject);
     }
 
     public String uploadToLocal(MultipartFile file) {
@@ -73,10 +84,10 @@ public class ImageService {
         }
     }
 
-    public void imageToJson(String fileName) {
+    public void imageToJson(String fileName, BillType billType) {
         String[] command = new String[6];
         command[0] = "python";
-        command[1] = this.basePath().split("working")[0] + strategyFactory.findBillStrategy(BillType.ELECTRICITY).callOcrFilename();
+        command[1] = this.basePath().split("working")[0] + findBillOcr(billType);
         command[2] = "-img_path";
         command[3] = this.basePath() + fileName + ".jpg";
         command[4] = "-output_path";
@@ -88,59 +99,6 @@ public class ImageService {
         }
 
         this.deleteFile(fileName + ".jpg");
-    }
-
-    public ElectricityInfo jsonToDto(String fileName) throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        String outputPath = this.basePath() + fileName + ".json";
-
-        Reader reader = new FileReader(outputPath);
-        JSONObject jsonObject = (JSONObject) parser.parse(reader);
-
-        ElectricityInfo electricityInfo = ElectricityInfo.builder()
-            .demandCharge(Integer.parseInt(
-                jsonObject.containsKey("base_fee") == true ? (String) jsonObject.get("base_fee")
-                    : "0"))
-            .energyCharge(Integer.parseInt(
-                jsonObject.containsKey("pure_eletric_fee") == true ? (String) jsonObject.get(
-                    "pure_eletric_fee") : "0"))
-            .environmentCharge(Integer.parseInt(
-                jsonObject.containsKey("environment_fee") == true ? (String) jsonObject.get(
-                    "environment_fee") : "0"))
-            .fuelAdjustmentRate(Integer.parseInt(
-                jsonObject.containsKey("fuel_fee") == true ? (String) jsonObject.get("fuel_fee")
-                    : "0"))
-            .elecChargeSum(Integer.parseInt(
-                jsonObject.containsKey("eletric_fee") == true ? (String) jsonObject.get(
-                    "eletric_fee") : "0"))
-            .vat(Integer.parseInt(
-                jsonObject.containsKey("VATS_fee") == true ? (String) jsonObject.get("VATS_fee")
-                    : "0"))
-            .elecFund(Integer.parseInt(
-                jsonObject.containsKey("unknown_fee") == true ? (String) jsonObject.get(
-                    "unknown_fee") : "0"))
-            .roundDown(Integer.parseInt(
-                jsonObject.containsKey("cutoff_fee") == true ? (String) jsonObject.get("cutoff_fee")
-                    : "0"))
-            .totalbyCurrMonth(Integer.parseInt(
-                jsonObject.containsKey("total_month_fee") == true ? (String) jsonObject.get(
-                    "total_month_fee") : "0"))
-            .tvSubscriptionFee(Integer.parseInt(
-                jsonObject.containsKey("TV_fee") == true ? (String) jsonObject.get("TV_fee") : "0"))
-            .currMonthUsage(Integer.parseInt(
-                jsonObject.containsKey("current_month") == true ? (String) jsonObject.get(
-                    "current_month") : "0"))
-            .preMonthUsage(Integer.parseInt(
-                jsonObject.containsKey("previous_month") == true ? (String) jsonObject.get(
-                    "previous_month") : "0"))
-            .lastYearUsage(Integer.parseInt(
-                jsonObject.containsKey("last_year") == true ? (String) jsonObject.get("last_year")
-                    : "0"))
-            .build();
-        electricityInfo.calculateTotalPrice(electricityInfo.getTotalbyCurrMonth(),
-            electricityInfo.getTvSubscriptionFee());
-        deleteFile(fileName + ".json");
-        return electricityInfo;
     }
 
     public void deleteFile(String fileName) {
