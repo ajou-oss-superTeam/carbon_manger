@@ -1,6 +1,7 @@
 package com.oss.carbonadministrator.domain.gas;
 
 import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
+import com.oss.carbonadministrator.dto.request.image.ImgDataRequest;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,5 +51,14 @@ public class GasInfo extends BaseTimeEntity {
     public int calculateTotalPrice(int demandCharge, int vat) {
         totalPrice = demandCharge + vat;
         return totalPrice;
+    }
+
+    public void update(ImgDataRequest updateData) {
+        this.demandCharge = updateData.getDemandCharge();
+        this.vat = updateData.getVat();
+        this.roundDown = updateData.getRoundDown();
+        this.totalbyCurrMonth = updateData.getTotalbyCurrMonth();
+        this.totalPrice = calculateTotalPrice(this.demandCharge, this.vat);
+        this.currMonthUsage = updateData.getCurrMonthUsage();
     }
 }
