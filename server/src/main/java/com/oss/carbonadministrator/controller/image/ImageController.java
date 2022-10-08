@@ -8,7 +8,6 @@ import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.service.image.BillType;
 import com.oss.carbonadministrator.service.image.ImageService;
 import java.io.IOException;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -27,28 +26,24 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    /*
+     * 데이터 저장 후 json 파일 삭제
+     */
     @PostMapping("/{billType}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto uploadImg(@PathVariable BillType billType, @RequestBody ImageRequest request)
         throws IOException, ParseException {
 
-        UUID uuid = UUID.randomUUID();
+        ElectricityInfo recognizedData = imageService.convert(billType, request);
+        Bill savedBillData = imageService.save(request.getEmail(), request.getYear(), request.getMonth(), recognizedData);
 
-        imageService.makeBase64ToImage(request.getImage(), ".jpg", uuid);
-
-        imageService.imageToJson(uuid.toString());
-        ElectricityInfo recognizedElecData = imageService.jsonToDto(uuid.toString());
-        // 데이터 저장 후 json 파일 삭제
-        Bill savedBillData = imageService.save(request.getEmail(), request.getYear(), request.getMonth(), recognizedElecData);
-
-        return ResponseDto.success(savedBillData, "전기 고지서 데이터 인식 및 저장 성공");
+        return ResponseDto.success(savedBillData, "전기  고지서 데이터 인식 및 저장 성공");
     }
 
-    @PutMapping("/electricity/{electricityId}/edit")
-    public ResponseDto editElecImgData(
-        @PathVariable("electricityId") Long electricityId,
-        @RequestBody ElecImgRequest requestDto) {
-        imageService.update(electricityId, requestDto);
+    @PutMapping("/electricity/{billTypeId}/edit")
+    public ResponseDto editElecImgData(@PathVariable("billTypeId") Long electricityId,
+        @RequestBody ElecImgRequest imgRequest) {
+        imageService.update(electricityId, imgRequest);
         return ResponseDto.success(null, "전기 고지서 데이터 사용자 수정 완료");
     }
 

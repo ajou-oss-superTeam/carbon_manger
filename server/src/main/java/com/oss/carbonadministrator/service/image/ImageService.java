@@ -4,6 +4,7 @@ import com.oss.carbonadministrator.domain.bill.Bill;
 import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.domain.user.User;
 import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
+import com.oss.carbonadministrator.dto.request.image.ImageRequest;
 import com.oss.carbonadministrator.exception.ElecInfoNotFoundException;
 import com.oss.carbonadministrator.exception.image.ImgUploadFailException;
 import com.oss.carbonadministrator.exception.user.HasNoUserException;
@@ -200,5 +201,14 @@ public class ImageService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public ElectricityInfo convert(BillType billType, ImageRequest request)
+        throws IOException, ParseException {
+        UUID uuid = UUID.randomUUID();
+        makeBase64ToImage(request.getImage(), ".jpg", uuid);
+        imageToJson(uuid.toString());
+        return jsonToDto(uuid.toString());
     }
 }

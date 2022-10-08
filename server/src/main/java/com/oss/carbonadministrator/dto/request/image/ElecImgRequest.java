@@ -4,10 +4,8 @@ import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class ElecImgRequest {
 
