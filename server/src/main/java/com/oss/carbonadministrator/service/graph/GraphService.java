@@ -40,7 +40,7 @@ public class GraphService {
         ArrayList<Integer> billResult) {
         for (Bill sur : targetBill) {
             monthData.add(sur.getYear() + "/" + sur.getMonth());
-            billResult.add(sur.getElectricityList().getTotalPrice());
+            billResult.add(sur.getElectricityInfoList().getTotalPrice());
         }
     }
 
