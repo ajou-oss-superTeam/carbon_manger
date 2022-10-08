@@ -15,7 +15,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
@@ -171,35 +170,21 @@ public class ImageService {
     }
 
     @Transactional
-    public ElectricityInfo save(String email, int year, int month,
-        ElectricityInfo recognizedElecData) {
+    public Bill save(String email, int year, int month, ElectricityInfo recognizedElecData) {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()) {
             throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
 
-        Bill bill;
+        Bill bill = Bill.builder()
+            .user(user.get())
+            .electricityInfoList(recognizedElecData)
+            .year(year)
+            .month(month)
+            .build();
 
-        if (billRepository.findBillByEmailAndYearAndMonth(user.get().getEmail(), year, month)
-            .stream().findAny().isEmpty()) {
-            bill = Bill.builder()
-                .user(user.get())
-                .electricityInfoList(recognizedElecData)
-                .year(year)
-                .month(month)
-                .build();
-            billRepository.save(bill);
-
-        } else {
-            List<Bill> billList = billRepository.findBillByEmailAndYearAndMonth(
-                user.get().getEmail(), year, month);
-            bill = billList.get(0);
-            bill.setElectricityInfoList(recognizedElecData);
-            billRepository.save(bill);
-        }
-
-        return bill.getElectricityInfoList();
+        return billRepository.save(bill);
     }
 
     public void makeBase64ToImage(String base64, String fileExtension, UUID uuid) {
@@ -216,6 +201,4 @@ public class ImageService {
             e.printStackTrace();
         }
     }
-
-
 }

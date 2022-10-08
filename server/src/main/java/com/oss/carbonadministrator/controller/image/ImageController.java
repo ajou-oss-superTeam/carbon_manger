@@ -1,5 +1,6 @@
 package com.oss.carbonadministrator.controller.image;
 
+import com.oss.carbonadministrator.domain.bill.Bill;
 import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.dto.request.image.ElecImgRequest;
 import com.oss.carbonadministrator.dto.request.image.ImageRequest;
@@ -38,13 +39,14 @@ public class ImageController {
         imageService.imageToJson(uuid.toString());
         ElectricityInfo recognizedElecData = imageService.jsonToDto(uuid.toString());
         // 데이터 저장 후 json 파일 삭제
-        ElectricityInfo savedData = imageService.save(request.getEmail(), request.getYear(), request.getMonth(), recognizedElecData);
+        Bill savedBillData = imageService.save(request.getEmail(), request.getYear(), request.getMonth(), recognizedElecData);
 
-        return ResponseDto.success(savedData, "전기 고지서 데이터 인식 및 저장 성공");
+        return ResponseDto.success(savedBillData, "전기 고지서 데이터 인식 및 저장 성공");
     }
 
     @PutMapping("/electricity/{electricityId}/edit")
-    public ResponseDto editElecImgData(@PathVariable("electricityId") Long electricityId,
+    public ResponseDto editElecImgData(
+        @PathVariable("electricityId") Long electricityId,
         @RequestBody ElecImgRequest requestDto) {
         imageService.update(electricityId, requestDto);
         return ResponseDto.success(null, "전기 고지서 데이터 사용자 수정 완료");
