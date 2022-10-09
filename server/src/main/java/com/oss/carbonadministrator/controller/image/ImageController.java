@@ -46,7 +46,7 @@ public class ImageController {
     /*
      * electricity
      */
-    @PostMapping("/{billType}")
+    @PostMapping("/{elecBillType}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto uploadElecImg(@PathVariable BillType billType,
         @RequestBody ImageRequest request)
@@ -67,7 +67,7 @@ public class ImageController {
     /*
      * water
      */
-    @PostMapping("/{billType}")
+    @PostMapping("/{waterBillType}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto uploadWaterImg(@PathVariable BillType billType,
         @RequestBody ImageRequest request)
@@ -89,7 +89,7 @@ public class ImageController {
      * gas
      */
 
-    @PostMapping("/{billType}")
+    @PostMapping("/{gasBillType}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto uploadGasImg(@PathVariable BillType billType,
         @RequestBody ImageRequest request)
