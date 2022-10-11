@@ -36,7 +36,10 @@ const Home = ({ navigation: { navigate, replace } }) => {
         });
         break;
       case '가스':
-        Alert.alert('개발 중입니다.');
+        navigate('Tabs', {
+          screen: 'picture',
+          params: { type, user },
+        });
         break;
       case '수도':
         Alert.alert('개발 중입니다.');
