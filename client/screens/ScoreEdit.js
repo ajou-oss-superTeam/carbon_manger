@@ -19,7 +19,9 @@ const ScoreEdit = ({
     params: { type, data, time },
   },
 }) => {
-  // data, time이 null로 오는 케이스 존재함
+  // 달력
+  const [showDate, setShowDate] = useState(false);
+  // 전기 ==========
   const [demandCharge, setDemandCharge] = useState(
     data?.demandCharge ? String(data.demandCharge) : '0'
   );
@@ -57,8 +59,7 @@ const ScoreEdit = ({
   const [lastYearUsage, setLastYearUsage] = useState(
     data?.lastYearUsage ? String(data.lastYearUsage) : '0'
   );
-  // 달력
-  const [showDate, setShowDate] = useState(false);
+  // 가스 ===========
 
   const onPressBtn = () => {
     if (Object.entries(data).length === 0) {
@@ -82,7 +83,10 @@ const ScoreEdit = ({
     const month = jsDate.getMonth() + 1;
 
     const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+
     const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
     const email = parseUser.user.email;
 
     const numbers = {
@@ -110,24 +114,46 @@ const ScoreEdit = ({
       return;
     }
 
-    const { success, message } = await API.sendNumber(
-      email,
-      year,
-      month,
-      numbers
-    );
+    if (type === '전기') {
+      const { success, message } = await API.sendNumber(
+        email,
+        year,
+        month,
+        numbers,
+        parseToken
+      );
 
-    if (success) {
-      navigate('Tabs', {
-        screen: 'graph',
-      });
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { success, message } = await API.sendGasNumber(
+        email,
+        year,
+        month,
+        numbers,
+        parseToken
+      );
+
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
   };
 
   // 사진 후 수정 - null이 아닐 경우
   const requsetAPIPlus = async () => {
+    const token = await AsyncStorage.getItem('@token');
+    const parseToken = JSON.parse(token);
+
     const id = data.id;
     const numbers = {
       demandCharge,
@@ -154,14 +180,34 @@ const ScoreEdit = ({
       return;
     }
 
-    const { success, message } = await API.editImgInfo(id, numbers);
+    if (type === '전기') {
+      const { success, message } = await API.editImgInfo(
+        id,
+        number,
+        parseToken
+      );
 
-    if (success) {
-      navigate('Tabs', {
-        screen: 'graph',
-      });
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { success, message } = await API.editGasImgInfo(
+        id,
+        numbers,
+        parseToken
+      );
+
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
   };
 

@@ -88,27 +88,51 @@ const CameraScreen = ({
     const month = jsDate.getMonth() + 1;
 
     const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+
     const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
     const email = parseUser?.user?.email;
 
     // loading
     setLoading(true);
 
-    const { data, success, message } = await API.sendImg(
-      email,
-      imageUrl,
-      base,
-      year,
-      month
-    );
+    if (type === '전기') {
+      const { data, success, message } = await API.sendImg(
+        email,
+        imageUrl,
+        base,
+        year,
+        month,
+        parseToken
+      );
 
-    if (success) {
-      navigate('Stack', {
-        screen: 'score',
-        params: { type, data, time: { year, month } },
-      });
+      if (success) {
+        navigate('Stack', {
+          screen: 'score',
+          params: { type, data, time: { year, month } },
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { data, success, message } = await API.sendGasImg(
+        email,
+        imageUrl,
+        base,
+        year,
+        month,
+        parseToken
+      );
+
+      if (success) {
+        navigate('Stack', {
+          screen: 'score',
+          params: { type, data, time: { year, month } },
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
 
     // finished

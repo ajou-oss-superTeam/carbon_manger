@@ -19,6 +19,9 @@ const Home = ({ navigation: { navigate, replace } }) => {
   const checkUser = async () => {
     const user = await AsyncStorage.getItem('@user');
     if (user) {
+      // replace('Stack', {
+      //   screen: 'notlogin',
+      // });
       setUser(JSON.parse(user));
     } else {
       replace('Stack', {
@@ -36,7 +39,10 @@ const Home = ({ navigation: { navigate, replace } }) => {
         });
         break;
       case '가스':
-        Alert.alert('개발 중입니다.');
+        navigate('Tabs', {
+          screen: 'picture',
+          params: { type, user },
+        });
         break;
       case '수도':
         Alert.alert('개발 중입니다.');

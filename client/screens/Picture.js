@@ -27,10 +27,17 @@ const Picture = ({
       </View>
       <View style={styles.middle}>
         <View style={styles.imgCover}>
-          <Image
-            style={styles.exampleImg}
-            source={require('../assets/images/example.jpeg')}
-          />
+          {type && type === '전기' ? (
+            <Image
+              style={styles.exampleImg}
+              source={require('../assets/images/example.jpeg')}
+            />
+          ) : (
+            <Image
+              style={styles.exampleImg}
+              source={require('../assets/images/example_gas.png')}
+            />
+          )}
         </View>
       </View>
       <View style={styles.footer}>

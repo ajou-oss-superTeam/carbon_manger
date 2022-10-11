@@ -5,7 +5,7 @@
     "owner": "namlulu",
     "version": "1.0.0",
     "extra": {
-      "apiUrl": "http://34.64.114.118:8080",
+      "apiUrl": "http://34.170.83.54:8080",
       "eas": {
         "projectId": "bbe8f19e-ff98-409c-be9b-916465512584"
       }
@@ -21,9 +21,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.namlulu.carbonmanager"

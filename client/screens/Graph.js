@@ -14,7 +14,10 @@ const Graph = () => {
 
   const drawGraph = async () => {
     const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+
     const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
 
     // 닉네임
     setNickname(parseUser?.user?.nickname);
@@ -22,7 +25,8 @@ const Graph = () => {
     // 그패프 데이터
     if (parseUser?.user?.email) {
       const { data, message, success } = await API.getGraph(
-        parseUser?.user?.email
+        parseUser?.user?.email,
+        parseToken
       );
 
       if (success) {
