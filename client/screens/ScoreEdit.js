@@ -19,7 +19,9 @@ const ScoreEdit = ({
     params: { type, data, time },
   },
 }) => {
-  // data, time이 null로 오는 케이스 존재함
+  // 달력
+  const [showDate, setShowDate] = useState(false);
+  // 전기 ==========
   const [demandCharge, setDemandCharge] = useState(
     data?.demandCharge ? String(data.demandCharge) : '0'
   );
@@ -57,8 +59,7 @@ const ScoreEdit = ({
   const [lastYearUsage, setLastYearUsage] = useState(
     data?.lastYearUsage ? String(data.lastYearUsage) : '0'
   );
-  // 달력
-  const [showDate, setShowDate] = useState(false);
+  // 가스 ===========
 
   const onPressBtn = () => {
     if (Object.entries(data).length === 0) {
@@ -110,19 +111,36 @@ const ScoreEdit = ({
       return;
     }
 
-    const { success, message } = await API.sendNumber(
-      email,
-      year,
-      month,
-      numbers
-    );
+    if (type === '전기') {
+      const { success, message } = await API.sendNumber(
+        email,
+        year,
+        month,
+        numbers
+      );
 
-    if (success) {
-      navigate('Tabs', {
-        screen: 'graph',
-      });
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { success, message } = await API.sendGasNumber(
+        email,
+        year,
+        month,
+        numbers
+      );
+
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
   };
 
@@ -154,14 +172,26 @@ const ScoreEdit = ({
       return;
     }
 
-    const { success, message } = await API.editImgInfo(id, numbers);
+    if (type === '전기') {
+      const { success, message } = await API.editImgInfo(id, numbers);
 
-    if (success) {
-      navigate('Tabs', {
-        screen: 'graph',
-      });
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { success, message } = await API.editGasImgInfo(id, numbers);
+
+      if (success) {
+        navigate('Tabs', {
+          screen: 'graph',
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
   };
 

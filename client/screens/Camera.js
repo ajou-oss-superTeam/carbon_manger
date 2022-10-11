@@ -94,21 +94,40 @@ const CameraScreen = ({
     // loading
     setLoading(true);
 
-    const { data, success, message } = await API.sendImg(
-      email,
-      imageUrl,
-      base,
-      year,
-      month
-    );
+    if (type === '전기') {
+      const { data, success, message } = await API.sendImg(
+        email,
+        imageUrl,
+        base,
+        year,
+        month
+      );
 
-    if (success) {
-      navigate('Stack', {
-        screen: 'score',
-        params: { type, data, time: { year, month } },
-      });
+      if (success) {
+        navigate('Stack', {
+          screen: 'score',
+          params: { type, data, time: { year, month } },
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { data, success, message } = await API.sendGasImg(
+        email,
+        imageUrl,
+        base,
+        year,
+        month
+      );
+
+      if (success) {
+        navigate('Stack', {
+          screen: 'score',
+          params: { type, data, time: { year, month } },
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
 
     // finished
