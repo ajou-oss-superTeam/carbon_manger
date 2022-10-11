@@ -7,13 +7,17 @@ const API = {
   // 로그인
   async getLogin({ email, password }) {
     try {
-      const { data } = await axios.post(`${host}/api/user/login`, {
+      const { data, headers } = await axios.post(`${host}/api/user/login`, {
         email,
         password,
       });
 
       if (data.success) {
-        return { user: data.data, success: data.success };
+        return {
+          user: data.data,
+          success: data.success,
+          token: headers.authorization,
+        };
       } else {
         return { message: data.message, success: data.success };
       }
@@ -25,7 +29,7 @@ const API = {
   // 회원가입
   async getSignup({ email, nickname, password, province, city }) {
     try {
-      const { data } = await axios.post(`${host}/api/user/signup`, {
+      const { data, headers } = await axios.post(`${host}/api/user/signup`, {
         email,
         nickname,
         password,
@@ -33,8 +37,14 @@ const API = {
         city,
       });
 
+      console.log(headers);
+
       if (data.success) {
-        return { user: data.data, success: data.success };
+        return {
+          user: data.data,
+          success: data.success,
+          token: headers.authorization,
+        };
       } else {
         return { message: data.message, success: data.success };
       }
@@ -45,15 +55,23 @@ const API = {
 
   // =======================================
   // 전기 이미지 전송
-  async sendImg(email, uri, base, year, month) {
+  async sendImg(email, uri, base, year, month, token) {
     try {
-      const { data } = await axios.post(`${host}/api/image/electricity`, {
-        email,
-        year,
-        month,
-        image: base,
-        uri,
-      });
+      const { data } = await axios.post(
+        `${host}/api/image/electricity`,
+        {
+          email,
+          year,
+          month,
+          image: base,
+          uri,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       if (data.success) {
         return { data: data.data, success: data.success };
@@ -67,13 +85,18 @@ const API = {
   },
 
   // 전기 사진 수정
-  async editImgInfo(id, numbers) {
+  async editImgInfo(id, numbers, token) {
     try {
       const { data } = await axios.put(
         `${host}/api/image/electricity/${id}/edit`,
         {
           id,
           ...numbers,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
         }
       );
 
@@ -88,14 +111,22 @@ const API = {
   },
 
   // 전기 숫자 전송
-  async sendNumber(email, year, month, numbers) {
+  async sendNumber(email, year, month, numbers, token) {
     try {
-      const { data } = await axios.post(`${host}/api/image/electricity/input`, {
-        email,
-        year,
-        month,
-        ...numbers,
-      });
+      const { data } = await axios.post(
+        `${host}/api/image/electricity/input`,
+        {
+          email,
+          year,
+          month,
+          ...numbers,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       if (data.success) {
         return { data: data.data, success: data.success };
@@ -108,10 +139,16 @@ const API = {
   },
 
   // 전기 그래프
-  async getGraph(email) {
+  async getGraph(email, token) {
     try {
       const { data } = await axios.post(
-        `${host}/api/graph/electricity/fee?email=${email}`
+        `${host}/api/graph/electricity/fee?email=${email}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
 
       if (data.success) {
@@ -126,15 +163,23 @@ const API = {
 
   // =======================================
   // 가스 이미지 전송
-  async sendGasImg(email, uri, base, year, month) {
+  async sendGasImg(email, uri, base, year, month, token) {
     try {
-      const { data } = await axios.post(`${host}/api/image/gas`, {
-        email,
-        year,
-        month,
-        image: base,
-        uri,
-      });
+      const { data } = await axios.post(
+        `${host}/api/image/gas`,
+        {
+          email,
+          year,
+          month,
+          image: base,
+          uri,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       if (data.success) {
         return { data: data.data, success: data.success };
@@ -148,12 +193,20 @@ const API = {
   },
 
   // 가스 사진 수정
-  async editGasImgInfo(id, numbers) {
+  async editGasImgInfo(id, numbers, token) {
     try {
-      const { data } = await axios.put(`${host}/api/image/gas/${id}/edit`, {
-        id,
-        ...numbers,
-      });
+      const { data } = await axios.put(
+        `${host}/api/image/gas/${id}/edit`,
+        {
+          id,
+          ...numbers,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       if (data.success) {
         return { data: data.data, success: data.success };
@@ -166,14 +219,22 @@ const API = {
   },
 
   // 가스 숫자 전송
-  async sendGasNumber(email, year, month, numbers) {
+  async sendGasNumber(email, year, month, numbers, token) {
     try {
-      const { data } = await axios.post(`${host}/api/image/gas/input`, {
-        email,
-        year,
-        month,
-        ...numbers,
-      });
+      const { data } = await axios.post(
+        `${host}/api/image/gas/input`,
+        {
+          email,
+          year,
+          month,
+          ...numbers,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       if (data.success) {
         return { data: data.data, success: data.success };

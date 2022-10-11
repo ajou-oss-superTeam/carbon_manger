@@ -83,7 +83,10 @@ const ScoreEdit = ({
     const month = jsDate.getMonth() + 1;
 
     const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+
     const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
     const email = parseUser.user.email;
 
     const numbers = {
@@ -116,7 +119,8 @@ const ScoreEdit = ({
         email,
         year,
         month,
-        numbers
+        numbers,
+        parseToken
       );
 
       if (success) {
@@ -131,7 +135,8 @@ const ScoreEdit = ({
         email,
         year,
         month,
-        numbers
+        numbers,
+        parseToken
       );
 
       if (success) {
@@ -146,6 +151,9 @@ const ScoreEdit = ({
 
   // 사진 후 수정 - null이 아닐 경우
   const requsetAPIPlus = async () => {
+    const token = await AsyncStorage.getItem('@token');
+    const parseToken = JSON.parse(token);
+
     const id = data.id;
     const numbers = {
       demandCharge,
@@ -173,7 +181,11 @@ const ScoreEdit = ({
     }
 
     if (type === '전기') {
-      const { success, message } = await API.editImgInfo(id, numbers);
+      const { success, message } = await API.editImgInfo(
+        id,
+        number,
+        parseToken
+      );
 
       if (success) {
         navigate('Tabs', {
@@ -183,7 +195,11 @@ const ScoreEdit = ({
         Alert.alert(message);
       }
     } else {
-      const { success, message } = await API.editGasImgInfo(id, numbers);
+      const { success, message } = await API.editGasImgInfo(
+        id,
+        numbers,
+        parseToken
+      );
 
       if (success) {
         navigate('Tabs', {
