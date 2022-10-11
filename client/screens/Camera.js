@@ -88,7 +88,10 @@ const CameraScreen = ({
     const month = jsDate.getMonth() + 1;
 
     const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+
     const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
     const email = parseUser?.user?.email;
 
     // loading
@@ -100,7 +103,8 @@ const CameraScreen = ({
         imageUrl,
         base,
         year,
-        month
+        month,
+        parseToken
       );
 
       if (success) {
@@ -117,7 +121,8 @@ const CameraScreen = ({
         imageUrl,
         base,
         year,
-        month
+        month,
+        parseToken
       );
 
       if (success) {
