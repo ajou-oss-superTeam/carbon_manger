@@ -11,7 +11,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://34.64.90.1:3306/OSS?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://34.170.83.54:3306/OSS?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
     username: test
     password: test
 

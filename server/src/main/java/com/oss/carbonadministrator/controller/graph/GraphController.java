@@ -17,6 +17,7 @@ public class GraphController {
 
     private final GraphService graphService;
 
+
     @PostMapping("/electricity/fee")
     public ResponseDto electricFeeGraph(@RequestBody @Valid UserEmailRequest requestDto) {
         return graphService.elecFeeGraph(requestDto.getEmail());
