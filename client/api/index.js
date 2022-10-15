@@ -37,8 +37,6 @@ const API = {
         city,
       });
 
-      console.log(headers);
-
       if (data.success) {
         return {
           user: data.data,
@@ -68,7 +66,7 @@ const API = {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
@@ -95,7 +93,7 @@ const API = {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
@@ -123,7 +121,7 @@ const API = {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
@@ -146,7 +144,7 @@ const API = {
         {},
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
@@ -176,7 +174,7 @@ const API = {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
@@ -203,7 +201,7 @@ const API = {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
@@ -231,7 +229,7 @@ const API = {
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token.token,
           },
         }
       );
