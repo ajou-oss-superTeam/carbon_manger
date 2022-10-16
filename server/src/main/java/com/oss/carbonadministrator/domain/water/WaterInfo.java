@@ -69,6 +69,10 @@ public class WaterInfo extends BaseTimeEntity {
         return totalPrice;
     }
 
+    public int calculateCarbonUsage() {
+        return (int) (this.totalbyCurrMonth * 0.332);
+    }
+
     public void update(ImgDataRequest updateData) {
         this.demandCharge = updateData.getDemandCharge();
         this.fuelAdjustmentRate = updateData.getFuelAdjustmentRate();

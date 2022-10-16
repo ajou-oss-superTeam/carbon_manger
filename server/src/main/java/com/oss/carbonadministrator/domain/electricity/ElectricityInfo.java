@@ -86,6 +86,10 @@ public class ElectricityInfo extends BaseTimeEntity {
         return totalPrice;
     }
 
+    public int calculateCarbonUsage() {
+        return (int) (this.totalbyCurrMonth * 0.4666);
+    }
+
     public void update(ImgDataRequest updateData) {
         this.demandCharge = updateData.getDemandCharge();
         this.energyCharge = updateData.getEnergyCharge();

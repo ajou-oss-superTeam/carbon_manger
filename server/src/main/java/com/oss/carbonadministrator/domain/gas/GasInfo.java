@@ -53,6 +53,10 @@ public class GasInfo extends BaseTimeEntity {
         return totalPrice;
     }
 
+    public int calculateCarbonUsage() {
+        return (int) (this.totalbyCurrMonth * 2.22);
+    }
+
     public void update(ImgDataRequest updateData) {
         this.demandCharge = updateData.getDemandCharge();
         this.vat = updateData.getVat();

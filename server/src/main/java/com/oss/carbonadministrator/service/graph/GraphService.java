@@ -3,14 +3,12 @@ package com.oss.carbonadministrator.service.graph;
 import com.oss.carbonadministrator.domain.bill.Bill;
 import com.oss.carbonadministrator.domain.electricity.ElecAverage;
 import com.oss.carbonadministrator.domain.user.User;
-import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.exception.user.HasNoUserException;
 import com.oss.carbonadministrator.repository.bill.BillRepository;
 import com.oss.carbonadministrator.repository.electricity.ElecAverageRepository;
 import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -25,27 +23,56 @@ public class GraphService {
     private final BillRepository billRepository;
     private final UserRepository userRepository;
 
-    private static void extractGovernmentData(List<ElecAverage> targetElecAver,
+    private static void extractGovernmentData(
+        List<ElecAverage> targetElecAver,
         ArrayList<String> monthData,
-        ArrayList<Integer> averResult) {
+        ArrayList<Integer> averResult
+    ) {
         for (ElecAverage sur : targetElecAver) {
             if (monthData.contains(
-                sur.getYear() + "/" + sur.getMonth())) {
+                sur.getYear()%100 + "/" + sur.getMonth())) {
                 averResult.add(sur.getChargeAverage());
             }
         }
     }
 
-    private static void extractUserBillData(List<Bill> targetBill, ArrayList<String> monthData,
-        ArrayList<Integer> billResult) {
+    private static void extractUserElecPrice(
+        List<Bill> targetBill,
+        ArrayList<String> monthData,
+        ArrayList<Integer> billResult
+    ) {
         for (Bill sur : targetBill) {
-            monthData.add(sur.getYear() + "/" + sur.getMonth());
+            monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
             billResult.add(sur.getElectricityInfoList().getTotalPrice());
         }
     }
 
+    private static List<Object> calculatedList(Bill sur) {
+        List<Object> result = new ArrayList<>();
+        if (sur.getElectricityInfoList() == null) {
+            result.add("");
+        } else {
+            result.add(sur.getElectricityInfoList().calculateCarbonUsage());
+        }
+
+        if (sur.getGasInfoList() == null) {
+            result.add("");
+        } else {
+            result.add(sur.getGasInfoList().calculateCarbonUsage());
+        }
+
+        if (sur.getWaterInfoList() == null) {
+            result.add("");
+        } else {
+            result.add(sur.getWaterInfoList().calculateCarbonUsage());
+        }
+
+        return result;
+    }
+
+
     @Transactional(readOnly = true)
-    public ResponseDto elecFeeGraph(String email) {
+    public GraphData getElecFeeGraph(String email) {
         if (userRepository.findByEmail(email).isEmpty()) {
             throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
@@ -58,22 +85,59 @@ public class GraphService {
         ArrayList<Integer> billResult = new ArrayList<>();
         ArrayList<Integer> averResult = new ArrayList<>();
 
-        extractUserBillData(targetBill, monthData, billResult);
+        extractUserElecPrice(targetBill, monthData, billResult);
 
         extractGovernmentData(targetElecAver, monthData, averResult);
 
-        return ResponseDto.success(
-            new GraphData(monthData.toArray(new String[monthData.size()]),
-                new DataSets(billResult.stream().mapToInt(Integer::intValue).toArray(),
-                    averResult.stream().mapToInt(Integer::intValue).toArray())), "그래프 데이터 전송");
+        return new GraphData(monthData.toArray(new String[monthData.size()]),
+            new DataSets(billResult.stream().mapToInt(Integer::intValue).toArray(),
+                averResult.stream().mapToInt(Integer::intValue).toArray()));
+    }
+
+    public GraphData getAllCarbonGraph(String email) {
+        if (userRepository.findByEmail(email).isEmpty()) {
+            throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
+        }
+        User targetUser = userRepository.findByEmail(email).get();
+        List<Bill> targetBill = billRepository.findAllByUser(targetUser);
+
+        ArrayList<String> monthData = new ArrayList<>();
+        ArrayList<List<Object>> carbonResult = new ArrayList<>();
+        String[] legend = {"전기", "가스", "수도"};
+
+        calculateUserCarbonData(targetBill, monthData, carbonResult);
+
+        return new GraphData(monthData.toArray(new String[monthData.size()]), legend, carbonResult);
+    }
+
+    private void calculateUserCarbonData(
+        List<Bill> targetBill,
+        ArrayList<String> monthData,
+        ArrayList<List<Object>> carbonResult
+    ) {
+        for (Bill sur : targetBill) {
+            monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
+            carbonResult.add(calculatedList(sur)); // TODO "" 처리
+        }
     }
 
     @Getter
-    @AllArgsConstructor
-    public static class GraphData {
+    public static class GraphData<T> {
 
         private String[] labels;
-        private DataSets datasets;
+        private String[] legend;
+        private T datasets;
+
+        public GraphData(String[] labels, T datasets) {
+            this.labels = labels;
+            this.datasets = datasets;
+        }
+
+        public GraphData(String[] labels, String[] legend, T datasets) {
+            this.labels = labels;
+            this.legend = legend;
+            this.datasets = datasets;
+        }
     }
 
     @Getter
