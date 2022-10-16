@@ -46,12 +46,11 @@ public class ImageController {
     /*
      * electricity
      */
-    @PostMapping("/{elecBillType}")
+    @PostMapping("/electricity")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto uploadElecImg(@PathVariable BillType billType,
-        @RequestBody ImageRequest request)
+    public ResponseDto uploadElecImg(@RequestBody ImageRequest request)
         throws IOException, ParseException {
-
+        BillType billType = BillType.ELECTRICITY;
         ElectricityInfo recognizedData = imageService.convert(billType, request);
 
         Bill savedBillData = electricityImageService.save(
@@ -67,12 +66,11 @@ public class ImageController {
     /*
      * water
      */
-    @PostMapping("/{waterBillType}")
+    @PostMapping("/water")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto uploadWaterImg(@PathVariable BillType billType,
-        @RequestBody ImageRequest request)
+    public ResponseDto uploadWaterImg(@RequestBody ImageRequest request)
         throws IOException, ParseException {
-
+        BillType billType = BillType.WATER;
         WaterInfo recognizedData = imageService.convert(billType, request);
 
         Bill savedBillData = waterImageService.save(
@@ -89,12 +87,11 @@ public class ImageController {
      * gas
      */
 
-    @PostMapping("/{gasBillType}")
+    @PostMapping("/gas")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto uploadGasImg(@PathVariable BillType billType,
-        @RequestBody ImageRequest request)
+    public ResponseDto uploadGasImg(@RequestBody ImageRequest request)
         throws IOException, ParseException {
-
+        BillType billType = BillType.GAS;
         GasInfo recognizedData = imageService.convert(billType, request);
 
         Bill savedBillData = gasImageService.save(
