@@ -3,14 +3,14 @@ package com.oss.carbonadministrator.service.graph;
 import com.oss.carbonadministrator.domain.bill.Bill;
 import com.oss.carbonadministrator.domain.electricity.ElecAverage;
 import com.oss.carbonadministrator.domain.user.User;
-import com.oss.carbonadministrator.dto.response.ResponseDto;
 import com.oss.carbonadministrator.exception.user.HasNoUserException;
 import com.oss.carbonadministrator.repository.bill.BillRepository;
 import com.oss.carbonadministrator.repository.electricity.ElecAverageRepository;
 import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -49,8 +49,17 @@ public class GraphService {
         }
     }
 
+    private static List<Object> calculatedList(Bill sur) {
+        Optional<Double> elecData = sur.getElectricityInfoList().calculateCarbonUsage();
+        Optional<Double> gasData = sur.getGasInfoList().calculateCarbonUsage();
+        Optional<Double> waterData = sur.getWaterInfoList().calculateCarbonUsage();
+
+        return Arrays.asList(elecData, gasData, waterData);
+    }
+
+
     @Transactional(readOnly = true)
-    public ResponseDto getElecFeeGraph(String email) {
+    public GraphData getElecFeeGraph(String email) {
         if (userRepository.findByEmail(email).isEmpty()) {
             throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
@@ -67,13 +76,12 @@ public class GraphService {
 
         extractGovernmentData(targetElecAver, monthData, averResult);
 
-        return ResponseDto.success(
-            new GraphData(monthData.toArray(new String[monthData.size()]),
-                new DataSets(billResult.stream().mapToInt(Integer::intValue).toArray(),
-                    averResult.stream().mapToInt(Integer::intValue).toArray())), "전기 그래프 데이터 전송");
+        return new GraphData(monthData.toArray(new String[monthData.size()]),
+            new DataSets(billResult.stream().mapToInt(Integer::intValue).toArray(),
+                averResult.stream().mapToInt(Integer::intValue).toArray()));
     }
 
-    public void getAllCarbonGraph(String email) {
+    public GraphData getAllCarbonGraph(String email) {
         if (userRepository.findByEmail(email).isEmpty()) {
             throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
@@ -82,10 +90,11 @@ public class GraphService {
 
         ArrayList<String> monthData = new ArrayList<>();
         ArrayList<List<Object>> carbonResult = new ArrayList<>();
+        String[] legend = {"전기", "가스", "수도"};
 
         calculateUserCarbonData(targetBill, monthData, carbonResult);
 
-
+        return new GraphData(monthData.toArray(new String[monthData.size()]), legend, carbonResult);
     }
 
     private void calculateUserCarbonData(
@@ -95,17 +104,27 @@ public class GraphService {
     ) {
         for (Bill sur : targetBill) {
             monthData.add(sur.getYear() + "/" + sur.getMonth());
-
+            billResult.add(calculatedList(sur)); // TODO "" 처리
         }
     }
 
-
     @Getter
-    @AllArgsConstructor
-    public static class GraphData {
+    public static class GraphData<T> {
 
         private String[] labels;
-        private DataSets datasets;
+        private String[] legend;
+        private T datasets;
+
+        public GraphData(String[] labels, T datasets) {
+            this.labels = labels;
+            this.datasets = datasets;
+        }
+
+        public GraphData(String[] labels, String[] legend, T datasets) {
+            this.labels = labels;
+            this.legend = legend;
+            this.datasets = datasets;
+        }
     }
 
     @Getter
