@@ -1,13 +1,13 @@
 package com.oss.carbonadministrator.repository.electricity;
 
-import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ElectricityRepository extends JpaRepository<Electricity, Long> {
+public interface ElectricityRepository extends JpaRepository<ElectricityInfo, Long> {
 
-    Optional<Electricity> findById(Long id);
+    Optional<ElectricityInfo> findById(Long id);
 
 }

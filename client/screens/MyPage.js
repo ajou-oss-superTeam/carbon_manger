@@ -1,9 +1,36 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MyPage = () => {
+const MyPage = ({ navigation: { navigate, replace } }) => {
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+  };
+
+  const logout = async () => {
+    await AsyncStorage.setItem('@user', '');
+    replace('Stack', {
+      screen: 'notlogin',
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.prepare}>이 페이지는 개발 중 입니다.</Text>
+      <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+        <Text>로그아웃</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -16,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  prepare: {
+  logoutBtn: {
     textAlign: 'center',
     fontSize: 20,
   },

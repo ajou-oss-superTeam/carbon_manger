@@ -38,7 +38,7 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
       return;
     }
 
-    const { user } = await API.getSignup({
+    const { user, token } = await API.getSignup({
       email,
       nickname,
       password,
@@ -46,6 +46,7 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
       city,
     });
     await AsyncStorage.setItem('@user', JSON.stringify({ user }));
+    await AsyncStorage.setItem('@token', JSON.stringify({ token }));
     replace('Tabs', 'Home');
   };
 

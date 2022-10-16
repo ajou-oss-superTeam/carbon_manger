@@ -30,6 +30,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /*
+     * TODO client jwt token 전송 문제 해결 후 permint url 변경
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -50,9 +53,7 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             .antMatchers("/api/user/signup", "/api/user/login", "/api/user/user-email/exists",
-                "/api/user/user-nickname/exists", "/api/image/electricity",
-                "/api/image/electricity/{electricityId}/edit", "/api/image/electricity/input",
-                "/api/graph/electricity/fee").permitAll()
+                "/api/user/user-nickname/exists", "/api/image/**", "/api/graph/**").permitAll()
 
             .anyRequest().authenticated();
 

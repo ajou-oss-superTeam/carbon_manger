@@ -95,7 +95,7 @@ public class GraphTest {
 
         for (Bill sur : testBill) {
             monthData.add(sur.getYear() + "/" + sur.getMonth());
-            billResult.add(sur.getElectricityList().getTotalPrice());
+            billResult.add(sur.getElectricityInfoList().getTotalPrice());
         }
 
         for (ElecAverage sur : testElecAver) {
