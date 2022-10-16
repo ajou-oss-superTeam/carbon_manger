@@ -20,7 +20,7 @@ const Score = ({
     }
   };
 
-  return (
+  return type === '전기' ? (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{type} 고지서</Text>
@@ -108,6 +108,66 @@ const Score = ({
           <Text style={styles.elementText}>전년동월 사용량</Text>
           <Text style={styles.elementText}>
             {data?.lastYearUsage ? data.lastYearUsage : '인식 안됨'}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity onPress={(e) => goToLink('edit')}>
+          <Text style={styles.editBtn}>수정하기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={(e) => goToLink('confirm')}>
+          <Text style={styles.confirmBtn}>확인</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{type} 고지서</Text>
+        <Text style={styles.headerContent}>
+          입력하신 내용이 맞는지 <Text style={styles.green}>확인</Text>해주세요
+        </Text>
+        <Text style={styles.headerContent}>
+          ({time.year}년 {time.month}월 고지서)
+        </Text>
+      </View>
+      <View style={styles.middle}>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>당월지침</Text>
+          <Text style={styles.elementText}>
+            {data?.accumulatedMonthUsage
+              ? data.accumulatedMonthUsage
+              : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>전월지침</Text>
+          <Text style={styles.elementText}>
+            {data?.previousMonthUsage ? data.previousMonthUsage : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>검침량</Text>
+          <Text style={styles.elementText}>
+            {data?.checkedUsage ? data.checkedUsage : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>당월 사용량</Text>
+          <Text style={styles.elementText}>
+            {data?.currentMonthUsage ? data.currentMonthUsage : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>단위 열량</Text>
+          <Text style={styles.elementText}>
+            {data?.unitEnergy ? data.unitEnergy : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>사용 열량</Text>
+          <Text style={styles.elementText}>
+            {data?.usedEnergy ? data.usedEnergy : '인식 안됨'}
           </Text>
         </View>
       </View>

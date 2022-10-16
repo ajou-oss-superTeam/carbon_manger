@@ -60,6 +60,24 @@ const ScoreEdit = ({
     data?.lastYearUsage ? String(data.lastYearUsage) : '0'
   );
   // 가스 ===========
+  const [accumulatedMonthUsage, setAccumulatedMonthUsage] = useState(
+    data?.accumulatedMonthUsage ? String(data.accumulatedMonthUsage) : '0'
+  );
+  const [previousMonthUsage, setPreviousMonthUsage] = useState(
+    data?.previousMonthUsage ? String(data.previousMonthUsage) : '0'
+  );
+  const [checkedUsage, setCheckedUsage] = useState(
+    data?.checkedUsage ? String(data.checkedUsage) : '0'
+  );
+  const [currentMonthUsage, setCurrentMonthUsage] = useState(
+    data?.currentMonthUsage ? String(data.currentMonthUsage) : '0'
+  );
+  const [unitEnergy, setUnitEnergy] = useState(
+    data?.unitEnergy ? String(data.unitEnergy) : '0'
+  );
+  const [usedEnergy, setUsedEnergy] = useState(
+    data?.usedEnergy ? String(data.usedEnergy) : '0'
+  );
 
   const onPressBtn = () => {
     if (Object.entries(data).length === 0) {
@@ -89,32 +107,32 @@ const ScoreEdit = ({
     const parseToken = JSON.parse(token);
     const email = parseUser.user.email;
 
-    const numbers = {
-      demandCharge,
-      energyCharge,
-      environmentCharge,
-      fuelAdjustmentRate,
-      elecChargeSum,
-      vat,
-      elecFund,
-      roundDown,
-      totalbyCurrMonth,
-      tvSubscriptionFee,
-      currMonthUsage,
-      preMonthUsage,
-      lastYearUsage,
-    };
-
-    if (
-      Object.entries(numbers).filter(
-        ([key, value], index) => value == '0' || Number(value) < 0
-      ).length > 0
-    ) {
-      Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
-      return;
-    }
-
     if (type === '전기') {
+      const numbers = {
+        demandCharge,
+        energyCharge,
+        environmentCharge,
+        fuelAdjustmentRate,
+        elecChargeSum,
+        vat,
+        elecFund,
+        roundDown,
+        totalbyCurrMonth,
+        tvSubscriptionFee,
+        currMonthUsage,
+        preMonthUsage,
+        lastYearUsage,
+      };
+
+      if (
+        Object.entries(numbers).filter(
+          ([key, value], index) => value == '0' || Number(value) < 0
+        ).length > 0
+      ) {
+        Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
+        return;
+      }
+
       const { success, message } = await API.sendNumber(
         email,
         year,
@@ -131,11 +149,29 @@ const ScoreEdit = ({
         Alert.alert(message);
       }
     } else {
+      const gasNumbers = {
+        accumulatedMonthUsage,
+        previousMonthUsage,
+        checkedUsage,
+        currentMonthUsage,
+        unitEnergy,
+        usedEnergy,
+      };
+
+      if (
+        Object.entries(gasNumbers).filter(
+          ([key, value], index) => value == '0' || Number(value) < 0
+        ).length > 0
+      ) {
+        Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
+        return;
+      }
+
       const { success, message } = await API.sendGasNumber(
         email,
         year,
         month,
-        numbers,
+        gasNumbers,
         parseToken
       );
 
@@ -153,34 +189,34 @@ const ScoreEdit = ({
   const requsetAPIPlus = async () => {
     const token = await AsyncStorage.getItem('@token');
     const parseToken = JSON.parse(token);
-
     const id = data.id;
-    const numbers = {
-      demandCharge,
-      energyCharge,
-      environmentCharge,
-      fuelAdjustmentRate,
-      elecChargeSum,
-      vat,
-      elecFund,
-      roundDown,
-      totalbyCurrMonth,
-      tvSubscriptionFee,
-      currMonthUsage,
-      preMonthUsage,
-      lastYearUsage,
-    };
-
-    if (
-      Object.entries(numbers).filter(
-        ([key, value], index) => value == '0' || Number(value) < 0
-      ).length > 0
-    ) {
-      Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
-      return;
-    }
 
     if (type === '전기') {
+      const numbers = {
+        demandCharge,
+        energyCharge,
+        environmentCharge,
+        fuelAdjustmentRate,
+        elecChargeSum,
+        vat,
+        elecFund,
+        roundDown,
+        totalbyCurrMonth,
+        tvSubscriptionFee,
+        currMonthUsage,
+        preMonthUsage,
+        lastYearUsage,
+      };
+
+      if (
+        Object.entries(numbers).filter(
+          ([key, value], index) => value == '0' || Number(value) < 0
+        ).length > 0
+      ) {
+        Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
+        return;
+      }
+
       const { success, message } = await API.editImgInfo(
         id,
         number,
@@ -195,9 +231,27 @@ const ScoreEdit = ({
         Alert.alert(message);
       }
     } else {
+      const gasNumbers = {
+        accumulatedMonthUsage,
+        previousMonthUsage,
+        checkedUsage,
+        currentMonthUsage,
+        unitEnergy,
+        usedEnergy,
+      };
+
+      if (
+        Object.entries(gasNumbers).filter(
+          ([key, value], index) => value == '0' || Number(value) < 0
+        ).length > 0
+      ) {
+        Alert.alert('빈 값 혹은 유효하지 않은 값이 있습니다.');
+        return;
+      }
+
       const { success, message } = await API.editGasImgInfo(
         id,
-        numbers,
+        gasNumbers,
         parseToken
       );
 
@@ -229,126 +283,186 @@ const ScoreEdit = ({
         )}
       </View>
       <View style={styles.middle}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>기본요금</Text>
-            <TextInput
-              style={styles.elementText}
-              value={demandCharge}
-              autoFocus={true}
-              keyboardType="numeric"
-              onChangeText={setDemandCharge}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>전력량요금</Text>
-            <TextInput
-              style={styles.elementText}
-              value={energyCharge}
-              keyboardType="numeric"
-              onChangeText={setEnergyCharge}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>기후환경요금</Text>
-            <TextInput
-              style={styles.elementText}
-              value={environmentCharge}
-              keyboardType="numeric"
-              onChangeText={setEnvironmentCharge}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>연료비조정액</Text>
-            <TextInput
-              style={styles.elementText}
-              value={fuelAdjustmentRate}
-              keyboardType="numeric"
-              onChangeText={setFuelAdjustmentRate}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>전기요금계</Text>
-            <TextInput
-              style={styles.elementText}
-              value={elecChargeSum}
-              keyboardType="numeric"
-              onChangeText={setElecChargeSum}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>부가가치세</Text>
-            <TextInput
-              style={styles.elementText}
-              value={vat}
-              keyboardType="numeric"
-              onChangeText={setVat}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>전력 기금</Text>
-            <TextInput
-              style={styles.elementText}
-              value={elecFund}
-              keyboardType="numeric"
-              onChangeText={setElecFund}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>월단위 절사</Text>
-            <TextInput
-              style={styles.elementText}
-              value={roundDown}
-              keyboardType="numeric"
-              onChangeText={setRoundDown}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>당월요금계</Text>
-            <TextInput
-              style={styles.elementText}
-              value={totalbyCurrMonth}
-              keyboardType="numeric"
-              onChangeText={setTotalbyCurrMonth}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>TV수신료</Text>
-            <TextInput
-              style={styles.elementText}
-              value={tvSubscriptionFee}
-              keyboardType="numeric"
-              onChangeText={setTvSubscriptionFee}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>당월 사용량</Text>
-            <TextInput
-              style={styles.elementText}
-              value={currMonthUsage}
-              keyboardType="numeric"
-              onChangeText={setCurrMonthUsage}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>전월 사용량</Text>
-            <TextInput
-              style={styles.elementText}
-              value={preMonthUsage}
-              keyboardType="numeric"
-              onChangeText={setPreMonthUsage}
-            />
-          </View>
-          <View style={styles.element}>
-            <Text style={styles.elementLabel}>전년동월 사용량</Text>
-            <TextInput
-              style={styles.elementText}
-              value={lastYearUsage}
-              keyboardType="numeric"
-              onChangeText={setLastYearUsage}
-            />
-          </View>
-        </ScrollView>
+        {type === '전기' ? (
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>기본요금</Text>
+              <TextInput
+                style={styles.elementText}
+                value={demandCharge}
+                autoFocus={true}
+                keyboardType="numeric"
+                onChangeText={setDemandCharge}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>전력량요금</Text>
+              <TextInput
+                style={styles.elementText}
+                value={energyCharge}
+                keyboardType="numeric"
+                onChangeText={setEnergyCharge}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>기후환경요금</Text>
+              <TextInput
+                style={styles.elementText}
+                value={environmentCharge}
+                keyboardType="numeric"
+                onChangeText={setEnvironmentCharge}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>연료비조정액</Text>
+              <TextInput
+                style={styles.elementText}
+                value={fuelAdjustmentRate}
+                keyboardType="numeric"
+                onChangeText={setFuelAdjustmentRate}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>전기요금계</Text>
+              <TextInput
+                style={styles.elementText}
+                value={elecChargeSum}
+                keyboardType="numeric"
+                onChangeText={setElecChargeSum}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>부가가치세</Text>
+              <TextInput
+                style={styles.elementText}
+                value={vat}
+                keyboardType="numeric"
+                onChangeText={setVat}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>전력 기금</Text>
+              <TextInput
+                style={styles.elementText}
+                value={elecFund}
+                keyboardType="numeric"
+                onChangeText={setElecFund}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>월단위 절사</Text>
+              <TextInput
+                style={styles.elementText}
+                value={roundDown}
+                keyboardType="numeric"
+                onChangeText={setRoundDown}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>당월요금계</Text>
+              <TextInput
+                style={styles.elementText}
+                value={totalbyCurrMonth}
+                keyboardType="numeric"
+                onChangeText={setTotalbyCurrMonth}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>TV수신료</Text>
+              <TextInput
+                style={styles.elementText}
+                value={tvSubscriptionFee}
+                keyboardType="numeric"
+                onChangeText={setTvSubscriptionFee}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>당월 사용량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={currMonthUsage}
+                keyboardType="numeric"
+                onChangeText={setCurrMonthUsage}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>전월 사용량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={preMonthUsage}
+                keyboardType="numeric"
+                onChangeText={setPreMonthUsage}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>전년동월 사용량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={lastYearUsage}
+                keyboardType="numeric"
+                onChangeText={setLastYearUsage}
+              />
+            </View>
+          </ScrollView>
+        ) : (
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>당월지침</Text>
+              <TextInput
+                style={styles.elementText}
+                value={accumulatedMonthUsage}
+                autoFocus={true}
+                keyboardType="numeric"
+                onChangeText={setAccumulatedMonthUsage}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>전월지침</Text>
+              <TextInput
+                style={styles.elementText}
+                value={previousMonthUsage}
+                keyboardType="numeric"
+                onChangeText={setPreviousMonthUsage}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>검침량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={checkedUsage}
+                keyboardType="numeric"
+                onChangeText={setCheckedUsage}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>당월 사용량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={currentMonthUsage}
+                keyboardType="numeric"
+                onChangeText={setCurrentMonthUsage}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>단위 열량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={unitEnergy}
+                keyboardType="numeric"
+                onChangeText={setUnitEnergy}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>사용 열량</Text>
+              <TextInput
+                style={styles.elementText}
+                value={usedEnergy}
+                keyboardType="numeric"
+                onChangeText={setUsedEnergy}
+              />
+            </View>
+          </ScrollView>
+        )}
       </View>
       <View style={styles.footer}>
         <TouchableOpacity onPress={onPressBtn}>
