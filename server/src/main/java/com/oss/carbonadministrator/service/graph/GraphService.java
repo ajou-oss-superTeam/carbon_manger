@@ -30,7 +30,7 @@ public class GraphService {
     ) {
         for (ElecAverage sur : targetElecAver) {
             if (monthData.contains(
-                sur.getYear() + "/" + sur.getMonth())) {
+                sur.getYear()%100 + "/" + sur.getMonth())) {
                 averResult.add(sur.getChargeAverage());
             }
         }
@@ -42,7 +42,7 @@ public class GraphService {
         ArrayList<Integer> billResult
     ) {
         for (Bill sur : targetBill) {
-            monthData.add(sur.getYear() + "/" + sur.getMonth());
+            monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
             billResult.add(sur.getElectricityInfoList().getTotalPrice());
         }
     }
@@ -116,7 +116,7 @@ public class GraphService {
         ArrayList<List<Object>> carbonResult
     ) {
         for (Bill sur : targetBill) {
-            monthData.add(sur.getYear() + "/" + sur.getMonth());
+            monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
             carbonResult.add(calculatedList(sur)); // TODO "" 처리
         }
     }
