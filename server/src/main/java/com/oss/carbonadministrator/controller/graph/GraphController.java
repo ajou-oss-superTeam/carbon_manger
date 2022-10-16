@@ -6,7 +6,6 @@ import com.oss.carbonadministrator.service.graph.GraphService;
 import com.oss.carbonadministrator.service.graph.GraphService.GraphData;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class GraphController {
         return ResponseDto.success(elecFeeGraph, "전기 지역별 요금 비교 그래프 성공");
     }
 
-    @GetMapping("/all/carbon")
+    @PostMapping("/all/carbon")
     public ResponseDto allCarbonUsageGraph(@RequestBody @Valid UserEmailRequest requestDto) {
         GraphData allCarbonGraph = graphService.getAllCarbonGraph(requestDto.getEmail());
         return ResponseDto.success(allCarbonGraph, "전체 탄소배출량 데이터 그래프 성공");
