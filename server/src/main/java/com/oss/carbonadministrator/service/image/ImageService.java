@@ -48,11 +48,11 @@ public class ImageService {
     @Transactional
     public <T> T convert(BillType billType, ImageRequest request)
         throws IOException, ParseException {
-        UUID uuid = UUID.randomUUID();
-        makeBase64ToImage(request.getImage(), ".jpg", uuid);
-        imageToJson(uuid.toString(), billType);
-        T result = jsonToDto(uuid.toString(), billType);
-        deleteFile(uuid + ".json");
+        UUID uuidFileName = UUID.randomUUID();
+        makeBase64ToImage(request.getImage(), ".jpg", uuidFileName);
+        imageToJson(uuidFileName.toString(), billType);
+        T result = jsonToDto(uuidFileName.toString(), billType);
+        deleteFile(uuidFileName + ".json");
         return result;
     }
 
