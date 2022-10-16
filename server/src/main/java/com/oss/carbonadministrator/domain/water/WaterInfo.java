@@ -2,7 +2,6 @@ package com.oss.carbonadministrator.domain.water;
 
 import com.oss.carbonadministrator.domain.base.BaseTimeEntity;
 import com.oss.carbonadministrator.dto.request.image.ImgDataRequest;
-import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -70,11 +69,8 @@ public class WaterInfo extends BaseTimeEntity {
         return totalPrice;
     }
 
-    public Optional<Double> calculateCarbonUsage() {
-        if (0 == this.totalbyCurrMonth) {
-            return Optional.of(0.0);
-        }
-        return Optional.of(this.totalbyCurrMonth * 0.332);
+    public Double calculateCarbonUsage() {
+        return this.totalbyCurrMonth * 0.332;
     }
 
     public void update(ImgDataRequest updateData) {

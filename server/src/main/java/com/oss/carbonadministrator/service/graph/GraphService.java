@@ -8,9 +8,7 @@ import com.oss.carbonadministrator.repository.bill.BillRepository;
 import com.oss.carbonadministrator.repository.electricity.ElecAverageRepository;
 import com.oss.carbonadministrator.repository.user.UserRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -50,11 +48,26 @@ public class GraphService {
     }
 
     private static List<Object> calculatedList(Bill sur) {
-        Optional<Double> elecData = sur.getElectricityInfoList().calculateCarbonUsage();
-        Optional<Double> gasData = sur.getGasInfoList().calculateCarbonUsage();
-        Optional<Double> waterData = sur.getWaterInfoList().calculateCarbonUsage();
+        List<Object> result = new ArrayList<>();
+        if (sur.getElectricityInfoList() == null) {
+            result.add("");
+        } else {
+            result.add(sur.getElectricityInfoList().calculateCarbonUsage());
+        }
 
-        return Arrays.asList(elecData, gasData, waterData);
+        if (sur.getGasInfoList() == null) {
+            result.add("");
+        } else {
+            result.add(sur.getGasInfoList().calculateCarbonUsage());
+        }
+
+        if (sur.getWaterInfoList() == null) {
+            result.add("");
+        } else {
+            result.add(sur.getWaterInfoList().calculateCarbonUsage());
+        }
+
+        return result;
     }
 
 
@@ -100,11 +113,11 @@ public class GraphService {
     private void calculateUserCarbonData(
         List<Bill> targetBill,
         ArrayList<String> monthData,
-        ArrayList<List<Object>> billResult
+        ArrayList<List<Object>> carbonResult
     ) {
         for (Bill sur : targetBill) {
             monthData.add(sur.getYear() + "/" + sur.getMonth());
-            billResult.add(calculatedList(sur)); // TODO "" 처리
+            carbonResult.add(calculatedList(sur)); // TODO "" 처리
         }
     }
 
