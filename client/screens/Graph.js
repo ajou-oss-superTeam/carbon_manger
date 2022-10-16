@@ -3,6 +3,11 @@ import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LineChart, StackedBarChart } from 'react-native-chart-kit';
 import API from '../api/index';
+import {
+  NAVI_BG,
+  NAVI_ITEM_DEFAULT,
+  NAVI_ITEM_CLICK,
+} from '../assets/variables/color';
 
 const Graph = () => {
   const [nickname, setNickname] = useState('');
@@ -24,25 +29,27 @@ const Graph = () => {
 
     // 그패프 데이터
     if (parseUser?.user?.email) {
-      // const { data, message, success } = await API.getGraph(
-      //   parseUser?.user?.email,
-      //   parseToken
-      // );
+      const { data, message, success } = await API.getCarbonGraph(
+        parseUser?.user?.email,
+        parseToken
+      );
 
-      // if (success) {
-      //   setGraphData(data);
-      // } else {
-      //   Alert.alert(message);
-      // }
-      setGraphData({
-        labels: ['21/12', '22/01', '22/03'],
-        legend: ['전기', '가스', '수도'],
-        datasets: [
-          [60, 20, ''],
-          [10, 30, ''],
-          ['', 50, ''],
-        ],
-      });
+      if (success) {
+        setGraphData(data);
+        // console.log(data);
+      } else {
+        Alert.alert(message);
+      }
+
+      // setGraphData({
+      //   labels: ['21/12', '22/01', '22/03'],
+      //   legend: ['전기', '가스', '수도'],
+      //   datasets: [
+      //     [60, 20, ''],
+      //     [10, 30, ''],
+      //     ['', 50, ''],
+      //   ],
+      // });
     }
   };
 
@@ -109,18 +116,30 @@ const Graph = () => {
           <StackedBarChart
             data={{
               labels: graphData.labels,
-              legend: graphData.legend,
+              // legend: graphData.legend,
               data: graphData.datasets,
-              barColors: ['#dfe4ea', '#ced6e0', '#a4b0be'],
+              barColors: ['yellow', 'red', 'blue'],
             }}
             width={Dimensions.get('window').width - 16}
             height={400}
             chartConfig={{
-              backgroundColor: '#1cc910',
-              backgroundGradientFrom: '#eff3ff',
-              backgroundGradientTo: '#efefef',
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              backgroundColor: NAVI_BG,
+              backgroundGradientFrom: NAVI_BG,
+              backgroundGradientTo: NAVI_ITEM_CLICK,
+              color: (opacity = 1) => `lightgrey`,
+              barPercentage: 0.3,
+              propsForLabels: {
+                fill: 'none',
+              },
+              propsForHorizontalLabels: {
+                fontSize: 8,
+                dy: 15,
+              },
+              propsForVerticalLabels: {
+                fontSize: 6,
+                dy: -10,
+                dx: -8,
+              },
               style: {
                 borderRadius: 16,
               },

@@ -51,6 +51,31 @@ const API = {
     }
   },
 
+  // 탄소 그래프
+  async getCarbonGraph(email, token) {
+    try {
+      const { data } = await axios.post(
+        `${host}/api/graph/all/carbon`,
+        {
+          email,
+        },
+        {
+          headers: {
+            Authorization: token.token,
+          },
+        }
+      );
+
+      if (data.success) {
+        return { data: data.data, success: data.success };
+      } else {
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err.response);
+    }
+  },
+
   // =======================================
   // 전기 이미지 전송
   async sendImg(email, uri, base, year, month, token) {
@@ -140,8 +165,8 @@ const API = {
   async getGraph(email, token) {
     try {
       const { data } = await axios.post(
-        `${host}/api/graph/electricity/fee?email=${email}`,
-        {},
+        `${host}/api/graph/electricity/fee`,
+        { email },
         {
           headers: {
             Authorization: token.token,
