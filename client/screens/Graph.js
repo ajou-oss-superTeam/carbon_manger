@@ -61,6 +61,16 @@ const Graph = () => {
         </Text>
       </View>
       <View style={styles.middle}>
+        <View style={styles.label}>
+          <View style={styles.item}>
+            <View style={styles.yellowDot}></View>
+            <Text>전기</Text>
+          </View>
+          <View style={styles.item}>
+            <View style={styles.redDot}></View>
+            <Text>가스</Text>
+          </View>
+        </View>
         {graphData && (
           // <LineChart
           //   data={{
@@ -173,6 +183,23 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  label: {
+    backgroundColor: NAVI_ITEM_CLICK,
+    flexDirection: 'row',
+  },
+  item: { flexDirection: 'row', padding: 10 },
+  yellowDot: {
+    width: 20,
+    height: 20,
+    backgroundColor: 'yellow',
+    marginRight: 5,
+  },
+  redDot: {
+    width: 20,
+    height: 20,
+    backgroundColor: 'red',
+    marginRight: 5,
   },
   middle: {
     flex: 4,
