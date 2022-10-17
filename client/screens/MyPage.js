@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from '../api/index';
 import {
   NAVI_BG,
   NAVI_ITEM_DEFAULT,
@@ -15,11 +16,11 @@ import {
 } from '../assets/variables/color';
 
 const MyPage = ({ navigation: { navigate, replace } }) => {
-  const [nickname, setNickname] = useState('user5');
-  const [email, setEmail] = useState('test5@gmail.com');
-  const [city, setCity] = useState('수원시');
-  const [province, setProvince] = useState('경기도');
-  const [totalCount, setTotalCount] = useState('10');
+  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [province, setProvince] = useState('');
+  // const [totalCount, setTotalCount] = useState('10');
 
   useEffect(() => {
     checkUser();
@@ -28,6 +29,26 @@ const MyPage = ({ navigation: { navigate, replace } }) => {
   const checkUser = async () => {
     const user = await AsyncStorage.getItem('@user');
     const token = await AsyncStorage.getItem('@token');
+
+    const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
+
+    // 마이페이지
+    if (parseUser?.user?.email) {
+      const { data, message, success } = await API.getMypage(
+        parseUser?.user?.email,
+        parseToken
+      );
+
+      if (success) {
+        setNickname(data?.nickName);
+        setEmail(data?.email);
+        setCity(data?.city);
+        setProvince(data?.province);
+      } else {
+        Alert.alert(message);
+      }
+    }
   };
 
   const logout = async () => {
@@ -48,7 +69,7 @@ const MyPage = ({ navigation: { navigate, replace } }) => {
         <Text style={styles.column}>
           주소: {city} {province}
         </Text>
-        <Text style={styles.column}>제출 횟수: {totalCount}</Text>
+        {/* <Text style={styles.column}>제출 횟수: {totalCount}</Text> */}
         <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
           <Text style={styles.logoutBtnText}>로그아웃</Text>
         </TouchableOpacity>

@@ -36,20 +36,9 @@ const Graph = () => {
 
       if (success) {
         setGraphData(data);
-        // console.log(data);
       } else {
         Alert.alert(message);
       }
-
-      // setGraphData({
-      //   labels: ['21/12', '22/01', '22/03'],
-      //   legend: ['전기', '가스', '수도'],
-      //   datasets: [
-      //     [60, 20, ''],
-      //     [10, 30, ''],
-      //     ['', 50, ''],
-      //   ],
-      // });
     }
   };
 

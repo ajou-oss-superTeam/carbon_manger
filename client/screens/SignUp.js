@@ -38,16 +38,23 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
       return;
     }
 
-    const { user, token } = await API.getSignup({
+    const { user, success, message, token } = await API.getSignup({
       email,
       nickname,
       password,
       province,
       city,
     });
-    await AsyncStorage.setItem('@user', JSON.stringify({ user }));
-    await AsyncStorage.setItem('@token', JSON.stringify({ token }));
-    replace('Tabs', 'Home');
+
+    if (success) {
+      await AsyncStorage.setItem('@user', JSON.stringify({ user }));
+      await AsyncStorage.setItem('@token', JSON.stringify({ token }));
+      replace('Tabs', {
+        screen: 'Home',
+      });
+    } else {
+      Alert.alert(message);
+    }
   };
 
   return (
