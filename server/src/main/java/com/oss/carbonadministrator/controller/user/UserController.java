@@ -66,7 +66,7 @@ public class UserController {
         return ResponseDto.success(responseDto, "user info");
     }
 
-    @PutMapping("/passwd")
+    @PutMapping("/mypage/passwd")
     public ResponseDto changePW(@Valid @RequestBody LoginRequest requestDto){
         ChangePWResponse responseDto = new ChangePWResponse();
         boolean result = userService.changePW(requestDto);
