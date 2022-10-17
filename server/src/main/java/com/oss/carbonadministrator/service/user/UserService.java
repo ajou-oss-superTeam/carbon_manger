@@ -2,15 +2,19 @@ package com.oss.carbonadministrator.service.user;
 
 import com.oss.carbonadministrator.domain.user.User;
 import com.oss.carbonadministrator.domain.user.User.Role;
+import com.oss.carbonadministrator.dto.request.user.UserEmailRequest;
 import com.oss.carbonadministrator.dto.response.user.SignupResponse;
+import com.oss.carbonadministrator.dto.response.user.UserInfoResponse;
 import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.user.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.repository.user.UserRepository;
 import com.oss.carbonadministrator.service.command.SignUpCommand;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +56,18 @@ public class UserService {
     @Transactional
     public boolean checkValidNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoResponse getUserInfo(UserEmailRequest requestDto){
+        Optional targetUser = userRepository.findByEmail(requestDto.getEmail());
+
+        if (targetUser.isEmpty()){
+            return null;
+        }
+
+        UserInfoResponse result = new UserInfoResponse((User) targetUser.get());
+
+        return result;
     }
 }
