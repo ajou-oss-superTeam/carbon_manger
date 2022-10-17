@@ -60,7 +60,7 @@ public class UserController {
      * /api/user/login"
      */
 
-    @GetMapping("/mypage/info")
+    @PostMapping("/mypage/info")
     public ResponseDto userInfo(@Valid @RequestBody UserEmailRequest requestDto) {
         UserInfoResponse responseDto = userService.getUserInfo(requestDto);
         return ResponseDto.success(responseDto, "user info");
