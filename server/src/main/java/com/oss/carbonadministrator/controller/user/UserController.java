@@ -1,9 +1,11 @@
 package com.oss.carbonadministrator.controller.user;
 
+import com.oss.carbonadministrator.dto.request.user.LoginRequest;
 import com.oss.carbonadministrator.dto.request.user.SignUpRequest;
 import com.oss.carbonadministrator.dto.request.user.UserEmailRequest;
 import com.oss.carbonadministrator.dto.request.user.UserNicknameRequest;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
+import com.oss.carbonadministrator.dto.response.user.ChangePWResponse;
 import com.oss.carbonadministrator.dto.response.user.SignupResponse;
 import com.oss.carbonadministrator.dto.response.user.UserInfoResponse;
 import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
@@ -62,6 +64,19 @@ public class UserController {
     public ResponseDto userInfo(@Valid @RequestBody UserEmailRequest requestDto) {
         UserInfoResponse responseDto = userService.getUserInfo(requestDto);
         return ResponseDto.success(responseDto, "user info");
+    }
+
+    @PutMapping("/passwd")
+    public ResponseDto changePW(@Valid @RequestBody LoginRequest requestDto){
+        ChangePWResponse responseDto = new ChangePWResponse();
+        boolean result = userService.changePW(requestDto);
+        responseDto.setResult(result);
+        if (result){
+            return ResponseDto.success(responseDto, "user info");
+            }
+        else{
+            return ResponseDto.fail("비밀번호 변경 실패", "-1", "비밀번호 변경 실패");
+        }
     }
 
 }

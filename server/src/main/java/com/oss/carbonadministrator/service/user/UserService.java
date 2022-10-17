@@ -2,6 +2,7 @@ package com.oss.carbonadministrator.service.user;
 
 import com.oss.carbonadministrator.domain.user.User;
 import com.oss.carbonadministrator.domain.user.User.Role;
+import com.oss.carbonadministrator.dto.request.user.LoginRequest;
 import com.oss.carbonadministrator.dto.request.user.UserEmailRequest;
 import com.oss.carbonadministrator.dto.response.user.SignupResponse;
 import com.oss.carbonadministrator.dto.response.user.UserInfoResponse;
@@ -69,5 +70,23 @@ public class UserService {
         UserInfoResponse result = new UserInfoResponse((User) targetUser.get());
 
         return result;
+    }
+
+    @Transactional(readOnly = false)
+    public boolean changePW(LoginRequest requestDto){
+        Optional target = userRepository.findByEmail(requestDto.getEmail());
+        if (target.isEmpty()){
+            return false;
+        }
+
+        User targetUser = (User)target.get();
+
+        String encodedPw = passwordEncoder.encode(requestDto.getPassword());
+
+        targetUser.setPassword(encodedPw);
+
+        userRepository.saveAndFlush(targetUser);
+
+        return true;
     }
 }
