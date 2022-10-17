@@ -23,6 +23,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/user/login 에러', success: false };
     }
   },
 
@@ -48,6 +49,36 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/user/signup 에러', success: false };
+    }
+  },
+
+  // 마이페이지
+  async getMypage(email, token) {
+    try {
+      const { data } = await axios.post(
+        `${host}/api/user/mypage/info`,
+        {
+          email,
+        },
+        {
+          headers: {
+            Authorization: token.token,
+          },
+        }
+      );
+
+      if (data.success) {
+        return {
+          data: data.data,
+          success: data.success,
+        };
+      } else {
+        return { message: data.message, success: data.success };
+      }
+    } catch (err) {
+      console.error(err.response);
+      return { message: '/api/user/mypage/info 에러', success: false };
     }
   },
 
@@ -73,6 +104,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/graph/all/carbon 에러', success: false };
     }
   },
 
@@ -130,6 +162,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/image/electricity/${id}/edit', success: false };
     }
   },
 
@@ -158,6 +191,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/image/electricity/input', success: false };
     }
   },
 
@@ -181,6 +215,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/graph/electricity/fee', success: false };
     }
   },
 
@@ -211,7 +246,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
-      return { message: '/api/image/gas 에러', success: false };
+      return { message: '/api/image/gas', success: false };
     }
   },
 
@@ -238,6 +273,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/image/gas/${id}/edit', success: false };
     }
   },
 
@@ -266,6 +302,7 @@ const API = {
       }
     } catch (err) {
       console.error(err.response);
+      return { message: '/api/image/gas/input', success: false };
     }
   },
 };

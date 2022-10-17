@@ -20,10 +20,13 @@ const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
       email,
       password,
     });
+
     if (success) {
       await AsyncStorage.setItem('@user', JSON.stringify({ user }));
       await AsyncStorage.setItem('@token', JSON.stringify({ token }));
-      replace('Tabs', 'Home');
+      replace('Tabs', {
+        screen: 'Home',
+      });
     } else {
       Alert.alert(message);
     }
