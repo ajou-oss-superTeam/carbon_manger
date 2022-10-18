@@ -30,7 +30,7 @@ const API = {
   // 회원가입
   async getSignup({ email, nickname, password, province, city }) {
     try {
-      const { data, headers } = await axios.post(`${host}/api/user/signup`, {
+      const { data } = await axios.post(`${host}/api/user/signup`, {
         email,
         nickname,
         password,
@@ -42,7 +42,6 @@ const API = {
         return {
           user: data.data,
           success: data.success,
-          token: headers.authorization,
         };
       } else {
         return { message: data.message, success: data.success };
