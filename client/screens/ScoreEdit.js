@@ -219,7 +219,7 @@ const ScoreEdit = ({
 
       const { success, message } = await API.editImgInfo(
         id,
-        number,
+        numbers,
         parseToken
       );
 
