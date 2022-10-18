@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
 
 const NotLogin = ({ navigation: { navigate }, route }) => {
   return (
@@ -15,18 +22,24 @@ const NotLogin = ({ navigation: { navigate }, route }) => {
       <View style={styles.middle}></View>
       <View style={styles.footer}>
         <View style={styles.images}>
-          <Image
-            style={styles.image}
-            source={require('../assets/images/facebook.jpeg')}
-          />
-          <Image
-            style={styles.image}
-            source={require('../assets/images/google.png')}
-          />
-          <Image
-            style={styles.image}
-            source={require('../assets/images/naver.png')}
-          />
+          <TouchableOpacity onPress={() => Alert.alert('개발 중 입니다.')}>
+            <Image
+              style={styles.image}
+              source={require('../assets/images/facebook.jpeg')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert('개발 중 입니다.')}>
+            <Image
+              style={styles.image}
+              source={require('../assets/images/google.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert('개발 중 입니다.')}>
+            <Image
+              style={styles.image}
+              source={require('../assets/images/naver.png')}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity onPress={() => navigate('login')}>
