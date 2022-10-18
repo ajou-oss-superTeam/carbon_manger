@@ -3,6 +3,8 @@ package com.oss.carbonadministrator.dto.request.image;
 import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.domain.gas.GasInfo;
 import com.oss.carbonadministrator.domain.water.WaterInfo;
+
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,6 +63,18 @@ public class ImgDataRequest {
     // 전년동월 사용량 (kWh)
     private int lastYearUsage;
 
+    private int accumulatedMonthUsage;
+
+    private int previousMonthUsage;
+
+    private int checkedUsage;
+
+    private int currentMonthUsage;
+
+    private int unitEnergy;
+
+    private int usedEnergy;
+
     public ElectricityInfo toElecEntity(ImgDataRequest requestDto) {
         ElectricityInfo elecData = ElectricityInfo.builder()
             .demandCharge(requestDto.getDemandCharge())
@@ -103,7 +117,12 @@ public class ImgDataRequest {
             .vat(requestDto.getVat())
             .roundDown(requestDto.getRoundDown())
             .totalbyCurrMonth(requestDto.getTotalbyCurrMonth())
-            .currMonthUsage(requestDto.getCurrMonthUsage())
+            .accumulatedMonthUsage(requestDto.getAccumulatedMonthUsage())
+            .previousMonthUsage(requestDto.getPreviousMonthUsage())
+            .checkedUsage(requestDto.getCheckedUsage())
+            .currentMonthUsage(requestDto.getCurrentMonthUsage())
+            .unitEnergy(requestDto.getUnitEnergy())
+            .usedEnergy(requestDto.getUsedEnergy())
             .build();
         gasData.calculateTotalPrice(gasData.getDemandCharge(), gasData.getVat());
         return gasData;

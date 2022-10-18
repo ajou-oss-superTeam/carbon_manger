@@ -22,7 +22,12 @@ public class Gas implements BillStrategy {
                 .roundDown(Integer.parseInt(jsonObject.containsKey("roundDown") == true ? (String) jsonObject.get("roundDown") : "0"))
                 .totalbyCurrMonth(Integer.parseInt(jsonObject.containsKey("totalbyCurrMonth") == true ? (String) jsonObject.get("totalbyCurrMonth") : "0"))
                 .totalPrice(Integer.parseInt(jsonObject.containsKey("totalPrice") == true ? (String) jsonObject.get("totalPrice") : "0"))
-                .currMonthUsage(Integer.parseInt(jsonObject.containsKey("currMonthUsage") == true ? (String) jsonObject.get("currMonthUsage") : "0"))
+                .accumulatedMonthUsage(Integer.parseInt(jsonObject.containsKey("accumulatedMonthUsage") == true ? (String) jsonObject.get("accumulatedMonthUsage") : "0"))
+                .previousMonthUsage(Integer.parseInt(jsonObject.containsKey("previousMonthUsage") == true ? (String) jsonObject.get("previousMonthUsage") : "0"))
+                .checkedUsage(Integer.parseInt(jsonObject.containsKey("checkedUsage") == true ? (String) jsonObject.get("checkedUsage") : "0"))
+                .currentMonthUsage(Integer.parseInt(jsonObject.containsKey("currentMonthUsage") == true ? (String) jsonObject.get("currentMonthUsage") : "0"))
+                .unitEnergy(Integer.parseInt(jsonObject.containsKey("unitEnergy") == true ? (String) jsonObject.get("unitEnergy") : "0"))
+                .usedEnergy(Integer.parseInt(jsonObject.containsKey("usedEnergy") == true ? (String) jsonObject.get("usedEnergy") : "0"))
                 .build();
     }
 
