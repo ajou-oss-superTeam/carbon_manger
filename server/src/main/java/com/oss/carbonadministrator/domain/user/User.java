@@ -48,6 +48,9 @@ public class User extends BaseTimeEntity {
     @Column
     private Role role;
 
+    @Column
+    private int count;
+
     @Getter
     public enum Role {
 
