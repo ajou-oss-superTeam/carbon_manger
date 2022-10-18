@@ -45,6 +45,16 @@ public class ElectricityImageService {
         }
 
         Bill bill = targetBill.get();
+
+        if(bill.getElectricityInfoList() == null){
+            User targetUser = user.get();
+            targetUser.setElecCount(targetUser.getElecCount() + 1);
+            userRepository.saveAndFlush(targetUser);
+
+            bill.setElectricityInfoList(recognizedElecData);
+
+            return billRepository.saveAndFlush(bill);
+        }
         electricityRepository.delete(bill.getElectricityInfoList());
         bill.setElectricityInfoList(recognizedElecData);
 

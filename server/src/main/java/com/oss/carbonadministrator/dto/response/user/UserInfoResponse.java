@@ -15,12 +15,13 @@ public class UserInfoResponse {
     private String province;
     private String email;
     private String nickName;
-//    private int totalCount;
+    private int totalCount;
 
     public UserInfoResponse (User user){
         this.city = user.getCity();
         this.province = user.getProvince();
         this.email = user.getEmail();
         this.nickName = user.getNickname();
+        this.totalCount = user.getElecCount() + user.getGasCount();
     }
 }

@@ -43,6 +43,8 @@ public class UserService {
             .province(commandDto.getProvince())
             .city(commandDto.getCity())
             .role(Role.ROLE_USER)
+            .elecCount(0)
+            .gasCount(0)
             .build();
 
         userRepository.saveAndFlush(user);

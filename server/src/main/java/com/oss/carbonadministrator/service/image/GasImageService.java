@@ -44,6 +44,16 @@ public class GasImageService {
         }
 
         Bill bill = targetBill.get();
+
+        if(bill.getGasInfoList() == null){
+            User targetUser = user.get();
+            targetUser.setGasCount(targetUser.getGasCount() + 1);
+            userRepository.saveAndFlush(targetUser);
+
+            bill.setGasInfoList(recognizedGasData);
+
+            return billRepository.saveAndFlush(bill);
+        }
         gasRepository.delete(bill.getGasInfoList());
         bill.setGasInfoList(recognizedGasData);
 
