@@ -20,7 +20,7 @@ const MyPage = ({ navigation: { navigate, replace } }) => {
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [province, setProvince] = useState('');
-  // const [totalCount, setTotalCount] = useState('10');
+  const [totalCount, setTotalCount] = useState('');
 
   useEffect(() => {
     checkUser();
@@ -45,6 +45,7 @@ const MyPage = ({ navigation: { navigate, replace } }) => {
         setEmail(data?.email);
         setCity(data?.city);
         setProvince(data?.province);
+        setTotalCount(data?.totalCount);
       } else {
         Alert.alert(message);
       }
@@ -67,9 +68,9 @@ const MyPage = ({ navigation: { navigate, replace } }) => {
         <Text style={styles.column}>닉네임: {nickname}</Text>
         <Text style={styles.column}>이메일: {email}</Text>
         <Text style={styles.column}>
-          주소: {city} {province}
+          주소: {province} {city}
         </Text>
-        {/* <Text style={styles.column}>제출 횟수: {totalCount}</Text> */}
+        <Text style={styles.column}>제출 횟수: {totalCount}</Text>
         <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
           <Text style={styles.logoutBtnText}>로그아웃</Text>
         </TouchableOpacity>
