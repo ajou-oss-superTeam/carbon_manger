@@ -22,6 +22,6 @@ public class UserInfoResponse {
         this.province = user.getProvince();
         this.email = user.getEmail();
         this.nickName = user.getNickname();
-        this.totalCount = user.getCount();
+        this.totalCount = user.getElecCount() + user.getGasCount();
     }
 }
