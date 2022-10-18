@@ -31,6 +31,10 @@ public class ElectricityImageService {
             throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
 
+        User targetUser = user.get();
+        targetUser.setCount(targetUser.getCount() + 1);
+        userRepository.saveAndFlush(targetUser);
+
         Optional<Bill> targetBill = billRepository.findBillByEmailAndYearAndMonth(user.get().getEmail(), year, month);
 
         if (targetBill.isEmpty()){
