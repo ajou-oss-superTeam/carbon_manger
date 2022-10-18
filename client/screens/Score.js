@@ -25,8 +25,19 @@ const Score = ({
         params: { type, data, time },
       });
     } else {
-      navigate('Tabs', {
-        screen: 'graph',
+      reset({
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'graph',
+                },
+              ],
+            },
+          },
+        ],
       });
     }
   };

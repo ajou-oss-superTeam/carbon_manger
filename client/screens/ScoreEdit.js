@@ -14,7 +14,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const ScoreEdit = ({
-  navigation: { navigate, replace },
+  navigation: { navigate, replace, reset },
   route: {
     params: { type, data, time },
   },
@@ -178,8 +178,19 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        navigate('Tabs', {
-          screen: 'graph',
+        reset({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'graph',
+                  },
+                ],
+              },
+            },
+          ],
         });
       } else {
         Alert.alert(message);
@@ -212,8 +223,19 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        navigate('Tabs', {
-          screen: 'graph',
+        reset({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'graph',
+                  },
+                ],
+              },
+            },
+          ],
         });
       } else {
         Alert.alert(message);
@@ -260,8 +282,19 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        navigate('Tabs', {
-          screen: 'graph',
+        reset({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'graph',
+                  },
+                ],
+              },
+            },
+          ],
         });
       } else {
         Alert.alert(message);
@@ -293,8 +326,19 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        navigate('Tabs', {
-          screen: 'graph',
+        reset({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'graph',
+                  },
+                ],
+              },
+            },
+          ],
         });
       } else {
         Alert.alert(message);

@@ -9,13 +9,13 @@ import {
   NAVI_ITEM_CLICK,
 } from '../assets/variables/color';
 
-const Graph = () => {
+const Graph = ({ navigation, route: { key } }) => {
   const [nickname, setNickname] = useState('');
   const [graphData, setGraphData] = useState(null);
 
   useEffect(() => {
     drawGraph();
-  }, []);
+  }, [key]);
 
   const drawGraph = async () => {
     const user = await AsyncStorage.getItem('@user');
