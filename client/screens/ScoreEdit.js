@@ -23,60 +23,96 @@ const ScoreEdit = ({
   const [showDate, setShowDate] = useState(false);
   // 전기 ==========
   const [demandCharge, setDemandCharge] = useState(
-    data?.demandCharge ? String(data.demandCharge) : '0'
+    data?.electricityInfoList?.demandCharge
+      ? String(data?.electricityInfoList?.demandCharge)
+      : '0'
   );
   const [energyCharge, setEnergyCharge] = useState(
-    data?.energyCharge ? String(data.energyCharge) : '0'
+    data?.electricityInfoList?.energyCharge
+      ? String(data?.electricityInfoList?.energyCharge)
+      : '0'
   );
   const [environmentCharge, setEnvironmentCharge] = useState(
-    data?.environmentCharge ? String(data.environmentCharge) : '0'
+    data?.electricityInfoList?.environmentCharge
+      ? String(data?.electricityInfoList?.environmentCharge)
+      : '0'
   );
   const [fuelAdjustmentRate, setFuelAdjustmentRate] = useState(
-    data?.fuelAdjustmentRate ? String(data.fuelAdjustmentRate) : '0'
+    data?.electricityInfoList?.fuelAdjustmentRate
+      ? String(data?.electricityInfoList?.fuelAdjustmentRate)
+      : '0'
   );
   const [elecChargeSum, setElecChargeSum] = useState(
-    data?.elecChargeSum ? String(data.elecChargeSum) : '0'
+    data?.electricityInfoList?.elecChargeSum
+      ? String(data?.electricityInfoList?.elecChargeSum)
+      : '0'
   );
-  const [vat, setVat] = useState(data?.vat ? String(data.vat) : '0');
+  const [vat, setVat] = useState(
+    data?.electricityInfoList?.vat
+      ? String(data?.electricityInfoList?.vat)
+      : '0'
+  );
   const [elecFund, setElecFund] = useState(
-    data?.elecFund ? String(data.elecFund) : '0'
+    data?.electricityInfoList?.elecFund
+      ? String(data?.electricityInfoList?.elecFund)
+      : '0'
   );
   const [roundDown, setRoundDown] = useState(
-    data?.roundDown ? String(data.roundDown) : '0'
+    data?.electricityInfoList?.roundDown
+      ? String(data?.electricityInfoList?.roundDown)
+      : '0'
   );
   const [totalbyCurrMonth, setTotalbyCurrMonth] = useState(
-    data?.totalbyCurrMonth ? String(data.totalbyCurrMonth) : '0'
+    data?.electricityInfoList?.totalbyCurrMonth
+      ? String(data?.electricityInfoList?.totalbyCurrMonth)
+      : '0'
   );
   const [tvSubscriptionFee, setTvSubscriptionFee] = useState(
-    data?.tvSubscriptionFee ? String(data.tvSubscriptionFee) : '0'
+    data?.electricityInfoList?.tvSubscriptionFee
+      ? String(data?.electricityInfoList?.tvSubscriptionFee)
+      : '0'
   );
   const [currMonthUsage, setCurrMonthUsage] = useState(
-    data?.currMonthUsage ? String(data.currMonthUsage) : '0'
+    data?.electricityInfoList?.currMonthUsage
+      ? String(data?.electricityInfoList?.currMonthUsage)
+      : '0'
   );
   const [preMonthUsage, setPreMonthUsage] = useState(
-    data?.preMonthUsage ? String(data.preMonthUsage) : '0'
+    data?.electricityInfoList?.preMonthUsage
+      ? String(data?.electricityInfoList?.preMonthUsage)
+      : '0'
   );
   const [lastYearUsage, setLastYearUsage] = useState(
-    data?.lastYearUsage ? String(data.lastYearUsage) : '0'
+    data?.electricityInfoList?.lastYearUsage
+      ? String(data?.electricityInfoList?.lastYearUsage)
+      : '0'
   );
   // 가스 ===========
   const [accumulatedMonthUsage, setAccumulatedMonthUsage] = useState(
-    data?.accumulatedMonthUsage ? String(data.accumulatedMonthUsage) : '0'
+    data?.gasInfoList?.accumulatedMonthUsage
+      ? String(data?.gasInfoList?.accumulatedMonthUsage)
+      : '0'
   );
   const [previousMonthUsage, setPreviousMonthUsage] = useState(
-    data?.previousMonthUsage ? String(data.previousMonthUsage) : '0'
+    data?.gasInfoList?.previousMonthUsage
+      ? String(data?.gasInfoList?.previousMonthUsage)
+      : '0'
   );
   const [checkedUsage, setCheckedUsage] = useState(
-    data?.checkedUsage ? String(data.checkedUsage) : '0'
+    data?.gasInfoList?.checkedUsage
+      ? String(data?.gasInfoList.checkedUsage)
+      : '0'
   );
   const [currentMonthUsage, setCurrentMonthUsage] = useState(
-    data?.currentMonthUsage ? String(data.currentMonthUsage) : '0'
+    data?.gasInfoList?.currentMonthUsage
+      ? String(data?.gasInfoList.currentMonthUsage)
+      : '0'
   );
   const [unitEnergy, setUnitEnergy] = useState(
-    data?.unitEnergy ? String(data.unitEnergy) : '0'
+    data?.gasInfoList?.unitEnergy ? String(data?.gasInfoList.unitEnergy) : '0'
   );
   const [usedEnergy, setUsedEnergy] = useState(
-    data?.usedEnergy ? String(data.usedEnergy) : '0'
+    data?.gasInfoList?.usedEnergy ? String(data?.gasInfoList.usedEnergy) : '0'
   );
 
   const onPressBtn = () => {
@@ -189,9 +225,9 @@ const ScoreEdit = ({
   const requsetAPIPlus = async () => {
     const token = await AsyncStorage.getItem('@token');
     const parseToken = JSON.parse(token);
-    const id = data.id;
 
     if (type === '전기') {
+      const id = data.electricityInfoList.id;
       const numbers = {
         demandCharge,
         energyCharge,
@@ -231,6 +267,7 @@ const ScoreEdit = ({
         Alert.alert(message);
       }
     } else {
+      const id = data.gasInfoList.id;
       const gasNumbers = {
         accumulatedMonthUsage,
         previousMonthUsage,
