@@ -12,6 +12,7 @@ import { Camera } from 'expo-camera';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
+import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
 
 const CameraScreen = ({
@@ -31,6 +32,8 @@ const CameraScreen = ({
   const [permission, requestPermission] = useState(false);
   // 날짜
   const [showDate, setShowDate] = useState(false);
+  // 로딩
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -85,25 +88,55 @@ const CameraScreen = ({
     const month = jsDate.getMonth() + 1;
 
     const user = await AsyncStorage.getItem('@user');
+    const token = await AsyncStorage.getItem('@token');
+
     const parseUser = JSON.parse(user);
+    const parseToken = JSON.parse(token);
     const email = parseUser?.user?.email;
 
-    const { data, success, message } = await API.sendImg(
-      email,
-      imageUrl,
-      base,
-      year,
-      month
-    );
+    // loading
+    setLoading(true);
 
-    if (success) {
-      navigate('Stack', {
-        screen: 'score',
-        params: { type, data, time: { year, month } },
-      });
+    if (type === '전기') {
+      const { data, success, message } = await API.sendImg(
+        email,
+        imageUrl,
+        base,
+        year,
+        month,
+        parseToken
+      );
+
+      if (success) {
+        navigate('Stack', {
+          screen: 'score',
+          params: { type, data, time: { year, month } },
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
-      Alert.alert(message);
+      const { data, success, message } = await API.sendGasImg(
+        email,
+        imageUrl,
+        base,
+        year,
+        month,
+        parseToken
+      );
+
+      if (success) {
+        navigate('Stack', {
+          screen: 'score',
+          params: { type, data, time: { year, month } },
+        });
+      } else {
+        Alert.alert(message);
+      }
     }
+
+    // finished
+    setLoading(false);
   };
 
   const goToLink = () => {
@@ -160,6 +193,11 @@ const CameraScreen = ({
         )}
       </View>
       <View style={styles.middle}>
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         <View style={styles.imgCover}>
           {imageUrl && <Image source={{ uri: imageUrl }} style={{ flex: 1 }} />}
         </View>
@@ -234,6 +272,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+  },
+  spinnerTextStyle: {
+    color: '#FFF',
   },
   imgCover: {
     flex: 1,

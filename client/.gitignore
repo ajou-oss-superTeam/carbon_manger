@@ -10,5 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 
+# 환경변수
+app.config.js
+
 # macOS
 .DS_Store

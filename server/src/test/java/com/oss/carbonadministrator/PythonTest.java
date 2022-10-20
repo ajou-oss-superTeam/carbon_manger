@@ -1,9 +1,19 @@
 package com.oss.carbonadministrator;
 
-import com.oss.carbonadministrator.service.image.ElecImageService;
+import com.oss.carbonadministrator.service.image.ImageService;
+import com.oss.carbonadministrator.service.image.strategy.BillStrategy;
+import com.oss.carbonadministrator.service.image.strategy.BillType;
+
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.UUID;
+
+import com.oss.carbonadministrator.service.image.strategy.StrategyFactory;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class PythonTest {
 
     @Autowired
-    ElecImageService elecImageService;
+    ImageService imageService;
+    private StrategyFactory strategyFactory;
 
     @Test
     @Ignore
@@ -48,6 +59,17 @@ public class PythonTest {
     @Ignore
     void funcTest() throws IOException, InterruptedException {
         String fileName = "receipt1";
-        elecImageService.imageToJson(fileName);
+        BillType billType = BillType.ELECTRICITY;
+        imageService.imageToJson(fileName, billType);
+        imageService.deleteFile(fileName + ".json");
+    }
+
+    @Test
+    @Ignore
+    void funcGasTest() throws IOException, InterruptedException {
+        String fileName = "20220817_210459";
+        BillType billType = BillType.GAS;
+        imageService.imageToJson(fileName, billType);
+        imageService.deleteFile(fileName + ".json");
     }
 }

@@ -19,6 +19,9 @@ const Home = ({ navigation: { navigate, replace } }) => {
   const checkUser = async () => {
     const user = await AsyncStorage.getItem('@user');
     if (user) {
+      // replace('Stack', {
+      //   screen: 'notlogin',
+      // });
       setUser(JSON.parse(user));
     } else {
       replace('Stack', {
@@ -36,10 +39,15 @@ const Home = ({ navigation: { navigate, replace } }) => {
         });
         break;
       case '가스':
-        Alert.alert('개발 중입니다.');
+        navigate('Tabs', {
+          screen: 'picture',
+          params: { type, user },
+        });
         break;
       case '수도':
-        Alert.alert('개발 중입니다.');
+        Alert.alert(
+          '기능명세서 범위에 해당되지 않는 기능입니다. 추후 발전시킬 예정입니다.'
+        );
         break;
       default:
         break;

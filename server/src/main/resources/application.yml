@@ -11,9 +11,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://34.64.90.1:3306/OSS?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-    username: test
-    password: test
+    url: ENC(KaaEO/pTDmbAgCULySW72sqO73uTcZQ+lbUB3DAHtNrVowEdDcnAoUMKQrWOVAfhJ90B0NxxPoqe8oXqiRsSZQgMXmHiKS5H/Mx3DdpX8lYFNmCBkZ6gWwFJwUzxtVkr8HLgkZlPK5U=)
+    username: ENC(XNSDVrY4hqaW6/cyKwbedg==)
+    password: ENC(ma+pnruxyVM4mAPYyBs/FA==)
 
   jpa:
     hibernate:
@@ -26,6 +26,10 @@ spring:
       location: ${java.io.tmpdir}
       max-file-size: 500MB
       max-request-size: 500MB
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 
 logging.level:
   org.hibernate:

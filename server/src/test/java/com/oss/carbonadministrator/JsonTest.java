@@ -2,7 +2,7 @@ package com.oss.carbonadministrator;
 
 import static org.junit.Assert.assertEquals;
 
-import com.oss.carbonadministrator.domain.electricity.Electricity;
+import com.oss.carbonadministrator.domain.electricity.ElectricityInfo;
 import com.oss.carbonadministrator.repository.electricity.ElectricityRepository;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class JsonTest {
         Reader reader = new FileReader(path);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
-        Electricity elecTest = new Electricity();
+        ElectricityInfo elecTest = new ElectricityInfo();
 
         //elecTest.setDemandCharge(Integer.parseInt((String)jsonObject.get("base_fee")));
 
@@ -46,7 +46,7 @@ public class JsonTest {
         Reader reader = new FileReader(outputPath);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
-        Electricity elecResult = Electricity.builder()
+        ElectricityInfo elecResult = ElectricityInfo.builder()
             .demandCharge(Integer.parseInt((String) jsonObject.get("base_fee")))
             .energyCharge(Integer.parseInt((String) jsonObject.get("pure_eletric_fee")))
             .environmentCharge(Integer.parseInt((String) jsonObject.get("environment_fee")))
@@ -70,7 +70,7 @@ public class JsonTest {
     @Test
     @Ignore
     public void editElec() throws IOException, ParseException {
-        Electricity elec = electricityRepository.findById(3L).get();
+        ElectricityInfo elec = electricityRepository.findById(3L).get();
         //elec.setRoundDown(12333);
         electricityRepository.save(elec);
     }

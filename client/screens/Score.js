@@ -7,6 +7,17 @@ const Score = ({
     params: { type, data, time },
   },
 }) => {
+  const [electricityInfoList, setElectricityInfoList] = useState(null);
+  const [gasInfoList, setGasInfoList] = useState(null);
+
+  useEffect(() => {
+    if (type === '전기') {
+      setElectricityInfoList(data?.electricityInfoList);
+    } else {
+      setGasInfoList(data?.gasInfoList);
+    }
+  }, []);
+
   const goToLink = (btnType) => {
     if (btnType === 'edit') {
       navigate('Stack', {
@@ -14,13 +25,24 @@ const Score = ({
         params: { type, data, time },
       });
     } else {
-      navigate('Tabs', {
-        screen: 'graph',
+      reset({
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'graph',
+                },
+              ],
+            },
+          },
+        ],
       });
     }
   };
 
-  return (
+  return type === '전기' ? (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{type} 고지서</Text>
@@ -35,79 +57,169 @@ const Score = ({
         <View style={styles.element}>
           <Text style={styles.elementText}>기본요금</Text>
           <Text style={styles.elementText}>
-            {data?.demandCharge ? data.demandCharge : '인식 안됨'}
+            {electricityInfoList?.demandCharge
+              ? electricityInfoList.demandCharge
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>전력량요금</Text>
           <Text style={styles.elementText}>
-            {data?.energyCharge ? data.energyCharge : '인식 안됨'}
+            {electricityInfoList?.energyCharge
+              ? electricityInfoList.energyCharge
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>기후환경요금</Text>
           <Text style={styles.elementText}>
-            {data?.environmentCharge ? data.environmentCharge : '인식 안됨'}
+            {electricityInfoList?.environmentCharge
+              ? electricityInfoList.environmentCharge
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>연료비조정액</Text>
           <Text style={styles.elementText}>
-            {data?.fuelAdjustmentRate ? data.fuelAdjustmentRate : '인식 안됨'}
+            {electricityInfoList?.fuelAdjustmentRate
+              ? electricityInfoList.fuelAdjustmentRate
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>전기요금계</Text>
           <Text style={styles.elementText}>
-            {data?.elecChargeSum ? data.elecChargeSum : '인식 안됨'}
+            {electricityInfoList?.elecChargeSum
+              ? electricityInfoList.elecChargeSum
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>부가가치세</Text>
           <Text style={styles.elementText}>
-            {data?.vat ? data.vat : '인식 안됨'}
+            {electricityInfoList?.vat ? electricityInfoList.vat : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>전력 기금</Text>
           <Text style={styles.elementText}>
-            {data?.elecFund ? data.elecFund : '인식 안됨'}
+            {electricityInfoList?.elecFund
+              ? electricityInfoList.elecFund
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>월단위 절사</Text>
           <Text style={styles.elementText}>
-            {data?.roundDown ? data.roundDown : '인식 안됨'}
+            {electricityInfoList?.roundDown
+              ? electricityInfoList.roundDown
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>당월요금계</Text>
           <Text style={styles.elementText}>
-            {data?.totalbyCurrMonth ? data.totalbyCurrMonth : '인식 안됨'}
+            {electricityInfoList?.totalbyCurrMonth
+              ? electricityInfoList.totalbyCurrMonth
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>TV수신료</Text>
           <Text style={styles.elementText}>
-            {data?.tvSubscriptionFee ? data.tvSubscriptionFee : '인식 안됨'}
+            {electricityInfoList?.tvSubscriptionFee
+              ? electricityInfoList.tvSubscriptionFee
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>당월 사용량</Text>
           <Text style={styles.elementText}>
-            {data?.currMonthUsage ? data.currMonthUsage : '인식 안됨'}
+            {electricityInfoList?.currMonthUsage
+              ? electricityInfoList.currMonthUsage
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>전월 사용량</Text>
           <Text style={styles.elementText}>
-            {data?.preMonthUsage ? data.preMonthUsage : '인식 안됨'}
+            {electricityInfoList?.preMonthUsage
+              ? electricityInfoList.preMonthUsage
+              : '인식 안됨'}
           </Text>
         </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>전년동월 사용량</Text>
           <Text style={styles.elementText}>
-            {data?.lastYearUsage ? data.lastYearUsage : '인식 안됨'}
+            {electricityInfoList?.lastYearUsage
+              ? electricityInfoList.lastYearUsage
+              : '인식 안됨'}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity onPress={(e) => goToLink('edit')}>
+          <Text style={styles.editBtn}>수정하기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={(e) => goToLink('confirm')}>
+          <Text style={styles.confirmBtn}>확인</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{type} 고지서</Text>
+        <Text style={styles.headerContent}>
+          입력하신 내용이 맞는지 <Text style={styles.green}>확인</Text>해주세요
+        </Text>
+        <Text style={styles.headerContent}>
+          ({time.year}년 {time.month}월 고지서)
+        </Text>
+      </View>
+      <View style={styles.middle}>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>당월지침</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.accumulatedMonthUsage
+              ? gasInfoList?.accumulatedMonthUsage
+              : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>전월지침</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.previousMonthUsage
+              ? gasInfoList?.previousMonthUsage
+              : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>검침량</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.checkedUsage
+              ? gasInfoList?.checkedUsage
+              : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>당월 사용량</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.currentMonthUsage
+              ? gasInfoList?.currentMonthUsage
+              : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>단위 열량</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.unitEnergy ? gasInfoList?.unitEnergy : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>사용 열량</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.usedEnergy ? gasInfoList?.usedEnergy : '인식 안됨'}
           </Text>
         </View>
       </View>
