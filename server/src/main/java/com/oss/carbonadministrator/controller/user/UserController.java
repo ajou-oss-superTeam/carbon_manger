@@ -1,19 +1,19 @@
 package com.oss.carbonadministrator.controller.user;
 
+import com.oss.carbonadministrator.dto.request.user.LoginRequest;
 import com.oss.carbonadministrator.dto.request.user.SignUpRequest;
 import com.oss.carbonadministrator.dto.request.user.UserEmailRequest;
 import com.oss.carbonadministrator.dto.request.user.UserNicknameRequest;
 import com.oss.carbonadministrator.dto.response.ResponseDto;
+import com.oss.carbonadministrator.dto.response.user.ChangePWResponse;
 import com.oss.carbonadministrator.dto.response.user.SignupResponse;
+import com.oss.carbonadministrator.dto.response.user.UserInfoResponse;
 import com.oss.carbonadministrator.exception.user.AlreadyExistEmailException;
 import com.oss.carbonadministrator.exception.user.AlreadyExistNicknameException;
 import com.oss.carbonadministrator.service.user.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -59,4 +59,24 @@ public class UserController {
      * 시큐리티 로그인 API => 시큐리티 Config 내 구현 완료
      * /api/user/login"
      */
+
+    @PostMapping("/mypage/info")
+    public ResponseDto userInfo(@Valid @RequestBody UserEmailRequest requestDto) {
+        UserInfoResponse responseDto = userService.getUserInfo(requestDto);
+        return ResponseDto.success(responseDto, "user info");
+    }
+
+    @PutMapping("/mypage/passwd")
+    public ResponseDto changePW(@Valid @RequestBody LoginRequest requestDto){
+        ChangePWResponse responseDto = new ChangePWResponse();
+        boolean result = userService.changePW(requestDto);
+        responseDto.setResult(result);
+        if (result){
+            return ResponseDto.success(responseDto, "user info");
+            }
+        else{
+            return ResponseDto.fail("비밀번호 변경 실패", "-1", "비밀번호 변경 실패");
+        }
+    }
+
 }

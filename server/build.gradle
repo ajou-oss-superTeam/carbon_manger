@@ -69,6 +69,12 @@ dependencies {
 
     // base64
     implementation 'commons-codec:commons-codec:1.15'
+
+    //jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
+    //bcprov
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 }
 
 tasks.named('test') {

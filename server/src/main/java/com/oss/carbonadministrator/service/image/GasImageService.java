@@ -30,14 +30,34 @@ public class GasImageService {
             throw new HasNoUserException("해당하는 유저가 존재하지 않습니다.");
         }
 
-        Bill bill = Bill.builder()
-            .user(user.get())
-            .gasInfoList(recognizedGasData)
-            .year(year)
-            .month(month)
-            .build();
+        Optional<Bill> targetBill = billRepository.findBillByEmailAndYearAndMonth(user.get().getEmail(), year, month);
 
-        return billRepository.save(bill);
+        if(targetBill.isEmpty()){
+            Bill bill = Bill.builder()
+                    .user(user.get())
+                    .gasInfoList(recognizedGasData)
+                    .year(year)
+                    .month(month)
+                    .build();
+
+            return billRepository.saveAndFlush(bill);
+        }
+
+        Bill bill = targetBill.get();
+
+        if(bill.getGasInfoList() == null){
+            User targetUser = user.get();
+            targetUser.setGasCount(targetUser.getGasCount() + 1);
+            userRepository.saveAndFlush(targetUser);
+
+            bill.setGasInfoList(recognizedGasData);
+
+            return billRepository.saveAndFlush(bill);
+        }
+        gasRepository.delete(bill.getGasInfoList());
+        bill.setGasInfoList(recognizedGasData);
+
+        return billRepository.saveAndFlush(bill);
     }
 
     @Transactional
