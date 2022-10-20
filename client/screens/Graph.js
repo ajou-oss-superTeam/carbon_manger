@@ -114,11 +114,13 @@ const Graph = ({ navigation, route: { key } }) => {
           // />
           <StackedBarChart
             data={{
-              labels: graphData.labels,
-              // legend: graphData.legend,
-              data: graphData.datasets,
+              labels: ['min', ...graphData.labels, 'max'],
+              legend: graphData.legend,
+              // data: graphData.datasets,
+              data: [[0], ...graphData.datasets, [100000]],
               barColors: ['yellow', 'red', 'blue'],
             }}
+            hideLegend={true}
             width={Dimensions.get('window').width - 16}
             height={400}
             chartConfig={{

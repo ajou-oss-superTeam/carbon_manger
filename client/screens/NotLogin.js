@@ -22,19 +22,37 @@ const NotLogin = ({ navigation: { navigate }, route }) => {
       <View style={styles.middle}></View>
       <View style={styles.footer}>
         <View style={styles.images}>
-          <TouchableOpacity onPress={() => Alert.alert('개발 중 입니다.')}>
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert(
+                '기능명세서 범위에 해당되지 않는 기능입니다. 추후 발전시킬 예정입니다.'
+              )
+            }
+          >
             <Image
               style={styles.image}
               source={require('../assets/images/facebook.jpeg')}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Alert.alert('개발 중 입니다.')}>
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert(
+                '기능명세서 범위에 해당되지 않는 기능입니다. 추후 발전시킬 예정입니다.'
+              )
+            }
+          >
             <Image
               style={styles.image}
               source={require('../assets/images/google.png')}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Alert.alert('개발 중 입니다.')}>
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert(
+                '기능명세서 범위에 해당되지 않는 기능입니다. 추후 발전시킬 예정입니다.'
+              )
+            }
+          >
             <Image
               style={styles.image}
               source={require('../assets/images/naver.png')}
