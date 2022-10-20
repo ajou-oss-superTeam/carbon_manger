@@ -13,6 +13,8 @@ Development Environment
 |Language|JS|Java|Python|
 |Frameworks (and Libraries)|React Native, Expo|Spring|PyTorch, EasyOCR, OpenCV|
 
+##### &nbsp;server에서 [install.sh](https://github.com/ajou-oss-superTeam/carbon_manger/blob/main/install.sh, "install.sh link")를 실행합니다. 실행시 Python과 pytorch, numpy 그리고 Easyocr 등의 여러 라이브러리 및 프레임워크가 설치가 됩니다.
+
 Structure of Carbon Manager Application
 -------------
 ![image](https://user-images.githubusercontent.com/22979031/190436352-5939af0d-2820-49ee-a364-fa7c0366566f.png)
