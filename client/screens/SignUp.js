@@ -38,7 +38,7 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
       return;
     }
 
-    const { user, success, message, token } = await API.getSignup({
+    const { success, message } = await API.getSignup({
       email,
       nickname,
       password,
@@ -47,11 +47,20 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
     });
 
     if (success) {
-      await AsyncStorage.setItem('@user', JSON.stringify({ user }));
-      await AsyncStorage.setItem('@token', JSON.stringify({ token }));
-      replace('Tabs', {
-        screen: 'Home',
+      const { user, success, message, token } = await API.getLogin({
+        email,
+        password,
       });
+
+      if (success) {
+        await AsyncStorage.setItem('@user', JSON.stringify({ user }));
+        await AsyncStorage.setItem('@token', JSON.stringify({ token }));
+        replace('Tabs', {
+          screen: 'Home',
+        });
+      } else {
+        Alert.alert(message);
+      }
     } else {
       Alert.alert(message);
     }

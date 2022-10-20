@@ -9,13 +9,13 @@ import {
   NAVI_ITEM_CLICK,
 } from '../assets/variables/color';
 
-const Graph = () => {
+const Graph = ({ navigation, route: { key } }) => {
   const [nickname, setNickname] = useState('');
   const [graphData, setGraphData] = useState(null);
 
   useEffect(() => {
     drawGraph();
-  }, []);
+  }, [key]);
 
   const drawGraph = async () => {
     const user = await AsyncStorage.getItem('@user');
@@ -114,11 +114,13 @@ const Graph = () => {
           // />
           <StackedBarChart
             data={{
-              labels: graphData.labels,
-              // legend: graphData.legend,
-              data: graphData.datasets,
+              labels: ['min', ...graphData.labels, 'max'],
+              legend: graphData.legend,
+              // data: graphData.datasets,
+              data: [[0], ...graphData.datasets, [100000]],
               barColors: ['yellow', 'red', 'blue'],
             }}
+            hideLegend={true}
             width={Dimensions.get('window').width - 16}
             height={400}
             chartConfig={{

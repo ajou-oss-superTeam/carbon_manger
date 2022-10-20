@@ -68,12 +68,16 @@ const Login = ({ navigation: { navigate, replace }, route: { params } }) => {
           <TouchableOpacity style={styles.buttonLogin} onPress={loginOnPress}>
             <Text style={styles.login}>로그인</Text>
           </TouchableOpacity>
-          <View
+          <TouchableOpacity
             style={styles.buttonfindPassord}
-            onPress={() => Alert.alert('개발 중입니다.')}
+            onPress={() =>
+              Alert.alert(
+                '기능명세서 범위에 해당되지 않는 기능입니다. 추후 발전시킬 예정입니다.'
+              )
+            }
           >
             <Text style={styles.findPassword}>비밀번호를 잊으셨나요?</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
