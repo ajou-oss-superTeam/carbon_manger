@@ -7,6 +7,22 @@ import numpy as np
 
 import argparse
 
+'''
+Copyright 2022 Carbon_Developers
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+'''
+
 display_ = False
 
 def parse():
@@ -241,14 +257,22 @@ def read_gas_recipt(args):
     if(args.output_path != 'null'):
         output_file_path = args.output_path 
 
-    img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE) 
+    try:
+        img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE) 
 
-    ret, thresh1 = cv2.threshold(img,100,255, cv2.THRESH_BINARY)
+        ret, thresh1 = cv2.threshold(img,100,255, cv2.THRESH_BINARY)
 
-    filter = np.ones((5,5),np.float32)/25 
+        filter = np.ones((5,5),np.float32)/25 
 
-    blur_img = cv2.filter2D(thresh1, -1 , filter)
-    blur_img = cv2.resize(blur_img, dsize=(3600,2900*2), interpolation=cv2.INTER_CUBIC)
+        blur_img = cv2.filter2D(thresh1, -1 , filter)
+        blur_img = cv2.resize(blur_img, dsize=(3600,2900*2), interpolation=cv2.INTER_CUBIC)
+
+    except:
+        file = open(output_file_path,'w')
+        file.write('{"done":false}')
+
+        file.close()
+        return 
 
     max_height, max_width = blur_img.shape
 
