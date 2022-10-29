@@ -306,6 +306,8 @@ const API = {
   },
 };
 
+export default API;
+
 /**
  *  Copyright 2022 Carbon_Developers
  *
@@ -321,5 +323,3 @@ const API = {
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-export default API;

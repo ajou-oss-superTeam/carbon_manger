@@ -1,3 +1,7 @@
+export const NAVI_BG = 'rgb(10, 89, 73)'; // 초록
+export const NAVI_ITEM_DEFAULT = 'white';
+export const NAVI_ITEM_CLICK = 'rgb(125, 181, 105)'; // 연두
+
 /**
  *  Copyright 2022 Carbon_Developers
  *
@@ -13,7 +17,3 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-export const NAVI_BG = 'rgb(10, 89, 73)'; // 초록
-export const NAVI_ITEM_DEFAULT = 'white';
-export const NAVI_ITEM_CLICK = 'rgb(125, 181, 105)'; // 연두
