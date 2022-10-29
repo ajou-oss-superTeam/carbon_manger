@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const Score = ({
-  navigation: { navigate, replace },
+  navigation: { navigate, replace, reset },
   route: {
     params: { type, data, time },
   },

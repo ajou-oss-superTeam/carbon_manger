@@ -5,7 +5,7 @@
     "owner": "namlulu",
     "version": "1.0.0",
     "extra": {
-      "apiUrl": "http://34.64.237.180:8080",
+      "apiUrl": "http://34.64.43.233:8080",
       "eas": {
         "projectId": "bbe8f19e-ff98-409c-be9b-916465512584"
       }
