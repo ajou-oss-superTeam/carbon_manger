@@ -29,6 +29,7 @@ def parse():
     parser = argparse.ArgumentParser(prog="OCR", description='')
     parser.add_argument("-img_path", type=str, dest="img_path", action="store", default="null")
     parser.add_argument("-output_path", type=str, dest="output_path", action="store", default="null")
+    parser.add_argument("-gpu_use", type=str, dest="gpu_use", action="store", default="False")
 
     args = parser.parse_args()
     return args
@@ -121,7 +122,7 @@ def min_distance_between_box(a, b):
     return min_dist
 
 
-def read_usage(blur_img):
+def read_usage(blur_img, using_gpu):
 
     cropped = blur_img[0:2800,0:1500*2]
 
@@ -129,7 +130,7 @@ def read_usage(blur_img):
     resize_height = 4800 # 4500
     cropped= cv2.resize(blur_img, dsize=(resize_width,resize_height), interpolation=cv2.INTER_CUBIC)
 
-    reader = easyocr.Reader(['ko', 'en'])
+    reader = easyocr.Reader(['ko', 'en'], gpu=using_gpu)
     result = reader.readtext(cropped)
 
     meter_unit_texts = []
@@ -257,6 +258,11 @@ def read_gas_recipt(args):
     if(args.output_path != 'null'):
         output_file_path = args.output_path 
 
+    using_gpu = False
+    if(args.gpu_use == "True"):
+        using_gpu = True
+
+
     try:
         img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE) 
 
@@ -286,7 +292,7 @@ def read_gas_recipt(args):
         cv2.waitKey(0)
 
 
-    json_fee = read_usage(blur_img)
+    json_fee = read_usage(blur_img, using_gpu)
     json_result += json_fee
 
     json_result += '"done":true}'

@@ -29,6 +29,7 @@ def parse():
     parser = argparse.ArgumentParser(prog="OCR", description='')
     parser.add_argument("-img_path", type=str, dest="img_path", action="store", default="null")
     parser.add_argument("-output_path", type=str, dest="output_path", action="store", default="null")
+    parser.add_argument("-gpu_use", type=str, dest="gpu_use", action="store", default="False")
 
     args = parser.parse_args()
     return args
@@ -136,7 +137,7 @@ def rule_usage_compare_string(string):
             compare_checked = True
     return True if (usage_checked and compare_checked) else False
 
-def read_fee(blur_img):
+def read_fee(blur_img, using_gpu):
     resize_width = (int)(blur_img.shape[0]*1.5*1.5)
     resize_height = (int)(blur_img.shape[1]*2*1.5)
 
@@ -145,7 +146,7 @@ def read_fee(blur_img):
     filter = np.ones((3,3),np.float32)/9
     cropped = cv2.filter2D(cropped, -1 , filter)
 
-    reader = easyocr.Reader(['ko'])
+    reader = easyocr.Reader(['ko'],gpu=using_gpu)
     result = reader.readtext(cropped)
 
     numeric_texts = []
@@ -318,26 +319,38 @@ def read_electric_bill(args):
     if(args.output_path != 'null'):
         output_file_path = args.output_path 
 
-    img_raw = cv2.imread(file_path) 
+    using_gpu = False
+    if(args.gpu_use == "True"):
+        using_gpu = True
 
-    img = convert_gray_electric_img(img_raw)
-    img = cv2.resize(img, dsize=(3600,2900*2), interpolation=cv2.INTER_CUBIC)
+    try:
+        img_raw = cv2.imread(file_path) 
 
-    ret, thresh1 = cv2.threshold(img,120,255, cv2.THRESH_BINARY_INV)
-    kernel = np.ones((5, 5), np.uint8)
-    thresh1 = cv2.dilate(thresh1,kernel,5)
-    thresh1 = cv2.erode(thresh1,kernel,2)
+        img = convert_gray_electric_img(img_raw)
+        img = cv2.resize(img, dsize=(3600,2900*2), interpolation=cv2.INTER_CUBIC)
 
-    ret, thresh1 = cv2.threshold(thresh1,50,255, cv2.THRESH_BINARY_INV)
+        ret, thresh1 = cv2.threshold(img,120,255, cv2.THRESH_BINARY_INV)
+        kernel = np.ones((5, 5), np.uint8)
+        thresh1 = cv2.dilate(thresh1,kernel,5)
+        thresh1 = cv2.erode(thresh1,kernel,2)
 
-    filter = np.ones((1,1),np.float32)/1
-    blur_img = cv2.filter2D(thresh1, -1 , filter)
+        ret, thresh1 = cv2.threshold(thresh1,50,255, cv2.THRESH_BINARY_INV)
+
+        filter = np.ones((1,1),np.float32)/1
+        blur_img = cv2.filter2D(thresh1, -1 , filter)
+
+    except:
+        file = open(output_file_path,'w')
+        file.write('{"done":false}')
+
+        file.close()
+        return 
 
     max_height, max_width = blur_img.shape
 
     json_result = '{'
 
-    json_fee = read_fee(blur_img)
+    json_fee = read_fee(blur_img, using_gpu)
     json_result += json_fee
 
     json_result += '"done":true}'
