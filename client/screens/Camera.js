@@ -66,7 +66,6 @@ const CameraScreen = ({
   };
 
   const backToPage = () => {
-    console.log(123);
     setCamera(false);
   };
 
