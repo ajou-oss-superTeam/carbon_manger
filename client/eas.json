@@ -8,11 +8,17 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
     },
     "production": {
       "env": {
         "API_URL": "http://34.64.43.233:8080"
+      },
+      "android": {
+        "buildType": "apk"
       }
     }
   },

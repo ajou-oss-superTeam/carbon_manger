@@ -11,6 +11,7 @@ import {
 import { Camera } from 'expo-camera';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
@@ -34,6 +35,8 @@ const CameraScreen = ({
   const [showDate, setShowDate] = useState(false);
   // 로딩
   const [loading, setLoading] = useState(false);
+  // 가스 회사
+  const [company, setCompany] = useState('삼천리');
 
   useEffect(() => {
     (async () => {
@@ -63,6 +66,7 @@ const CameraScreen = ({
   };
 
   const backToPage = () => {
+    console.log(123);
     setCamera(false);
   };
 
@@ -122,6 +126,7 @@ const CameraScreen = ({
         base,
         year,
         month,
+        company,
         parseToken
       );
 
@@ -152,24 +157,34 @@ const CameraScreen = ({
         <Camera
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
-          ratio={'1:1'}
+          ratio={'9:16'}
         />
       </View>
       <View style={styles.btns}>
-        <TouchableOpacity
-          onPress={takePicture}
-          style={styles.catch}
-          hitSlop={{ top: 100, bottom: 100, left: 100, right: 100 }}
-        >
-          <Button title="사진 찍기" />
+        <TouchableOpacity onPress={takePicture} style={styles.catch}>
+          <Text style={styles.btnText}>사진 찍기</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={backToPage}
-          style={styles.backBtn}
-          hitSlop={{ top: 100, bottom: 100, left: 100, right: 100 }}
-        >
-          <Button title="돌아가기" />
+        <TouchableOpacity onPress={backToPage} style={styles.backBtn}>
+          <Text style={styles.btnText}>돌아가기</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.company}>
+        {type === '가스' ? (
+          <View>
+            <Text>가스 회사를 입력해주세요.</Text>
+            <Picker
+              selectedValue={'삼천리'}
+              style={styles.picker}
+              onValueChange={(itemValue, itemIndex) => {
+                setCompany(itemValue);
+              }}
+            >
+              <Picker.Item label="삼천리" value="삼천리" />
+            </Picker>
+          </View>
+        ) : (
+          ''
+        )}
       </View>
     </View>
   ) : (
@@ -199,7 +214,9 @@ const CameraScreen = ({
           textStyle={styles.spinnerTextStyle}
         />
         <View style={styles.imgCover}>
-          {imageUrl && <Image source={{ uri: imageUrl }} style={{ flex: 1 }} />}
+          {imageUrl && (
+            <Image source={{ uri: imageUrl }} style={styles.imageUrl} />
+          )}
         </View>
       </View>
       <View style={styles.footer}>
@@ -224,27 +241,41 @@ export default CameraScreen;
 const styles = StyleSheet.create({
   // 카메라
   cameraContainer: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
   },
   fixedRatio: {
     flex: 1,
-    aspectRatio: 1,
   },
   btns: {
-    flex: 1,
-    justifyContent: 'center',
+    flex: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
+  },
+  company: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  picker: {
+    width: 300,
+  },
+  btnText: {
+    color: 'white',
   },
   catch: {
     width: 100,
-    height: 100,
-    marginBottom: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'green',
   },
   backBtn: {
     width: 100,
-    height: 100,
-    zIndex: 1,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'green',
   },
   // 화면
   container: {
@@ -263,6 +294,10 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     fontSize: 18,
+  },
+  imageUrl: {
+    resizeMode: 'contain',
+    flex: 1,
   },
   red: {
     color: 'red',
@@ -310,19 +345,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-
-/**
- *  Copyright 2022 Carbon_Developers
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
