@@ -44,15 +44,15 @@ const CameraScreen = ({
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       requestPermission(cameraStatus.status === 'granted');
     })();
-    return () =>
-      (async () => {
-        await changeScreenOrientationPortrait();
-      })();
+    // return () =>
+    //   (async () => {
+    //     await changeScreenOrientationPortrait();
+    //   })();
   }, []);
 
   const openCamera = async () => {
     if (permission) {
-      await changeScreenOrientationLandScape();
+      // await changeScreenOrientationLandScape();
       setCamera(true);
     } else {
       Alert.alert('카메라 권한이 필요합니다.');
@@ -67,13 +67,13 @@ const CameraScreen = ({
       });
       setImageUri(data.uri);
       setBase(data.base64);
-      await changeScreenOrientationPortrait();
+      // await changeScreenOrientationPortrait();
       setCamera(false);
     }
   };
 
   const backToPage = async () => {
-    await changeScreenOrientationLandScape();
+    // await changeScreenOrientationLandScape();
     setCamera(false);
   };
 
@@ -158,25 +158,26 @@ const CameraScreen = ({
     });
   };
 
-  async function changeScreenOrientationLandScape() {
-    await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-    );
-  }
+  // async function changeScreenOrientationLandScape() {
+  //   await ScreenOrientation.lockAsync(
+  //     ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+  //   );
+  // }
 
-  async function changeScreenOrientationPortrait() {
-    await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT
-    );
-  }
+  // async function changeScreenOrientationPortrait() {
+  //   await ScreenOrientation.lockAsync(
+  //     ScreenOrientation.OrientationLock.PORTRAIT
+  //   );
+  // }
 
   return camera ? (
     <View style={{ flex: 1 }}>
       <View style={styles.cameraContainer}>
         <Camera
+          flashMode={Camera.Constants.FlashMode.on}
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
-          type={CameraType}
+          ratio="1:1"
         />
       </View>
       <View style={styles.btns}>
@@ -260,14 +261,14 @@ export default CameraScreen;
 const styles = StyleSheet.create({
   // 카메라
   cameraContainer: {
-    flex: 4,
+    flex: 3,
     flexDirection: 'row',
   },
   fixedRatio: {
     flex: 1,
   },
   btns: {
-    flex: 0.5,
+    flex: 6,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -315,7 +316,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   imageUrl: {
-    resizeMode: 'contain',
     flex: 1,
   },
   red: {
