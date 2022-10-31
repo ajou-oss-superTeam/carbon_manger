@@ -8,11 +8,12 @@ import {
   Alert,
   Button,
 } from 'react-native';
-import { Camera } from 'expo-camera';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Camera, CameraType } from 'expo-camera';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
 
@@ -43,10 +44,15 @@ const CameraScreen = ({
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       requestPermission(cameraStatus.status === 'granted');
     })();
+    return () =>
+      (async () => {
+        await changeScreenOrientationPortrait();
+      })();
   }, []);
 
   const openCamera = async () => {
     if (permission) {
+      await changeScreenOrientationLandScape();
       setCamera(true);
     } else {
       Alert.alert('카메라 권한이 필요합니다.');
@@ -61,12 +67,13 @@ const CameraScreen = ({
       });
       setImageUri(data.uri);
       setBase(data.base64);
+      await changeScreenOrientationPortrait();
       setCamera(false);
     }
   };
 
-  const backToPage = () => {
-    console.log(123);
+  const backToPage = async () => {
+    await changeScreenOrientationLandScape();
     setCamera(false);
   };
 
@@ -151,13 +158,25 @@ const CameraScreen = ({
     });
   };
 
+  async function changeScreenOrientationLandScape() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+    );
+  }
+
+  async function changeScreenOrientationPortrait() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  }
+
   return camera ? (
     <View style={{ flex: 1 }}>
       <View style={styles.cameraContainer}>
         <Camera
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
-          ratio={'9:16'}
+          type={CameraType}
         />
       </View>
       <View style={styles.btns}>
@@ -241,14 +260,14 @@ export default CameraScreen;
 const styles = StyleSheet.create({
   // 카메라
   cameraContainer: {
-    flex: 2,
+    flex: 4,
     flexDirection: 'row',
   },
   fixedRatio: {
     flex: 1,
   },
   btns: {
-    flex: 5,
+    flex: 0.5,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -265,14 +284,14 @@ const styles = StyleSheet.create({
   },
   catch: {
     width: 100,
-    height: 50,
+    height: 30,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'green',
   },
   backBtn: {
     width: 100,
-    height: 50,
+    height: 30,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'green',
