@@ -261,14 +261,14 @@ export default CameraScreen;
 const styles = StyleSheet.create({
   // 카메라
   cameraContainer: {
-    flex: 3,
+    flex: 4,
     flexDirection: 'row',
   },
   fixedRatio: {
     flex: 1,
   },
   btns: {
-    flex: 6,
+    flex: 3,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
