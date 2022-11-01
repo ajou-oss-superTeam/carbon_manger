@@ -72,21 +72,21 @@ const ScoreEdit = ({
   //     ? String(data?.electricityInfoList?.tvSubscriptionFee)
   //     : '0'
   // );
-  // const [currMonthUsage, setCurrMonthUsage] = useState(
-  //   data?.electricityInfoList?.currMonthUsage
-  //     ? String(data?.electricityInfoList?.currMonthUsage)
-  //     : '0'
-  // );
-  // const [preMonthUsage, setPreMonthUsage] = useState(
-  //   data?.electricityInfoList?.preMonthUsage
-  //     ? String(data?.electricityInfoList?.preMonthUsage)
-  //     : '0'
-  // );
-  // const [lastYearUsage, setLastYearUsage] = useState(
-  //   data?.electricityInfoList?.lastYearUsage
-  //     ? String(data?.electricityInfoList?.lastYearUsage)
-  //     : '0'
-  // );
+  const [currMonthUsage, setCurrMonthUsage] = useState(
+    data?.electricityInfoList?.currMonthUsage
+      ? String(data?.electricityInfoList?.currMonthUsage)
+      : '0'
+  );
+  const [preMonthUsage, setPreMonthUsage] = useState(
+    data?.electricityInfoList?.preMonthUsage
+      ? String(data?.electricityInfoList?.preMonthUsage)
+      : '0'
+  );
+  const [lastYearUsage, setLastYearUsage] = useState(
+    data?.electricityInfoList?.lastYearUsage
+      ? String(data?.electricityInfoList?.lastYearUsage)
+      : '0'
+  );
   // 가스 ===========
   const [accumulatedMonthUsage, setAccumulatedMonthUsage] = useState(
     data?.gasInfoList?.accumulatedMonthUsage
@@ -456,7 +456,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setTvSubscriptionFee}
               />
-            </View>
+            </View> */}
             <View style={styles.element}>
               <Text style={styles.elementLabel}>당월 사용량</Text>
               <TextInput
@@ -483,7 +483,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setLastYearUsage}
               />
-            </View> */}
+            </View>
           </ScrollView>
         ) : (
           <ScrollView style={styles.scrollView}>

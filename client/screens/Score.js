@@ -131,7 +131,7 @@ const Score = ({
               ? electricityInfoList.tvSubscriptionFee
               : '인식 안됨'}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.element}>
           <Text style={styles.elementText}>당월 사용량</Text>
           <Text style={styles.elementText}>
@@ -155,7 +155,7 @@ const Score = ({
               ? electricityInfoList.lastYearUsage
               : '인식 안됨'}
           </Text>
-        </View> */}
+        </View>
       </View>
       <View style={styles.footer}>
         <TouchableOpacity onPress={(e) => goToLink('edit')}>
