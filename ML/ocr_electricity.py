@@ -24,12 +24,13 @@ limitations under the License.
 '''
 
 gap = 100
+temp_multiply = 3
 
 def parse():
     parser = argparse.ArgumentParser(prog="OCR", description='')
     parser.add_argument("-img_path", type=str, dest="img_path", action="store", default="null")
     parser.add_argument("-output_path", type=str, dest="output_path", action="store", default="null")
-    parser.add_argument("-gpu_use", type=str, dest="gpu_use", action="store", default="False")
+    parser.add_argument("-gpu_use", type=str, dest="gpu_use", action="store", default="True")
 
     args = parser.parse_args()
     return args
@@ -209,7 +210,7 @@ def read_fee(blur_img, using_gpu):
             found = False
             for gidx in range(0,len(numeric_group)):
                 for item in numeric_group[gidx]:
-                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000):
+                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000*temp_multiply):
                         numeric_group[gidx].append(numeric_texts_sorted[idx]) 
                         found = True
                         break
@@ -217,7 +218,7 @@ def read_fee(blur_img, using_gpu):
                     break
             if(not found):
                 for item in temp_group:
-                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000):
+                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000*temp_multiply):
                         temp_group.append(numeric_texts_sorted[idx]) 
                         found = True
                         break
@@ -256,7 +257,7 @@ def read_fee(blur_img, using_gpu):
                 if(temp_dist < min_dist):
                     min_dist = temp_dist
                     closest_text = numeric_text
-            if(min_dist <= 3000*1.5):
+            if(min_dist <= 3000*1.5*temp_multiply):
                 temp_string += closest_text+'",'
                 output_string += temp_string
 
@@ -271,7 +272,7 @@ def read_fee(blur_img, using_gpu):
         temp_close_numerics = []
         for (numeric_bbox, numeric_text, numeric_prob) in numeric_texts:
             temp_dist = min_distance_between_box(numeric_bbox,center_123_box)
-            if((temp_dist < 2000) and (len(numeric_text) > 1)):
+            if((temp_dist < 2000*temp_multiply) and (len(numeric_text) > 1)):
                 temp_close_numerics.append([temp_dist, numeric_text])
         temp_close_numerics = sorted(temp_close_numerics)
 
@@ -287,7 +288,7 @@ def read_fee(blur_img, using_gpu):
         temp_close_numerics = []
         for (numeric_bbox, numeric_text, numeric_prob) in numeric_texts:
             temp_dist = min_distance_between_box(numeric_bbox,usage_compare_box)
-            if((temp_dist < 10000) and (len(numeric_text) > 1) and (numeric_bbox[0][1] > usage_compare_box[0][1])):
+            if((temp_dist < 10000*temp_multiply) and (len(numeric_text) > 1) and (numeric_bbox[0][1] > usage_compare_box[0][1])):
                 temp_close_numerics.append([temp_dist, numeric_text])
         temp_close_numerics = sorted(temp_close_numerics)
 
@@ -311,7 +312,7 @@ def convert_gray_electric_img(img):
 
 
 def read_electric_bill(args):
-    file_path = 'test4.jpg'
+    file_path = 'test3.jpg'
     if(args.img_path != 'null'):
         file_path = args.img_path 
 
