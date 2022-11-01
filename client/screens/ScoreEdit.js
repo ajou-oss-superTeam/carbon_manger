@@ -37,56 +37,56 @@ const ScoreEdit = ({
       ? String(data?.electricityInfoList?.environmentCharge)
       : '0'
   );
-  const [fuelAdjustmentRate, setFuelAdjustmentRate] = useState(
-    data?.electricityInfoList?.fuelAdjustmentRate
-      ? String(data?.electricityInfoList?.fuelAdjustmentRate)
-      : '0'
-  );
+  // const [fuelAdjustmentRate, setFuelAdjustmentRate] = useState(
+  //   data?.electricityInfoList?.fuelAdjustmentRate
+  //     ? String(data?.electricityInfoList?.fuelAdjustmentRate)
+  //     : '0'
+  // );
   const [elecChargeSum, setElecChargeSum] = useState(
     data?.electricityInfoList?.elecChargeSum
       ? String(data?.electricityInfoList?.elecChargeSum)
       : '0'
   );
-  const [vat, setVat] = useState(
-    data?.electricityInfoList?.vat
-      ? String(data?.electricityInfoList?.vat)
-      : '0'
-  );
-  const [elecFund, setElecFund] = useState(
-    data?.electricityInfoList?.elecFund
-      ? String(data?.electricityInfoList?.elecFund)
-      : '0'
-  );
-  const [roundDown, setRoundDown] = useState(
-    data?.electricityInfoList?.roundDown
-      ? String(data?.electricityInfoList?.roundDown)
-      : '0'
-  );
-  const [totalbyCurrMonth, setTotalbyCurrMonth] = useState(
-    data?.electricityInfoList?.totalbyCurrMonth
-      ? String(data?.electricityInfoList?.totalbyCurrMonth)
-      : '0'
-  );
-  const [tvSubscriptionFee, setTvSubscriptionFee] = useState(
-    data?.electricityInfoList?.tvSubscriptionFee
-      ? String(data?.electricityInfoList?.tvSubscriptionFee)
-      : '0'
-  );
-  const [currMonthUsage, setCurrMonthUsage] = useState(
-    data?.electricityInfoList?.currMonthUsage
-      ? String(data?.electricityInfoList?.currMonthUsage)
-      : '0'
-  );
-  const [preMonthUsage, setPreMonthUsage] = useState(
-    data?.electricityInfoList?.preMonthUsage
-      ? String(data?.electricityInfoList?.preMonthUsage)
-      : '0'
-  );
-  const [lastYearUsage, setLastYearUsage] = useState(
-    data?.electricityInfoList?.lastYearUsage
-      ? String(data?.electricityInfoList?.lastYearUsage)
-      : '0'
-  );
+  // const [vat, setVat] = useState(
+  //   data?.electricityInfoList?.vat
+  //     ? String(data?.electricityInfoList?.vat)
+  //     : '0'
+  // );
+  // const [elecFund, setElecFund] = useState(
+  //   data?.electricityInfoList?.elecFund
+  //     ? String(data?.electricityInfoList?.elecFund)
+  //     : '0'
+  // );
+  // const [roundDown, setRoundDown] = useState(
+  //   data?.electricityInfoList?.roundDown
+  //     ? String(data?.electricityInfoList?.roundDown)
+  //     : '0'
+  // );
+  // const [totalbyCurrMonth, setTotalbyCurrMonth] = useState(
+  //   data?.electricityInfoList?.totalbyCurrMonth
+  //     ? String(data?.electricityInfoList?.totalbyCurrMonth)
+  //     : '0'
+  // );
+  // const [tvSubscriptionFee, setTvSubscriptionFee] = useState(
+  //   data?.electricityInfoList?.tvSubscriptionFee
+  //     ? String(data?.electricityInfoList?.tvSubscriptionFee)
+  //     : '0'
+  // );
+  // const [currMonthUsage, setCurrMonthUsage] = useState(
+  //   data?.electricityInfoList?.currMonthUsage
+  //     ? String(data?.electricityInfoList?.currMonthUsage)
+  //     : '0'
+  // );
+  // const [preMonthUsage, setPreMonthUsage] = useState(
+  //   data?.electricityInfoList?.preMonthUsage
+  //     ? String(data?.electricityInfoList?.preMonthUsage)
+  //     : '0'
+  // );
+  // const [lastYearUsage, setLastYearUsage] = useState(
+  //   data?.electricityInfoList?.lastYearUsage
+  //     ? String(data?.electricityInfoList?.lastYearUsage)
+  //     : '0'
+  // );
   // 가스 ===========
   const [accumulatedMonthUsage, setAccumulatedMonthUsage] = useState(
     data?.gasInfoList?.accumulatedMonthUsage
@@ -394,7 +394,7 @@ const ScoreEdit = ({
                 onChangeText={setEnvironmentCharge}
               />
             </View>
-            <View style={styles.element}>
+            {/* <View style={styles.element}>
               <Text style={styles.elementLabel}>연료비조정액</Text>
               <TextInput
                 style={styles.elementText}
@@ -402,7 +402,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setFuelAdjustmentRate}
               />
-            </View>
+            </View> */}
             <View style={styles.element}>
               <Text style={styles.elementLabel}>전기요금계</Text>
               <TextInput
@@ -412,7 +412,7 @@ const ScoreEdit = ({
                 onChangeText={setElecChargeSum}
               />
             </View>
-            <View style={styles.element}>
+            {/* <View style={styles.element}>
               <Text style={styles.elementLabel}>부가가치세</Text>
               <TextInput
                 style={styles.elementText}
@@ -483,7 +483,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setLastYearUsage}
               />
-            </View>
+            </View> */}
           </ScrollView>
         ) : (
           <ScrollView style={styles.scrollView}>

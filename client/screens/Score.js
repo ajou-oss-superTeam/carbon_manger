@@ -78,14 +78,14 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View>
-        <View style={styles.element}>
+        {/* <View style={styles.element}>
           <Text style={styles.elementText}>연료비조정액</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.fuelAdjustmentRate
               ? electricityInfoList.fuelAdjustmentRate
               : '인식 안됨'}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.element}>
           <Text style={styles.elementText}>전기요금계</Text>
           <Text style={styles.elementText}>
@@ -94,7 +94,7 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View>
-        <View style={styles.element}>
+        {/* <View style={styles.element}>
           <Text style={styles.elementText}>부가가치세</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.vat ? electricityInfoList.vat : '인식 안됨'}
@@ -155,7 +155,7 @@ const Score = ({
               ? electricityInfoList.lastYearUsage
               : '인식 안됨'}
           </Text>
-        </View>
+        </View> */}
       </View>
       <View style={styles.footer}>
         <TouchableOpacity onPress={(e) => goToLink('edit')}>

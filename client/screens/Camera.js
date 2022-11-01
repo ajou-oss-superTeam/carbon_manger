@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Camera, CameraType } from 'expo-camera';
-import * as ScreenOrientation from 'expo-screen-orientation';
+// import * as ScreenOrientation from 'expo-screen-orientation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
 
@@ -177,7 +177,7 @@ const CameraScreen = ({
           flashMode={Camera.Constants.FlashMode.on}
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
-          ratio="1:1"
+          ratio="16:9"
         />
       </View>
       <View style={styles.btns}>
