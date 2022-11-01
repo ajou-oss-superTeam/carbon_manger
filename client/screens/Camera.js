@@ -177,7 +177,7 @@ const CameraScreen = ({
           flashMode={Camera.Constants.FlashMode.on}
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
-          ratio="9:16"
+          ratio="16:9"
         />
       </View>
       <View style={styles.btns}>
