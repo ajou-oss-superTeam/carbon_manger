@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 
-const NotLogin = ({ navigation: { navigate }, route }) => {
+const NotLogin = ({ navigation: { navigate } }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>

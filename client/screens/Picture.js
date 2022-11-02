@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const Picture = ({
-  navigation: { navigate, replace },
+  navigation: { navigate },
   route: {
     params: { type, user },
   },

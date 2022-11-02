@@ -120,6 +120,7 @@ const SignUp = ({ navigation: { navigate, replace } }) => {
               onValueChange={(itemValue, itemIndex) => {
                 setProvince(itemValue);
                 setCityArray(address.city[itemValue]);
+                setCity(address.city[itemValue][0]);
               }}
             >
               {address.province.map((item) => {

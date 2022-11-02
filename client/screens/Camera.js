@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Camera, CameraType } from 'expo-camera';
-// import * as ScreenOrientation from 'expo-screen-orientation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
 
@@ -44,15 +44,15 @@ const CameraScreen = ({
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       requestPermission(cameraStatus.status === 'granted');
     })();
-    // return () =>
-    //   (async () => {
-    //     await changeScreenOrientationPortrait();
-    //   })();
+    return () =>
+      (async () => {
+        await changeScreenOrientationPortrait();
+      })();
   }, []);
 
   const openCamera = async () => {
     if (permission) {
-      // await changeScreenOrientationLandScape();
+      await changeScreenOrientationLandScape();
       setCamera(true);
     } else {
       Alert.alert('카메라 권한이 필요합니다.');
@@ -67,13 +67,13 @@ const CameraScreen = ({
       });
       setImageUri(data.uri);
       setBase(data.base64);
-      // await changeScreenOrientationPortrait();
+      await changeScreenOrientationPortrait();
       setCamera(false);
     }
   };
 
   const backToPage = async () => {
-    // await changeScreenOrientationLandScape();
+    await changeScreenOrientationLandScape();
     setCamera(false);
   };
 
@@ -158,23 +158,23 @@ const CameraScreen = ({
     });
   };
 
-  // async function changeScreenOrientationLandScape() {
-  //   await ScreenOrientation.lockAsync(
-  //     ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-  //   );
-  // }
+  async function changeScreenOrientationLandScape() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+    );
+  }
 
-  // async function changeScreenOrientationPortrait() {
-  //   await ScreenOrientation.lockAsync(
-  //     ScreenOrientation.OrientationLock.PORTRAIT
-  //   );
-  // }
+  async function changeScreenOrientationPortrait() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  }
 
   return camera ? (
     <View style={{ flex: 1 }}>
       <View style={styles.cameraContainer}>
         <Camera
-          flashMode={Camera.Constants.FlashMode.on}
+          // flashMode={Camera.Constants.FlashMode.on}
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
           ratio="16:9"
@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   imageUrl: {
+    resizeMode: 'contain',
     flex: 1,
   },
   red: {

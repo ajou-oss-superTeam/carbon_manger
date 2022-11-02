@@ -9,13 +9,19 @@ import {
   NAVI_ITEM_CLICK,
 } from '../assets/variables/color';
 
-const Graph = ({ navigation, route: { key } }) => {
+const Graph = ({
+  navigation: { navigate },
+  route: {
+    params: { hashValue },
+  },
+}) => {
   const [nickname, setNickname] = useState('');
   const [graphData, setGraphData] = useState(null);
+  const [maxValue, setMaxValue] = useState(0);
 
   useEffect(() => {
     drawGraph();
-  }, [key]);
+  }, [hashValue]);
 
   const drawGraph = async () => {
     const user = await AsyncStorage.getItem('@user');
@@ -35,6 +41,17 @@ const Graph = ({ navigation, route: { key } }) => {
       );
 
       if (success) {
+        const datasets = data.datasets;
+        const value = datasets.map((item) => {
+          const sum = item
+            .filter((num) => num !== '')
+            .reduce((sum, cur) => {
+              return sum + cur;
+            }, 0);
+          return sum;
+        });
+
+        setMaxValue(Math.max(...value));
         setGraphData(data);
       } else {
         Alert.alert(message);
@@ -60,64 +77,12 @@ const Graph = ({ navigation, route: { key } }) => {
             <Text>가스</Text>
           </View>
         </View>
-        {graphData && (
-          // <LineChart
-          //   data={{
-          //     labels: graphData.labels,
-          //     datasets: [
-          //       {
-          //         data: graphData.datasets.userData,
-          //         color: (opacity = 1) => 'rgba(58, 143, 255, 1)',
-          //       },
-          //       {
-          //         data: graphData.datasets.averageData,
-          //         color: (opacity = 1) => 'rgba(0, 255, 255, 1)',
-          //       },
-          //       { data: [0], withwithDots: false },
-          //     ],
-          //   }}
-          //   width={Dimensions.get('window').width - 20} // from react-native
-          //   height={400}
-          //   chartConfig={{
-          //     backgroundColor: '#1cc910',
-          //     backgroundGradientFrom: '#eff3ff',
-          //     backgroundGradientTo: '#efefef',
-          //     decimalPlaces: 2, // optional, defaults to 2dp
-          //     color: (opacity = 1) => `black`,
-          //     style: {
-          //       borderRadius: 16,
-          //     },
-          //   }}
-          //   bezier
-          //   style={{
-          //     borderRadius: 15,
-          //   }}
-          // />
-          // <StackedBarChart
-          //   data={graphData}
-          //   width={Dimensions.get('window').width - 20} // from react-native
-          //   height={400}
-          //   chartConfig={{
-          //     backgroundColor: '#1cc910',
-          //     backgroundGradientFrom: '#eff3ff',
-          //     backgroundGradientTo: '#efefef',
-          //     decimalPlaces: 2, // optional, defaults to 2dp
-          //     color: (opacity = 1) => `black`,
-          //     style: {
-          //       borderRadius: 16,
-          //     },
-          //   }}
-          //   bezier
-          //   style={{
-          //     borderRadius: 15,
-          //   }}
-          // />
+        {graphData && maxValue !== 0 ? (
           <StackedBarChart
             data={{
               labels: ['min', ...graphData.labels, 'max'],
               legend: graphData.legend,
-              // data: graphData.datasets,
-              data: [[0], ...graphData.datasets, [100000]],
+              data: [[0], ...graphData.datasets, [maxValue]],
               barColors: ['yellow', 'red', 'blue'],
             }}
             hideLegend={true}
@@ -150,6 +115,10 @@ const Graph = ({ navigation, route: { key } }) => {
               borderRadius: 16,
             }}
           />
+        ) : (
+          <View style={styles.noData}>
+            <Text style={styles.noDataText}>얼른 고지서를 제출하세요!</Text>
+          </View>
         )}
       </View>
     </View>
@@ -197,5 +166,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+  },
+  noData: {
+    width: 300,
+    height: 300,
+    marginTop: 20,
+    borderRadius: 20,
+    padding: 30,
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: 'white',
   },
 });
