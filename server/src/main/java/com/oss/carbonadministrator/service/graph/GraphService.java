@@ -65,19 +65,19 @@ public class GraphService {
     private static List<Object> calculatedList(Bill sur) {
         List<Object> result = new ArrayList<>();
         if (sur.getElectricityInfoList() == null) {
-            result.add("");
+            result.add(0);
         } else {
             result.add(sur.getElectricityInfoList().calculateCarbonUsage());
         }
 
         if (sur.getGasInfoList() == null) {
-            result.add("");
+            result.add(0);
         } else {
             result.add(sur.getGasInfoList().calculateCarbonUsage());
         }
 
         if (sur.getWaterInfoList() == null) {
-            result.add("");
+            result.add(0);
         } else {
             result.add(sur.getWaterInfoList().calculateCarbonUsage());
         }
@@ -132,7 +132,7 @@ public class GraphService {
     ) {
         for (Bill sur : targetBill) {
             monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
-            carbonResult.add(calculatedList(sur)); // TODO "" 처리
+            carbonResult.add(calculatedList(sur));
         }
     }
 
