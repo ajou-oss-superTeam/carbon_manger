@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Camera, CameraType } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
@@ -84,6 +85,19 @@ const CameraScreen = ({
     }
 
     setShowDate(true);
+  };
+
+  const pickImg = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImageUri(result.uri);
+    }
   };
 
   const requsetAPI = async (e) => {
@@ -246,6 +260,9 @@ const CameraScreen = ({
         <View style={styles.footerBtns}>
           <TouchableOpacity onPress={submitImg} style={styles.footerBtn}>
             <Text style={styles.footerBtnText}>사진 제출하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={pickImg} style={styles.footerBtn}>
+            <Text style={styles.footerBtnText}>앨범에서 올리기</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToLink} style={styles.footerBtn}>
             <Text style={styles.footerBtnText}>직접 입력하기</Text>

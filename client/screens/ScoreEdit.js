@@ -463,7 +463,7 @@ const ScoreEdit = ({
               <Text style={styles.elementLabel}>사용요금(당월)</Text>
               <TextInput
                 style={styles.elementText}
-                value={totalbyCurrMonth}
+                value={totalbyCurrMonthTwo}
                 autoFocus={true}
                 keyboardType="numeric"
                 onChangeText={setTotalbyCurrMonthTwo}
