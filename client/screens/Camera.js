@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Camera, CameraType } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import API from '../api';
@@ -44,15 +45,15 @@ const CameraScreen = ({
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       requestPermission(cameraStatus.status === 'granted');
     })();
-    // return () =>
-    //   (async () => {
-    //     await changeScreenOrientationPortrait();
-    //   })();
+    return () =>
+      (async () => {
+        await changeScreenOrientationPortrait();
+      })();
   }, []);
 
   const openCamera = async () => {
     if (permission) {
-      // await changeScreenOrientationLandScape();
+      await changeScreenOrientationLandScape();
       setCamera(true);
     } else {
       Alert.alert('카메라 권한이 필요합니다.');
@@ -67,13 +68,13 @@ const CameraScreen = ({
       });
       setImageUri(data.uri);
       setBase(data.base64);
-      // await changeScreenOrientationPortrait();
+      await changeScreenOrientationPortrait();
       setCamera(false);
     }
   };
 
   const backToPage = async () => {
-    // await changeScreenOrientationLandScape();
+    await changeScreenOrientationLandScape();
     setCamera(false);
   };
 
@@ -84,6 +85,19 @@ const CameraScreen = ({
     }
 
     setShowDate(true);
+  };
+
+  const pickImg = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImageUri(result.uri);
+    }
   };
 
   const requsetAPI = async (e) => {
@@ -158,26 +172,26 @@ const CameraScreen = ({
     });
   };
 
-  // async function changeScreenOrientationLandScape() {
-  //   await ScreenOrientation.lockAsync(
-  //     ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-  //   );
-  // }
+  async function changeScreenOrientationLandScape() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+    );
+  }
 
-  // async function changeScreenOrientationPortrait() {
-  //   await ScreenOrientation.lockAsync(
-  //     ScreenOrientation.OrientationLock.PORTRAIT
-  //   );
-  // }
+  async function changeScreenOrientationPortrait() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  }
 
   return camera ? (
     <View style={{ flex: 1 }}>
       <View style={styles.cameraContainer}>
         <Camera
-          flashMode={Camera.Constants.FlashMode.on}
+          // flashMode={Camera.Constants.FlashMode.on}
           style={styles.fixedRatio}
           ref={(ref) => setCameraObj(ref)}
-          ratio="1:1"
+          ratio="16:9"
         />
       </View>
       <View style={styles.btns}>
@@ -247,6 +261,9 @@ const CameraScreen = ({
           <TouchableOpacity onPress={submitImg} style={styles.footerBtn}>
             <Text style={styles.footerBtnText}>사진 제출하기</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={pickImg} style={styles.footerBtn}>
+            <Text style={styles.footerBtnText}>앨범에서 올리기</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={goToLink} style={styles.footerBtn}>
             <Text style={styles.footerBtnText}>직접 입력하기</Text>
           </TouchableOpacity>
@@ -261,14 +278,14 @@ export default CameraScreen;
 const styles = StyleSheet.create({
   // 카메라
   cameraContainer: {
-    flex: 3,
+    flex: 4,
     flexDirection: 'row',
   },
   fixedRatio: {
     flex: 1,
   },
   btns: {
-    flex: 6,
+    flex: 3,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -316,6 +333,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   imageUrl: {
+    resizeMode: 'contain',
     flex: 1,
   },
   red: {
