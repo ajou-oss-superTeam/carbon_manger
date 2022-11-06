@@ -80,14 +80,16 @@ const Graph = ({
         {graphData && maxValue !== 0 ? (
           <StackedBarChart
             data={{
-              labels: ['min', ...graphData.labels, 'max'],
+              labels: [...graphData.labels],
               legend: graphData.legend,
-              data: [[0], ...graphData.datasets, [maxValue]],
+              data: [...graphData.datasets, [maxValue]],
               barColors: ['yellow', 'red', 'blue'],
+              withDots: true,
             }}
             hideLegend={true}
             width={Dimensions.get('window').width - 16}
             height={400}
+            fromZero={true}
             chartConfig={{
               backgroundColor: NAVI_BG,
               backgroundGradientFrom: NAVI_BG,
