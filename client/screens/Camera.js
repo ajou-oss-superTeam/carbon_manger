@@ -93,10 +93,12 @@ const CameraScreen = ({
       allowsEditing: true,
       aspect: [16, 9],
       quality: 1,
+      base64: true,
     });
 
     if (!result.cancelled) {
       setImageUri(result.uri);
+      setBase(result.base64);
     }
   };
 
