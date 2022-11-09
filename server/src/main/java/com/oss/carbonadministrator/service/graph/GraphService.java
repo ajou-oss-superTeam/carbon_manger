@@ -120,20 +120,12 @@ public class GraphService {
         ArrayList<List<Object>> carbonResult = new ArrayList<>();
         String[] legend = {"전기", "가스", "수도"};
 
-        calculateUserCarbonData(targetBill, monthData, carbonResult);
-
-        return new GraphData(monthData.toArray(new String[monthData.size()]), legend, carbonResult);
-    }
-
-    private void calculateUserCarbonData(
-        List<Bill> targetBill,
-        ArrayList<String> monthData,
-        ArrayList<List<Object>> carbonResult
-    ) {
         for (Bill sur : targetBill) {
             monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
             carbonResult.add(calculatedList(sur));
         }
+
+        return new GraphData(monthData.toArray(new String[monthData.size()]), legend, carbonResult);
     }
 
     @Getter

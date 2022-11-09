@@ -67,7 +67,7 @@ public class ImageService {
         makeBase64ToImage(request.getImage(), ".jpg", uuidFileName);
         imageToJson(uuidFileName.toString(), billType);
         T result = jsonToDto(uuidFileName.toString(), billType);
-        deleteFile(uuidFileName + ".json");
+//        this.deleteFile(uuidFileName + ".json");
         return result;
     }
 
@@ -113,7 +113,7 @@ public class ImageService {
             e.printStackTrace();
         }
 
-        this.deleteFile(fileName + ".jpg");
+//        this.deleteFile(fileName + ".jpg");
     }
 
     public void deleteFile(String fileName) {
