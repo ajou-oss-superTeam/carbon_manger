@@ -65,19 +65,19 @@ public class GraphService {
     private static List<Object> calculatedList(Bill sur) {
         List<Object> result = new ArrayList<>();
         if (sur.getElectricityInfoList() == null) {
-            result.add("");
+            result.add(0);
         } else {
             result.add(sur.getElectricityInfoList().calculateCarbonUsage());
         }
 
         if (sur.getGasInfoList() == null) {
-            result.add("");
+            result.add(0);
         } else {
             result.add(sur.getGasInfoList().calculateCarbonUsage());
         }
 
         if (sur.getWaterInfoList() == null) {
-            result.add("");
+            result.add(0);
         } else {
             result.add(sur.getWaterInfoList().calculateCarbonUsage());
         }
@@ -120,20 +120,12 @@ public class GraphService {
         ArrayList<List<Object>> carbonResult = new ArrayList<>();
         String[] legend = {"전기", "가스", "수도"};
 
-        calculateUserCarbonData(targetBill, monthData, carbonResult);
-
-        return new GraphData(monthData.toArray(new String[monthData.size()]), legend, carbonResult);
-    }
-
-    private void calculateUserCarbonData(
-        List<Bill> targetBill,
-        ArrayList<String> monthData,
-        ArrayList<List<Object>> carbonResult
-    ) {
         for (Bill sur : targetBill) {
             monthData.add(sur.getYear()%100 + "/" + sur.getMonth());
-            carbonResult.add(calculatedList(sur)); // TODO "" 처리
+            carbonResult.add(calculatedList(sur));
         }
+
+        return new GraphData(monthData.toArray(new String[monthData.size()]), legend, carbonResult);
     }
 
     @Getter

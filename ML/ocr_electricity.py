@@ -24,11 +24,13 @@ limitations under the License.
 '''
 
 gap = 100
+temp_multiply = 3
 
 def parse():
     parser = argparse.ArgumentParser(prog="OCR", description='')
     parser.add_argument("-img_path", type=str, dest="img_path", action="store", default="null")
     parser.add_argument("-output_path", type=str, dest="output_path", action="store", default="null")
+    parser.add_argument("-gpu_use", type=str, dest="gpu_use", action="store", default="True")
 
     args = parser.parse_args()
     return args
@@ -136,7 +138,7 @@ def rule_usage_compare_string(string):
             compare_checked = True
     return True if (usage_checked and compare_checked) else False
 
-def read_fee(blur_img):
+def read_fee(blur_img, using_gpu):
     resize_width = (int)(blur_img.shape[0]*1.5*1.5)
     resize_height = (int)(blur_img.shape[1]*2*1.5)
 
@@ -145,7 +147,7 @@ def read_fee(blur_img):
     filter = np.ones((3,3),np.float32)/9
     cropped = cv2.filter2D(cropped, -1 , filter)
 
-    reader = easyocr.Reader(['ko'])
+    reader = easyocr.Reader(['ko'],gpu=using_gpu)
     result = reader.readtext(cropped)
 
     numeric_texts = []
@@ -208,7 +210,7 @@ def read_fee(blur_img):
             found = False
             for gidx in range(0,len(numeric_group)):
                 for item in numeric_group[gidx]:
-                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000):
+                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000*temp_multiply):
                         numeric_group[gidx].append(numeric_texts_sorted[idx]) 
                         found = True
                         break
@@ -216,7 +218,7 @@ def read_fee(blur_img):
                     break
             if(not found):
                 for item in temp_group:
-                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000):
+                    if(min_distance_between_box(item[1],numeric_texts_sorted[idx][1]) <= 1000*temp_multiply):
                         temp_group.append(numeric_texts_sorted[idx]) 
                         found = True
                         break
@@ -255,7 +257,7 @@ def read_fee(blur_img):
                 if(temp_dist < min_dist):
                     min_dist = temp_dist
                     closest_text = numeric_text
-            if(min_dist <= 3000*1.5):
+            if(min_dist <= 3000*1.5*temp_multiply):
                 temp_string += closest_text+'",'
                 output_string += temp_string
 
@@ -270,7 +272,7 @@ def read_fee(blur_img):
         temp_close_numerics = []
         for (numeric_bbox, numeric_text, numeric_prob) in numeric_texts:
             temp_dist = min_distance_between_box(numeric_bbox,center_123_box)
-            if((temp_dist < 2000) and (len(numeric_text) > 1)):
+            if((temp_dist < 2000*temp_multiply) and (len(numeric_text) > 1)):
                 temp_close_numerics.append([temp_dist, numeric_text])
         temp_close_numerics = sorted(temp_close_numerics)
 
@@ -286,7 +288,7 @@ def read_fee(blur_img):
         temp_close_numerics = []
         for (numeric_bbox, numeric_text, numeric_prob) in numeric_texts:
             temp_dist = min_distance_between_box(numeric_bbox,usage_compare_box)
-            if((temp_dist < 10000) and (len(numeric_text) > 1) and (numeric_bbox[0][1] > usage_compare_box[0][1])):
+            if((temp_dist < 10000*temp_multiply) and (len(numeric_text) > 1) and (numeric_bbox[0][1] > usage_compare_box[0][1])):
                 temp_close_numerics.append([temp_dist, numeric_text])
         temp_close_numerics = sorted(temp_close_numerics)
 
@@ -310,7 +312,7 @@ def convert_gray_electric_img(img):
 
 
 def read_electric_bill(args):
-    file_path = 'test4.jpg'
+    file_path = 'test3.jpg'
     if(args.img_path != 'null'):
         file_path = args.img_path 
 
@@ -318,26 +320,38 @@ def read_electric_bill(args):
     if(args.output_path != 'null'):
         output_file_path = args.output_path 
 
-    img_raw = cv2.imread(file_path) 
+    using_gpu = False
+    if(args.gpu_use == "True"):
+        using_gpu = True
 
-    img = convert_gray_electric_img(img_raw)
-    img = cv2.resize(img, dsize=(3600,2900*2), interpolation=cv2.INTER_CUBIC)
+    try:
+        img_raw = cv2.imread(file_path) 
 
-    ret, thresh1 = cv2.threshold(img,120,255, cv2.THRESH_BINARY_INV)
-    kernel = np.ones((5, 5), np.uint8)
-    thresh1 = cv2.dilate(thresh1,kernel,5)
-    thresh1 = cv2.erode(thresh1,kernel,2)
+        img = convert_gray_electric_img(img_raw)
+        img = cv2.resize(img, dsize=(3600,2900*2), interpolation=cv2.INTER_CUBIC)
 
-    ret, thresh1 = cv2.threshold(thresh1,50,255, cv2.THRESH_BINARY_INV)
+        ret, thresh1 = cv2.threshold(img,120,255, cv2.THRESH_BINARY_INV)
+        kernel = np.ones((5, 5), np.uint8)
+        thresh1 = cv2.dilate(thresh1,kernel,5)
+        thresh1 = cv2.erode(thresh1,kernel,2)
 
-    filter = np.ones((1,1),np.float32)/1
-    blur_img = cv2.filter2D(thresh1, -1 , filter)
+        ret, thresh1 = cv2.threshold(thresh1,50,255, cv2.THRESH_BINARY_INV)
+
+        filter = np.ones((1,1),np.float32)/1
+        blur_img = cv2.filter2D(thresh1, -1 , filter)
+
+    except:
+        file = open(output_file_path,'w')
+        file.write('{"done":false}')
+
+        file.close()
+        return 
 
     max_height, max_width = blur_img.shape
 
     json_result = '{'
 
-    json_fee = read_fee(blur_img)
+    json_fee = read_fee(blur_img, using_gpu)
     json_result += json_fee
 
     json_result += '"done":true}'

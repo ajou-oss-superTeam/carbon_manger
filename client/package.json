@@ -23,6 +23,8 @@
     "expo-camera": "~12.3.0",
     "expo-checkbox": "~2.2.0",
     "expo-font": "~10.2.1",
+    "expo-image-picker": "~13.3.1",
+    "expo-screen-orientation": "~4.3.0",
     "expo-splash-screen": "~0.16.1",
     "expo-status-bar": "~1.4.0",
     "react": "18.0.0",

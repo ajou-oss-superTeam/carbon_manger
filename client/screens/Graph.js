@@ -1,19 +1,3 @@
-/**
- *  Copyright 2022 Carbon_Developers
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,13 +9,19 @@ import {
   NAVI_ITEM_CLICK,
 } from '../assets/variables/color';
 
-const Graph = ({ navigation, route: { key } }) => {
+const Graph = ({
+  navigation: { navigate },
+  route: {
+    params: { hashValue },
+  },
+}) => {
   const [nickname, setNickname] = useState('');
   const [graphData, setGraphData] = useState(null);
+  const [maxValue, setMaxValue] = useState(0);
 
   useEffect(() => {
     drawGraph();
-  }, [key]);
+  }, [hashValue]);
 
   const drawGraph = async () => {
     const user = await AsyncStorage.getItem('@user');
@@ -51,6 +41,17 @@ const Graph = ({ navigation, route: { key } }) => {
       );
 
       if (success) {
+        const datasets = data.datasets;
+        const value = datasets.map((item) => {
+          const sum = item
+            .filter((num) => num !== '')
+            .reduce((sum, cur) => {
+              return sum + cur;
+            }, 0);
+          return sum;
+        });
+
+        setMaxValue(Math.max(...value));
         setGraphData(data);
       } else {
         Alert.alert(message);
@@ -76,69 +77,19 @@ const Graph = ({ navigation, route: { key } }) => {
             <Text>가스</Text>
           </View>
         </View>
-        {graphData && (
-          // <LineChart
-          //   data={{
-          //     labels: graphData.labels,
-          //     datasets: [
-          //       {
-          //         data: graphData.datasets.userData,
-          //         color: (opacity = 1) => 'rgba(58, 143, 255, 1)',
-          //       },
-          //       {
-          //         data: graphData.datasets.averageData,
-          //         color: (opacity = 1) => 'rgba(0, 255, 255, 1)',
-          //       },
-          //       { data: [0], withwithDots: false },
-          //     ],
-          //   }}
-          //   width={Dimensions.get('window').width - 20} // from react-native
-          //   height={400}
-          //   chartConfig={{
-          //     backgroundColor: '#1cc910',
-          //     backgroundGradientFrom: '#eff3ff',
-          //     backgroundGradientTo: '#efefef',
-          //     decimalPlaces: 2, // optional, defaults to 2dp
-          //     color: (opacity = 1) => `black`,
-          //     style: {
-          //       borderRadius: 16,
-          //     },
-          //   }}
-          //   bezier
-          //   style={{
-          //     borderRadius: 15,
-          //   }}
-          // />
-          // <StackedBarChart
-          //   data={graphData}
-          //   width={Dimensions.get('window').width - 20} // from react-native
-          //   height={400}
-          //   chartConfig={{
-          //     backgroundColor: '#1cc910',
-          //     backgroundGradientFrom: '#eff3ff',
-          //     backgroundGradientTo: '#efefef',
-          //     decimalPlaces: 2, // optional, defaults to 2dp
-          //     color: (opacity = 1) => `black`,
-          //     style: {
-          //       borderRadius: 16,
-          //     },
-          //   }}
-          //   bezier
-          //   style={{
-          //     borderRadius: 15,
-          //   }}
-          // />
+        {graphData && maxValue !== 0 ? (
           <StackedBarChart
             data={{
-              labels: ['min', ...graphData.labels, 'max'],
+              labels: [...graphData.labels],
               legend: graphData.legend,
-              // data: graphData.datasets,
-              data: [[0], ...graphData.datasets, [100000]],
+              data: [...graphData.datasets, [maxValue]],
               barColors: ['yellow', 'red', 'blue'],
+              withDots: true,
             }}
             hideLegend={true}
             width={Dimensions.get('window').width - 16}
             height={400}
+            fromZero={true}
             chartConfig={{
               backgroundColor: NAVI_BG,
               backgroundGradientFrom: NAVI_BG,
@@ -166,6 +117,10 @@ const Graph = ({ navigation, route: { key } }) => {
               borderRadius: 16,
             }}
           />
+        ) : (
+          <View style={styles.noData}>
+            <Text style={styles.noDataText}>얼른 고지서를 제출하세요!</Text>
+          </View>
         )}
       </View>
     </View>
@@ -213,5 +168,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+  },
+  noData: {
+    width: 300,
+    height: 300,
+    marginTop: 20,
+    borderRadius: 20,
+    padding: 30,
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataText: {
+    color: 'white',
   },
 });

@@ -1,24 +1,8 @@
-/**
- *  Copyright 2022 Carbon_Developers
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const Score = ({
-  navigation: { navigate, replace },
+  navigation: { navigate },
   route: {
     params: { type, data, time },
   },
@@ -41,19 +25,9 @@ const Score = ({
         params: { type, data, time },
       });
     } else {
-      reset({
-        routes: [
-          {
-            name: 'Tabs',
-            state: {
-              routes: [
-                {
-                  name: 'graph',
-                },
-              ],
-            },
-          },
-        ],
+      navigate('Tabs', {
+        screen: 'graph',
+        params: { hashValue: Math.random() },
       });
     }
   };
@@ -70,14 +44,14 @@ const Score = ({
         </Text>
       </View>
       <View style={styles.middle}>
-        <View style={styles.element}>
+        {/* <View style={styles.element}>
           <Text style={styles.elementText}>기본요금</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.demandCharge
               ? electricityInfoList.demandCharge
               : '인식 안됨'}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.element}>
           <Text style={styles.elementText}>전력량요금</Text>
           <Text style={styles.elementText}>
@@ -94,14 +68,14 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View>
-        <View style={styles.element}>
+        {/* <View style={styles.element}>
           <Text style={styles.elementText}>연료비조정액</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.fuelAdjustmentRate
               ? electricityInfoList.fuelAdjustmentRate
               : '인식 안됨'}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.element}>
           <Text style={styles.elementText}>전기요금계</Text>
           <Text style={styles.elementText}>
@@ -110,7 +84,7 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View>
-        <View style={styles.element}>
+        {/* <View style={styles.element}>
           <Text style={styles.elementText}>부가가치세</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.vat ? electricityInfoList.vat : '인식 안됨'}
@@ -132,19 +106,20 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View>
-        <View style={styles.element}>
-          <Text style={styles.elementText}>당월요금계</Text>
-          <Text style={styles.elementText}>
-            {electricityInfoList?.totalbyCurrMonth
-              ? electricityInfoList.totalbyCurrMonth
-              : '인식 안됨'}
-          </Text>
-        </View>
+  
         <View style={styles.element}>
           <Text style={styles.elementText}>TV수신료</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.tvSubscriptionFee
               ? electricityInfoList.tvSubscriptionFee
+              : '인식 안됨'}
+          </Text>
+        </View> */}
+        <View style={styles.element}>
+          <Text style={styles.elementText}>당월요금계</Text>
+          <Text style={styles.elementText}>
+            {electricityInfoList?.totalbyCurrMonth
+              ? electricityInfoList.totalbyCurrMonth
               : '인식 안됨'}
           </Text>
         </View>
@@ -194,6 +169,26 @@ const Score = ({
         </Text>
       </View>
       <View style={styles.middle}>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>기본요금</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.demandCharge
+              ? gasInfoList?.demandCharge
+              : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>부가가치세</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.vat ? gasInfoList?.vat : '인식 안됨'}
+          </Text>
+        </View>
+        <View style={styles.element}>
+          <Text style={styles.elementText}>청구금액</Text>
+          <Text style={styles.elementText}>
+            {gasInfoList?.totalPrice ? gasInfoList?.totalPrice : '인식 안됨'}
+          </Text>
+        </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>당월지침</Text>
           <Text style={styles.elementText}>

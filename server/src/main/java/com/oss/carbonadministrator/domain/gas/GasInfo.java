@@ -70,16 +70,16 @@ public class GasInfo extends BaseTimeEntity {
     private int checkedUsage;
 
     @Column
-    private int currentMonthUsage;
+    private double currentMonthUsage;
 
     @Column
-    private int unitEnergy;
+    private double unitEnergy;
 
     @Column
-    private int usedEnergy;
+    private double usedEnergy;
 
-    public int calculateTotalPrice(int demandCharge, int vat) {
-        totalPrice = demandCharge + vat;
+    public int calculateTotalPrice(int totalbyCurrMonth, int vat, int roundDown) {
+        totalPrice = totalbyCurrMonth + vat - roundDown;
         return totalPrice;
     }
 
@@ -92,7 +92,7 @@ public class GasInfo extends BaseTimeEntity {
         this.vat = updateData.getVat();
         this.roundDown = updateData.getRoundDown();
         this.totalbyCurrMonth = updateData.getTotalbyCurrMonth();
-        this.totalPrice = calculateTotalPrice(this.demandCharge, this.vat);
+        this.totalPrice = calculateTotalPrice(this.totalbyCurrMonth, this.vat, this.roundDown);
         this.accumulatedMonthUsage = updateData.getAccumulatedMonthUsage();
         this.previousMonthUsage = updateData.getPreviousMonthUsage();
         this.checkedUsage = updateData.getCheckedUsage();

@@ -78,17 +78,19 @@ public class ImgDataRequest {
     // 전년동월 사용량 (kWh)
     private int lastYearUsage;
 
+    private int totalPrice;
+
     private int accumulatedMonthUsage;
 
     private int previousMonthUsage;
 
     private int checkedUsage;
 
-    private int currentMonthUsage;
+    private double currentMonthUsage;
 
-    private int unitEnergy;
+    private double unitEnergy;
 
-    private int usedEnergy;
+    private double usedEnergy;
 
     public ElectricityInfo toElecEntity(ImgDataRequest requestDto) {
         ElectricityInfo elecData = ElectricityInfo.builder()
@@ -131,6 +133,7 @@ public class ImgDataRequest {
             .demandCharge(requestDto.getDemandCharge())
             .vat(requestDto.getVat())
             .roundDown(requestDto.getRoundDown())
+            .totalPrice(requestDto.getTotalPrice())
             .totalbyCurrMonth(requestDto.getTotalbyCurrMonth())
             .accumulatedMonthUsage(requestDto.getAccumulatedMonthUsage())
             .previousMonthUsage(requestDto.getPreviousMonthUsage())
@@ -139,7 +142,7 @@ public class ImgDataRequest {
             .unitEnergy(requestDto.getUnitEnergy())
             .usedEnergy(requestDto.getUsedEnergy())
             .build();
-        gasData.calculateTotalPrice(gasData.getDemandCharge(), gasData.getVat());
+        gasData.calculateTotalPrice(gasData.getTotalbyCurrMonth(), gasData.getVat(), getRoundDown());
         return gasData;
     }
 
