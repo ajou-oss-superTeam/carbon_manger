@@ -14,19 +14,19 @@ import { MaterialIcons } from '@expo/vector-icons';
 import API from '../api';
 
 const ScoreEdit = ({
-  navigation: { navigate, replace, reset },
+  navigation: { navigate },
   route: {
-    params: { type, data, time },
+    params: { type, data },
   },
 }) => {
   // 달력
   const [showDate, setShowDate] = useState(false);
   // 전기 ==========
-  const [demandCharge, setDemandCharge] = useState(
-    data?.electricityInfoList?.demandCharge
-      ? String(data?.electricityInfoList?.demandCharge)
-      : '0'
-  );
+  // const [demandCharge, setDemandCharge] = useState(
+  //   data?.electricityInfoList?.demandCharge
+  //     ? String(data?.electricityInfoList?.demandCharge)
+  //     : '0'
+  // );
   const [energyCharge, setEnergyCharge] = useState(
     data?.electricityInfoList?.energyCharge
       ? String(data?.electricityInfoList?.energyCharge)
@@ -37,41 +37,41 @@ const ScoreEdit = ({
       ? String(data?.electricityInfoList?.environmentCharge)
       : '0'
   );
-  const [fuelAdjustmentRate, setFuelAdjustmentRate] = useState(
-    data?.electricityInfoList?.fuelAdjustmentRate
-      ? String(data?.electricityInfoList?.fuelAdjustmentRate)
-      : '0'
-  );
+  // const [fuelAdjustmentRate, setFuelAdjustmentRate] = useState(
+  //   data?.electricityInfoList?.fuelAdjustmentRate
+  //     ? String(data?.electricityInfoList?.fuelAdjustmentRate)
+  //     : '0'
+  // );
   const [elecChargeSum, setElecChargeSum] = useState(
     data?.electricityInfoList?.elecChargeSum
       ? String(data?.electricityInfoList?.elecChargeSum)
       : '0'
   );
-  const [vat, setVat] = useState(
-    data?.electricityInfoList?.vat
-      ? String(data?.electricityInfoList?.vat)
-      : '0'
-  );
-  const [elecFund, setElecFund] = useState(
-    data?.electricityInfoList?.elecFund
-      ? String(data?.electricityInfoList?.elecFund)
-      : '0'
-  );
-  const [roundDown, setRoundDown] = useState(
-    data?.electricityInfoList?.roundDown
-      ? String(data?.electricityInfoList?.roundDown)
-      : '0'
-  );
+  // const [vat, setVat] = useState(
+  //   data?.electricityInfoList?.vat
+  //     ? String(data?.electricityInfoList?.vat)
+  //     : '0'
+  // );
+  // const [elecFund, setElecFund] = useState(
+  //   data?.electricityInfoList?.elecFund
+  //     ? String(data?.electricityInfoList?.elecFund)
+  //     : '0'
+  // );
+  // const [roundDown, setRoundDown] = useState(
+  //   data?.electricityInfoList?.roundDown
+  //     ? String(data?.electricityInfoList?.roundDown)
+  //     : '0'
+  // );
   const [totalbyCurrMonth, setTotalbyCurrMonth] = useState(
     data?.electricityInfoList?.totalbyCurrMonth
       ? String(data?.electricityInfoList?.totalbyCurrMonth)
       : '0'
   );
-  const [tvSubscriptionFee, setTvSubscriptionFee] = useState(
-    data?.electricityInfoList?.tvSubscriptionFee
-      ? String(data?.electricityInfoList?.tvSubscriptionFee)
-      : '0'
-  );
+  // const [tvSubscriptionFee, setTvSubscriptionFee] = useState(
+  //   data?.electricityInfoList?.tvSubscriptionFee
+  //     ? String(data?.electricityInfoList?.tvSubscriptionFee)
+  //     : '0'
+  // );
   const [currMonthUsage, setCurrMonthUsage] = useState(
     data?.electricityInfoList?.currMonthUsage
       ? String(data?.electricityInfoList?.currMonthUsage)
@@ -88,6 +88,14 @@ const ScoreEdit = ({
       : '0'
   );
   // 가스 ===========
+  const [totalbyCurrMonthTwo, setTotalbyCurrMonthTwo] = useState(
+    data?.gasInfoList?.demandCharge
+      ? String(data?.gasInfoList?.demandCharge)
+      : '0'
+  );
+  const [vat, setVat] = useState(
+    data?.gasInfoList?.vat ? String(data?.gasInfoList?.vat) : '0'
+  );
   const [accumulatedMonthUsage, setAccumulatedMonthUsage] = useState(
     data?.gasInfoList?.accumulatedMonthUsage
       ? String(data?.gasInfoList?.accumulatedMonthUsage)
@@ -145,16 +153,16 @@ const ScoreEdit = ({
 
     if (type === '전기') {
       const numbers = {
-        demandCharge,
+        totalbyCurrMonth,
         energyCharge,
         environmentCharge,
-        fuelAdjustmentRate,
+        // fuelAdjustmentRate,
         elecChargeSum,
-        vat,
-        elecFund,
-        roundDown,
-        totalbyCurrMonth,
-        tvSubscriptionFee,
+        // vat,
+        // elecFund,
+        // roundDown,
+        // totalbyCurrMonth,
+        // tvSubscriptionFee,
         currMonthUsage,
         preMonthUsage,
         lastYearUsage,
@@ -178,25 +186,17 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        reset({
-          routes: [
-            {
-              name: 'Tabs',
-              state: {
-                routes: [
-                  {
-                    name: 'graph',
-                  },
-                ],
-              },
-            },
-          ],
+        navigate('Tabs', {
+          screen: 'graph',
+          params: { hashValue: Math.random() },
         });
       } else {
         Alert.alert(message);
       }
     } else {
       const gasNumbers = {
+        totalbyCurrMonth: totalbyCurrMonthTwo,
+        vat,
         accumulatedMonthUsage,
         previousMonthUsage,
         checkedUsage,
@@ -223,19 +223,9 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        reset({
-          routes: [
-            {
-              name: 'Tabs',
-              state: {
-                routes: [
-                  {
-                    name: 'graph',
-                  },
-                ],
-              },
-            },
-          ],
+        navigate('Tabs', {
+          screen: 'graph',
+          params: { hashValue: Math.random() },
         });
       } else {
         Alert.alert(message);
@@ -251,16 +241,16 @@ const ScoreEdit = ({
     if (type === '전기') {
       const id = data.electricityInfoList.id;
       const numbers = {
-        demandCharge,
+        totalbyCurrMonth,
         energyCharge,
         environmentCharge,
-        fuelAdjustmentRate,
+        // fuelAdjustmentRate,
         elecChargeSum,
-        vat,
-        elecFund,
-        roundDown,
-        totalbyCurrMonth,
-        tvSubscriptionFee,
+        // vat,
+        // elecFund,
+        // roundDown,
+        // totalbyCurrMonth,
+        // tvSubscriptionFee,
         currMonthUsage,
         preMonthUsage,
         lastYearUsage,
@@ -282,19 +272,9 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        reset({
-          routes: [
-            {
-              name: 'Tabs',
-              state: {
-                routes: [
-                  {
-                    name: 'graph',
-                  },
-                ],
-              },
-            },
-          ],
+        navigate('Tabs', {
+          screen: 'graph',
+          params: { hashValue: Math.random() },
         });
       } else {
         Alert.alert(message);
@@ -302,6 +282,8 @@ const ScoreEdit = ({
     } else {
       const id = data.gasInfoList.id;
       const gasNumbers = {
+        totalbyCurrMonth: totalbyCurrMonthTwo,
+        vat,
         accumulatedMonthUsage,
         previousMonthUsage,
         checkedUsage,
@@ -326,19 +308,9 @@ const ScoreEdit = ({
       );
 
       if (success) {
-        reset({
-          routes: [
-            {
-              name: 'Tabs',
-              state: {
-                routes: [
-                  {
-                    name: 'graph',
-                  },
-                ],
-              },
-            },
-          ],
+        navigate('Tabs', {
+          screen: 'graph',
+          params: { hashValue: Math.random() },
         });
       } else {
         Alert.alert(message);
@@ -366,7 +338,7 @@ const ScoreEdit = ({
       <View style={styles.middle}>
         {type === '전기' ? (
           <ScrollView style={styles.scrollView}>
-            <View style={styles.element}>
+            {/* <View style={styles.element}>
               <Text style={styles.elementLabel}>기본요금</Text>
               <TextInput
                 style={styles.elementText}
@@ -375,7 +347,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setDemandCharge}
               />
-            </View>
+            </View> */}
             <View style={styles.element}>
               <Text style={styles.elementLabel}>전력량요금</Text>
               <TextInput
@@ -394,7 +366,7 @@ const ScoreEdit = ({
                 onChangeText={setEnvironmentCharge}
               />
             </View>
-            <View style={styles.element}>
+            {/* <View style={styles.element}>
               <Text style={styles.elementLabel}>연료비조정액</Text>
               <TextInput
                 style={styles.elementText}
@@ -402,7 +374,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setFuelAdjustmentRate}
               />
-            </View>
+            </View> */}
             <View style={styles.element}>
               <Text style={styles.elementLabel}>전기요금계</Text>
               <TextInput
@@ -412,7 +384,7 @@ const ScoreEdit = ({
                 onChangeText={setElecChargeSum}
               />
             </View>
-            <View style={styles.element}>
+            {/* <View style={styles.element}>
               <Text style={styles.elementLabel}>부가가치세</Text>
               <TextInput
                 style={styles.elementText}
@@ -438,7 +410,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setRoundDown}
               />
-            </View>
+            </View> */}
             <View style={styles.element}>
               <Text style={styles.elementLabel}>당월요금계</Text>
               <TextInput
@@ -448,7 +420,7 @@ const ScoreEdit = ({
                 onChangeText={setTotalbyCurrMonth}
               />
             </View>
-            <View style={styles.element}>
+            {/* <View style={styles.element}>
               <Text style={styles.elementLabel}>TV수신료</Text>
               <TextInput
                 style={styles.elementText}
@@ -456,7 +428,7 @@ const ScoreEdit = ({
                 keyboardType="numeric"
                 onChangeText={setTvSubscriptionFee}
               />
-            </View>
+            </View>  */}
             <View style={styles.element}>
               <Text style={styles.elementLabel}>당월 사용량</Text>
               <TextInput
@@ -487,6 +459,26 @@ const ScoreEdit = ({
           </ScrollView>
         ) : (
           <ScrollView style={styles.scrollView}>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>사용요금(당월)</Text>
+              <TextInput
+                style={styles.elementText}
+                value={totalbyCurrMonthTwo}
+                autoFocus={true}
+                keyboardType="numeric"
+                onChangeText={setTotalbyCurrMonthTwo}
+              />
+            </View>
+            <View style={styles.element}>
+              <Text style={styles.elementLabel}>부가가치세</Text>
+              <TextInput
+                style={styles.elementText}
+                value={vat}
+                autoFocus={true}
+                keyboardType="numeric"
+                onChangeText={setVat}
+              />
+            </View>
             <View style={styles.element}>
               <Text style={styles.elementLabel}>당월지침</Text>
               <TextInput

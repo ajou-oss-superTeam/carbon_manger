@@ -75,6 +75,7 @@ function Tabs() {
           ),
           headerShown: false,
         }}
+        initialParams={{ hashValue: 1 }}
       />
       <Tab.Screen
         name="mypage"
