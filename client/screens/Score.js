@@ -44,14 +44,14 @@ const Score = ({
         </Text>
       </View>
       <View style={styles.middle}>
-        <View style={styles.element}>
+        {/* <View style={styles.element}>
           <Text style={styles.elementText}>기본요금</Text>
           <Text style={styles.elementText}>
             {electricityInfoList?.demandCharge
               ? electricityInfoList.demandCharge
               : '인식 안됨'}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.element}>
           <Text style={styles.elementText}>전력량요금</Text>
           <Text style={styles.elementText}>
@@ -106,14 +106,7 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View>
-        <View style={styles.element}>
-          <Text style={styles.elementText}>당월요금계</Text>
-          <Text style={styles.elementText}>
-            {electricityInfoList?.totalbyCurrMonth
-              ? electricityInfoList.totalbyCurrMonth
-              : '인식 안됨'}
-          </Text>
-        </View>
+  
         <View style={styles.element}>
           <Text style={styles.elementText}>TV수신료</Text>
           <Text style={styles.elementText}>
@@ -122,6 +115,14 @@ const Score = ({
               : '인식 안됨'}
           </Text>
         </View> */}
+        <View style={styles.element}>
+          <Text style={styles.elementText}>당월요금계</Text>
+          <Text style={styles.elementText}>
+            {electricityInfoList?.totalbyCurrMonth
+              ? electricityInfoList.totalbyCurrMonth
+              : '인식 안됨'}
+          </Text>
+        </View>
         <View style={styles.element}>
           <Text style={styles.elementText}>당월 사용량</Text>
           <Text style={styles.elementText}>
